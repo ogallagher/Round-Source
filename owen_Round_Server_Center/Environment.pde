@@ -1,5 +1,33 @@
 void spawn(String objectData) {
-  objectList.append(objectData);
+  boolean processed = false;
+  
+  for (int i=0; i<objectList.size(); i++) {
+    String testObject = objectList.get(i);
+    String nameTest = extractString(testObject,nameID,endID);
+    int[] locationTest = int(split(extractString(testObject,locationID,endID),','));
+    
+    if (extractString(objectData,nameID,endID).equals(nameTest)) {
+      if (nameTest.equals("wall") || nameTest.equals("hazardRing") || nameTest.equals("detonator") || nameTest.equals("smokeScreen") || nameTest.equals("laserPoint") || nameTest.equals("fanshot")) {
+        int[] location = int(split(extractString(objectData,locationID,endID),','));
+        
+        if (location[0] == locationTest[0] && location[1] == locationTest[1]) {
+          processed = true;
+        }
+      }
+      else {
+        int[] target = int(split(extractString(objectData,targetID,endID),','));
+        int[] targetTest = int(split(extractString(testObject,targetID,endID),','));
+        
+        if (target.length > 1 && targetTest.length > 1 && target[0] == targetTest[0] && target[1] == targetTest[1]) {
+          processed = true;
+        }
+      }
+    }
+  }
+  
+  if (!processed) {
+    objectList.append(objectData);
+  }
 }
 
 void delete(String objectData) {
@@ -379,24 +407,24 @@ void updateEnvironment() {
       objectList.remove(i);
     }
     
-    if (objectName.equals("healthBox") || objectName.equals("ammoBox") || objectName.equals("coin")) {
-      int[] locationInt = int(split(extractString(object,locationID,endID),','));
-      if (locationInt[0] < 30) {
-        locationInt[0] += abs(30-locationInt[0]);
-      }
-      if (locationInt[0] > fieldWidth - 30) {
-        locationInt[0] -= abs(locationInt[0] - (fieldWidth-30));
-      }
-      if (locationInt[1] < 30) {
-        locationInt[1] += abs(30-locationInt[1]);
-      }
-      if (locationInt[1] > fieldWidth - 30) {
-        locationInt[1] -= abs(locationInt[1] - (fieldWidth-30));
-      }
+    //if (objectName.equals("healthBox") || objectName.equals("ammoBox") || objectName.equals("coin")) {       ——THIS WAS USED WHEN THE FIELD HAD DYNAMIC BOUNDARIES——
+    //  int[] locationInt = int(split(extractString(object,locationID,endID),','));
+    //  if (locationInt[0] < 30) {
+    //    locationInt[0] += abs(30-locationInt[0]);
+    //  }
+    //  if (locationInt[0] > fieldWidth - 30) {
+    //    locationInt[0] -= abs(locationInt[0] - (fieldWidth-30));
+    //  }
+    //  if (locationInt[1] < 30) {
+    //    locationInt[1] += abs(30-locationInt[1]);
+    //  }
+    //  if (locationInt[1] > fieldWidth - 30) {
+    //    locationInt[1] -= abs(locationInt[1] - (fieldWidth-30));
+    //  }
       
-      object = replaceString(object,str(locationInt[0]) + ',' + str(locationInt[1]),locationID,endID);
-      objectList.set(i,object);
-    }
+    //  object = replaceString(object,str(locationInt[0]) + ',' + str(locationInt[1]),locationID,endID);
+    //  objectList.set(i,object);
+    //}
     
   }
 }
@@ -457,7 +485,7 @@ void spawnItems() {
     }
   }
   
-  //int maxFieldClientNumber = fieldMinimum * (clientList.size()+1);
+  //int maxFieldClientNumber = fieldMinimum * (clientList.size()+1);      ——THIS WAS USED FOR CREATING NEW WALLS WHEN MORE CLIENTS JOINED——
   //if (maxFieldClientNumber > fieldMaximum) {
   //  maxFieldClientNumber = fieldMaximum;
   //}
@@ -479,13 +507,10 @@ void spawnItems() {
   //  spawn(nameID + "wall" + endID + locationID + location + endID + radiusID + radius + endID);
   //}
   
-  if (enemyTimer > 1500) {
+  if (enemyTimer > 500) {
     enemyTimer = 0;
     
-    //int ceiling = round(maxFieldClientNumber / 1000);
-    //ceiling = ceiling * ceiling;
-    
-    if (e + clientList.size() < playerMaximum) {    // one player per 1000*1000 pix. square = appropriate density
+    if (e + clientList.size() < playerMaximum) {
       float packageSelect = random(1);
       String randomPackage = "";
       int speed = 0;

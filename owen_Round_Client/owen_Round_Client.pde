@@ -1,11 +1,11 @@
 //Round_Client
 
 // BEGUN:         July 18, 2015
-// LAST UPDATED:  May 13, 2016
+// LAST UPDATED:  May 15, 2016
 // VERSION:       8
 // UPDATES:
 //    7 = Flexible field size, drawn boundaries, name changing, AI enemies
-//    8 = Tags shortened to reduce lag [x], Server split to reduce lag? [ ], Round locations and velocities [x], Improve shooting protocols [ ], Promote teaming [ ], Improve enemies [x], Change scoring dynamics and upgrades [ ], Worsen spider package (dagger,speed) [ ], Termite combat package [ ]
+//    8 = Tags shortened to reduce lag [x], Round locations and velocities [x], Improve shooting protocols [x], Promote teaming [ ], Improve enemies [x], Change scoring dynamics and upgrades [ ], Worsen spider package (dagger,speed) [ ], Termite combat package [ ]
 
 
                  //  ALL UPDATES  \\
@@ -297,8 +297,6 @@ Add Help Screen Scrolling (so I   √√√
     add horizontal shadow bar     √
     
 Shorten ID Tags                   √√√
-    
-Split Server?                     •••
 
 Round Locations and Velocities    √√√
   Client side                     √
@@ -327,20 +325,35 @@ Round Locations and Velocities    √√√
       objects                     √
     updateClient()                √
 
-Improve Shooting Protocols        •••
-  in changeObjects()              •
-    create new object instead of  •
-      just sending a message      •
-  create new verified var. for    •
-    objects                       •
-  in readServerLists()            •
-    update objects.verified       •
-  in object.display()             •
-    display if verified           •
-  in myClient.sendData()          •
-    for each object               •
-      if !(object.verified) send  •
-      mess. to add object again   •
+Improve Shooting Protocols        √√√
+  client-side                     √
+    in changeObjects()            √
+      create new object instead   √
+        of just sending a message √
+        woodpecker                √
+        mole                      √
+        salamander                √
+        spider                    √
+        beaver                    √
+        turtle                    √
+        hedgehog                  √
+    create new verified var. for  √
+      objects                     √
+    in readServerLists()          √
+      update objects.verified     √
+    in object.display()           √
+      only display if verified    √
+    in myClient.sendData()        √
+      for each object             √
+        if (!object.verified)     √
+        send mess. to add object  √
+        again                     √
+  server-side                     √
+    edit spawn() to check of      √
+      requested addition has      √
+      already been processed      √
+    edit respond() to process     √
+      multiple spawn() requests   √
           
 Systems for Cooperative Play      •••
   decrease damage from 'friendly  •
@@ -402,6 +415,16 @@ New termite combat package        •••
   
 Only draw field when near bounds  √√√
 
+Smokescreens lowers enemy agility •••
+
+Spawn new enemies faster          √√√
+
+Improve server reading?           •••
+  in respond()                    •
+    compile multiple HD requests  •
+    of each type before analyzing •
+    them                          •
+
   
 DEBUGGING:                        
   Show turtle's shield            √    (draw shield, expand alpha interpretation to include shieldLength)
@@ -449,7 +472,10 @@ DEBUGGING:
   Name taken, but not actually    •    (sometimes, it won't allow the user to make multiple name changes in one round)
   Windows doesn't have font       •    (solution: perhaps have font data stored in sketch folder?)
   Projectiles explode prematurely √    (solution: check if projectiles are past target by checking if abs(vAngle-tAngle) < PI*0.5)
-  Items spawn inside walls        •
+  Items spawn inside walls        •    (solution: when spawning new items AND when processing addition requests from clients [specifically beavers], check if items are in walls)
+  Some enemies vibrate            •    (when confronted with projectiles, enemies trying to dodge vibrate)
+  Client chatBox won't clear      √    (the chatBox doesn't clear when key pressed initially. solution: I had changed the default text, so conditions had to be changed as well)
+  Too many additions              √    (when a new object is requested, too many result. solution: in server, compare stationary objects by location and moving objects by target)
 \*****************************************************/
 
 import processing.net.*;
@@ -492,7 +518,7 @@ char endID = ']';
 char endCD = ')';
 char endHD = '*';
 
-char splitID = '$';                   //used only when necessary, which is when a client wants to delete multiple objects that need separation OR to split shapes in special icon instructions.
+char splitID = '$';                //used only when necessary, which is when a client wants to delete multiple objects, add multiple objects, or split shapes in special icon instructions.
 
 String myAddress = str(int(random(10000,99999)));    //random 5-digit number is the client's address — no need to use client's ip address :)
 

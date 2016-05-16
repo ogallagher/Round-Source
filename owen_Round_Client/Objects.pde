@@ -2,19 +2,22 @@ class Object {
   String name;
   PVector location;
   String specifics;
+  boolean verified;
   
-  Object(String data) {
+  Object(String data, boolean v) {
     name = extractString(data,nameID,endID);
     
     String locationString = extractString(data,locationID,endID);
     int[] locationInt = int(split(locationString,','));
     location = new PVector(locationInt[0],locationInt[1]);
     
-    specifics = data.substring(data.indexOf(endID,data.indexOf(locationID)) + 1);                               //Everything else that varies from object type to object type.           
+    specifics = data.substring(data.indexOf(endID,data.indexOf(locationID)) + 1);        //Everything else that varies from object type to object type.
+    
+    verified = v;      //Whether the server has sent back verification that it processed the request for the new object
   }
   
   void display() {
-    if (((z*location.x)-myClient.camera.x+width/2 > -400 && (z*location.x)-myClient.camera.x+width/2 < width+400) && ((z*location.y)-myClient.camera.y+height/2 > -400 && (z*location.y)-myClient.camera.y+height/2 < height+400)) {
+    if ((verified) && ((z*location.x)-myClient.camera.x+width/2 > -400 && (z*location.x)-myClient.camera.x+width/2 < width+400) && ((z*location.y)-myClient.camera.y+height/2 > -400 && (z*location.y)-myClient.camera.y+height/2 < height+400)) {
       if (name.equals("wall")) {
         int radius = int(extractString(specifics,radiusID,endID));
         pushMatrix();

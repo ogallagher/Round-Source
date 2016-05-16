@@ -119,15 +119,30 @@ void respond() {
     if (clientMessage.indexOf(spawnHD) > -1) {                                           //*** Update environment data (create objects)
       int i=0;
       if (clientList.size() > 0) {
-        while(extractString(clientList.get(i),addressID,endID).equals(clientAddress) == false && i<clientList.size()-1) {
+        while (extractString(clientList.get(i),addressID,endID).equals(clientAddress) == false && i<clientList.size()-1) {
           i++;
         }
         
         if (extractString(clientList.get(i),addressID,endID).equals(clientAddress)) {
-          String spawnObject =  extractString(clientMessage,spawnHD,endHD);
+          String spawn = extractString(clientMessage,spawnHD,endHD);
+          i = 0;
           
-          if (spawnObject.length() > 0) {
-            spawn(spawnObject);
+          while (spawn.indexOf(nameID,i) > -1) {
+            String subSpawn = spawn.substring(spawn.indexOf(nameID,i));
+            String spawnObject = "";
+            
+            if (subSpawn.indexOf(splitID) > -1) {
+              spawnObject = subSpawn.substring(0,subSpawn.indexOf(splitID));
+            }
+            else {
+              spawnObject = subSpawn;
+            }
+            
+            if (spawnObject.length() > 0) {
+              spawn(spawnObject);
+            }
+            int newI = spawn.indexOf(nameID,i) + nameID.length() + 1;
+            i = newI;
           }
         }
       }
@@ -136,7 +151,7 @@ void respond() {
     if (clientMessage.indexOf(deleteHD) > -1) {                                          //*** Update environment data (destroy objects)
       int i=0;
       if (clientList.size() > 0) {
-        while(extractString(clientList.get(i),addressID,endID).equals(clientAddress) == false && i<clientList.size()-1) {
+        while (extractString(clientList.get(i),addressID,endID).equals(clientAddress) == false && i<clientList.size()-1) {
           i++;
         }
         
@@ -144,7 +159,7 @@ void respond() {
           String delete = extractString(clientMessage,deleteHD,endHD);
           i=0;
           
-          while(delete.indexOf(nameID,i) > -1) {
+          while (delete.indexOf(nameID,i) > -1) {
             String subDelete = delete.substring(delete.indexOf(nameID,i));
             String deleteObject = "";
             

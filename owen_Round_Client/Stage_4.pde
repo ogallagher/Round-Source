@@ -49,9 +49,23 @@ void readServerLists(String text) {
       }
       
       String objectName = extractString(objectData,nameID,endID);
+      boolean myAddition = false;
       
       if (objectData.length() > 0) {
-        objects.add(new Object(objectData));
+        for (int k=0; k<objects.size(); k++) {
+          if (objects.get(k).name.equals(objectName)) {
+            int[] objectLocation = int(split(extractString(objectData,locationID,endID),','));
+            
+            if (round(objects.get(k).location.x) == objectLocation[0] && round(objects.get(k).location.y) == objectLocation[1]) {
+              myAddition = true;
+              objects.get(k).verified = true;
+            }
+          }
+        }
+        
+        if (!myAddition) {
+          objects.add(new Object(objectData, true));
+        }
       }
       
       i = objectText.indexOf(nameID,i) + nameID.length() + objectName.length() + 1;                         //move i forward until the end of name[NAME] to find next object in string.
@@ -110,28 +124,26 @@ void chatLine() {
 void textBoxChat(int locationX,int locationY) {
   if (chatting && keyPressed) {
       if ((key == DELETE || key == BACKSPACE) && chatBoxString.length() > 0) {
-        if (chatBoxString.equals("[,],*,:,$,TAB = Unsupported characters. Limit = 60 char.")) {
+        if (chatBoxString.equals("[,],*,:,$,TAB = Not Permitted. Limit = 60 char.")) {
           chatBoxString = "";
         }
         else {
           chatBoxString = chatBoxString.substring(0,chatBoxString.length()-1);
         }
       }
-      
       else if (key != CODED && key != BACKSPACE && key != ENTER && key != RETURN && key != '*' && key != '[' && key != ']' && key != ':' && key != '\t' && key != '$' && key != '˜' && key != '´' && chatBoxString.length() < 60) {
-        if (chatBoxString.equals("[,],*,:,$,TAB = Unsupported characters. Limit = 60 char.")) {
+        if (chatBoxString.equals("[,],*,:,$,TAB = Not Permitted. Limit = 60 char.")) {
           chatBoxString = str(key);
         }
         else {
           chatBoxString = chatBoxString + key;
         }
       }
-      
       else if (key == ENTER || key == RETURN) {
         chatting = false;
         reading = false;
         
-        if (chatBoxString.equals("[,],*,:,$,TAB = Unsupported characters. Limit = 60 char.") == false && chatBoxString.length() > 0) {
+        if (chatBoxString.equals("[,],*,:,$,TAB = Not Permitted. Limit = 60 char.") == false && chatBoxString.length() > 0) {
           String chat = nameID + myClient.name + endID + chatID + chatBoxString + endID;
           chatBoxString = "";
           

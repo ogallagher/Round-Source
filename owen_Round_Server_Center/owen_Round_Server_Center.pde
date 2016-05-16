@@ -1,11 +1,11 @@
 //Round_Server_Center
 
 // BEGUN:         July 18, 2015
-// LAST UPDATED:  May 13, 2016
+// LAST UPDATED:  May 15, 2016
 // VERSION:       8
 // UPDATES:       
 //    7 = Flexible field size, drawn boundaries, name changing, AI enemies
-//    8 = Tags shortened to reduce lag [x], Server split to reduce lag [ ], Round locations and velocities [x], Improve shooting protocols [ ], Promote teaming [ ], Improve enemies [x], Change scoring dynamics and upgrades [ ], Worsen spider package (dagger,speed) [ ], Termite combat package [ ]
+//    8 = Tags shortened to reduce lag [x], Server split to reduce lag [ ], Round locations and velocities [x], Improve shooting protocols [x], Promote teaming [ ], Improve enemies [x], Change scoring dynamics and upgrades [ ], Worsen spider package (dagger,speed) [ ], Termite combat package [ ]
 
 /*  
     File Format Example
@@ -88,7 +88,7 @@ char endID = ']';
 char endCD = ')';
 char endHD = '*';
 
-char splitID = '$';                   //used only when necessary: separation of client DELETE objects; separation of shapes in icon drawing instructions.
+char splitID = '$';                   //used only when necessary: separation of client DELETE objects; separation of SPAWN objects; separation of shapes in icon drawing instructions.
 
 int fieldMinimum = 1000;
 int fieldMaximum = 3160;

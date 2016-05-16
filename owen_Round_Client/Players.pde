@@ -374,10 +374,20 @@ class Player {
     }
       
     broadcast(broadcast,clientHD);
+    
+    broadcast = "";
+    for (int i=0; i<objects.size(); i++) {
+      if (!objects.get(i).verified) {
+        broadcast += nameID + objects.get(i).name + endID + locationID + str(round(objects.get(i).location.x)) + ',' + str(round(objects.get(i).location.y)) + endID + objects.get(i).specifics;
+        broadcast += splitID;
+      }
+    }
+    
+    broadcast(broadcast,spawnHD);
   }
   
   void changeObjects() {
-    String additions = "";
+    String addition = "";
     String subtractions = "";
     
     if (cpackage.equals("woodpecker")) {
@@ -411,7 +421,7 @@ class Player {
             targetL.add(objectL);
             velocity.mult(upgrade("speed2",5));
              
-            additions += nameID + "bullet" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + velocityID + str(round(velocity.x)) + ',' + str(round(velocity.y)) + endID + targetID + str(round(targetL.x)) + ',' + str(round(targetL.y)) + endID + damageID + damage + endID + ownerID + name + endID;  
+            addition = nameID + "bullet" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + velocityID + str(round(velocity.x)) + ',' + str(round(velocity.y)) + endID + targetID + str(round(targetL.x)) + ',' + str(round(targetL.y)) + endID + damageID + damage + endID + ownerID + name + endID;  
             
             if (switch1) {
               switch1 = false;
@@ -429,7 +439,7 @@ class Player {
             
             velocity.mult(upgrade("speed2",5));
             
-            additions += nameID + "bullet" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + velocityID + str(round(velocity.x)) + ',' + str(round(velocity.y)) + endID + targetID + str(round(targetL.x)) + ',' + str(round(targetL.y)) + endID + damageID + damage + endID + ownerID + name + endID;        //name[bullet]location[X,Y]velocity[Xv,Yv]target[Xf,Yf]damage[D]owner[player0]
+            addition = nameID + "bullet" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + velocityID + str(round(velocity.x)) + ',' + str(round(velocity.y)) + endID + targetID + str(round(targetL.x)) + ',' + str(round(targetL.y)) + endID + damageID + damage + endID + ownerID + name + endID;        //name[bullet]location[X,Y]velocity[Xv,Yv]target[Xf,Yf]damage[D]owner[player0]
           }
         }
         
@@ -442,7 +452,7 @@ class Player {
           int objectR = round(upgrade("range",300));
           int objectA = 350;
           
-          additions += nameID + "smokescreen" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + radiusID + objectR + endID + alphaID + objectA + endID;        //name[smokescreen]location[X,Y]radius[R]alpha[A]
+          addition = nameID + "smokescreen" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + radiusID + objectR + endID + alphaID + objectA + endID;        //name[smokescreen]location[X,Y]radius[R]alpha[A]
         }
       }
     }
@@ -454,7 +464,7 @@ class Player {
           int objectA = 30;
           int damage = round(upgrade("damage",5));
           
-          additions += nameID + "hazardRing" + endID + locationID + str(round(location.x)) + ',' + str(round(location.y)) + endID + radiusID + str(objectR) + endID + alphaID + str(objectA) + endID + damageID + damage + endID + ownerID + name + endID;    //name[hazardRing]location[X,Y]radius[R]alpha[A]damage[D]owner[player0]
+          addition = nameID + "hazardRing" + endID + locationID + str(round(location.x)) + ',' + str(round(location.y)) + endID + radiusID + str(objectR) + endID + alphaID + str(objectA) + endID + damageID + damage + endID + ownerID + name + endID;    //name[hazardRing]location[X,Y]radius[R]alpha[A]damage[D]owner[player0]
         }
       }
     }
@@ -471,7 +481,7 @@ class Player {
           int objectA = 500;
           int damage = round(upgrade("damage",20));
           
-          additions += nameID + "detonator" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + radiusID + objectR + endID + alphaID + objectA + endID + damageID + damage + endID + ownerID + name + endID;  //name[detonator]location[X,Y]radius[R]alpha[A]damage[D]owner[player0] 
+          addition = nameID + "detonator" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + radiusID + objectR + endID + alphaID + objectA + endID + damageID + damage + endID + ownerID + name + endID;  //name[detonator]location[X,Y]radius[R]alpha[A]damage[D]owner[player0] 
         }
         
         else if (mouseButton == RIGHT && coolTime2 < 0.1 && ammo2 > 0) {
@@ -493,10 +503,10 @@ class Player {
           int damage = round(upgrade("damage",3));
           
           if (score < 201) {
-            additions += nameID + "grenade" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + velocityID + str(round(velocity.x)) + ',' + str(round(velocity.y)) + endID + targetID + str(round(targetL.x)) + ',' + str(round(targetL.y)) + endID + radiusID + objectR + endID + damageID + damage + endID + ownerID + name + endID;        //name[grenade]location[X,Y]velocity[Xv,Yv]target[Xf,Yf]radius[R]damage[D]owner[player0]
+            addition = nameID + "grenade" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + velocityID + str(round(velocity.x)) + ',' + str(round(velocity.y)) + endID + targetID + str(round(targetL.x)) + ',' + str(round(targetL.y)) + endID + radiusID + objectR + endID + damageID + damage + endID + ownerID + name + endID;        //name[grenade]location[X,Y]velocity[Xv,Yv]target[Xf,Yf]radius[R]damage[D]owner[player0]
           }
           else {
-            additions += nameID + "demolition" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + velocityID + str(round(velocity.x)) + ',' + str(round(velocity.y)) + endID + targetID + str(round(targetL.x)) + ',' + str(round(targetL.y)) + endID + radiusID + objectR + endID + damageID + damage + endID + ownerID + name + endID;        //name[demolition]location[X,Y]velocity[Xv,Yv]target[Xf,Yf]radius[R]damage[D]owner[player0]
+            addition = nameID + "demolition" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + velocityID + str(round(velocity.x)) + ',' + str(round(velocity.y)) + endID + targetID + str(round(targetL.x)) + ',' + str(round(targetL.y)) + endID + radiusID + objectR + endID + damageID + damage + endID + ownerID + name + endID;        //name[demolition]location[X,Y]velocity[Xv,Yv]target[Xf,Yf]radius[R]damage[D]owner[player0]
           }
         }
       }
@@ -512,10 +522,10 @@ class Player {
             int objectR = round(upgrade("range",5));
             int objectA = 1;
             int damage = round(upgrade("damage",40));
-            additions += nameID + "hazardRing" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + radiusID + str(objectR) + endID + alphaID + str(objectA) + endID + damageID + damage + endID + ownerID + name + endID;
+            addition = nameID + "hazardRing" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + radiusID + str(objectR) + endID + alphaID + str(objectA) + endID + damageID + damage + endID + ownerID + name + endID;
           }
           else if (z < 0.8 && !(round((mouseX - width/2 + camera.x)/z) == round(objectL.x) && round((mouseY - height/2 + camera.y)/z) == round(objectL.y))) {
-            additions += nameID + "laserPoint" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + alphaID + '1' + endID;
+            addition = nameID + "laserPoint" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + alphaID + '1' + endID;
           }
       }
       else if (coolTime2 < 0.1 && mousePressed && mouseButton == RIGHT) {
@@ -526,7 +536,7 @@ class Player {
         int objectR = round(upgrade("range",10));
         int objectA = 1;
         int damage = round(upgrade("damage",10));
-        additions += nameID + "hazardRing" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + radiusID + str(objectR) + endID + alphaID + str(objectA) + endID + damageID + damage + endID + ownerID + name + endID;  
+        addition = nameID + "hazardRing" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + radiusID + str(objectR) + endID + alphaID + str(objectA) + endID + damageID + damage + endID + ownerID + name + endID;  
       }
     }
     
@@ -550,10 +560,10 @@ class Player {
           int damage = round(upgrade("damage",15));
           
           if (score > 150) {
-            additions += nameID + "grenade" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + velocityID + str(round(velocity.x)) + ',' + str(round(velocity.y)) + endID + targetID + str(round(targetL.x)) + ',' + str(round(targetL.y)) + endID + radiusID + str(150) + endID + damageID + damage + endID + ownerID + name + endID;
+            addition = nameID + "grenade" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + velocityID + str(round(velocity.x)) + ',' + str(round(velocity.y)) + endID + targetID + str(round(targetL.x)) + ',' + str(round(targetL.y)) + endID + radiusID + str(150) + endID + damageID + damage + endID + ownerID + name + endID;
           }
           else {
-            additions += nameID + "bullet" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + velocityID + str(round(velocity.x)) + ',' + str(round(velocity.y)) + endID + targetID + str(round(targetL.x)) + ',' + str(round(targetL.y)) + endID + damageID + damage + endID + ownerID + name + endID;
+            addition = nameID + "bullet" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + velocityID + str(round(velocity.x)) + ',' + str(round(velocity.y)) + endID + targetID + str(round(targetL.x)) + ',' + str(round(targetL.y)) + endID + damageID + damage + endID + ownerID + name + endID;
           }
         }
         
@@ -583,10 +593,10 @@ class Player {
               }
             }
           }
-          
+            
           if (!wallFound && beaverWalls.size() > 0 && (targetL.x > 0 && targetL.x < fieldWidth && targetL.y > 0 && targetL.y < fieldWidth)) {
             String newWall = replaceString(beaverWalls.get(0),str(round(targetL.x)) + ',' + str(round(targetL.y)),locationID,endID);
-            additions += newWall;
+            addition = newWall;
             beaverWalls.remove(0);
           }
           
@@ -601,7 +611,7 @@ class Player {
           int objectR = round(upgrade("range",200));
           int objectA = 30;
           int damage = round(upgrade("damage",5));
-          additions += nameID + "hazardRing" + endID + locationID + str(round(location.x)) + ',' + str(round(location.y)) + endID + radiusID + str(objectR) + endID + alphaID + str(objectA) + endID + damageID + damage + endID + ownerID + name + endID;
+          addition = nameID + "hazardRing" + endID + locationID + str(round(location.x)) + ',' + str(round(location.y)) + endID + radiusID + str(objectR) + endID + alphaID + str(objectA) + endID + damageID + damage + endID + ownerID + name + endID;
         }
         else if (mouseButton == RIGHT) {
           PVector shieldPoint;
@@ -685,14 +695,14 @@ class Player {
                     twoPoint.add(object.location);
                     
                     if (!(extractString(lastPlaced,nameID,endID).equals(object.name) && extractString(lastPlaced,locationID,endID).equals(str(object.location.x) + ',' + str(object.location.y)))) {
-                      additions += nameID + object.name + endID + locationID + str(round(object.location.x)) + ',' + str(round(object.location.y)) + endID + velocityID + str(round(velocity2.x)) + ',' + str(round(velocity2.y)) + endID + targetID + str(round(twoPoint.x)) + ',' + str(round(twoPoint.y)) + endID;
-                      lastPlaced = additions;
+                      addition = nameID + object.name + endID + locationID + str(round(object.location.x)) + ',' + str(round(object.location.y)) + endID + velocityID + str(round(velocity2.x)) + ',' + str(round(velocity2.y)) + endID + targetID + str(round(twoPoint.x)) + ',' + str(round(twoPoint.y)) + endID;
+                      lastPlaced = addition;
                       
                       if (object.name.equals("grenade") || object.name.equals("demolition")) {
-                        additions += radiusID + extractString(object.specifics,radiusID,endID) + endID;
+                        addition = radiusID + extractString(object.specifics,radiusID,endID) + endID;
                       }
                       
-                      additions += damageID + extractString(object.specifics,damageID,endID) + endID + ownerID + name + endID;
+                      addition = damageID + extractString(object.specifics,damageID,endID) + endID + ownerID + name + endID;
                     }
                   }
                 }
@@ -720,7 +730,7 @@ class Player {
           int alpha = 1;
           int damage = round(upgrade("damage",30));
           
-          additions += nameID + "fanshot" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + velocityID + str(round(velocity.x)) + ',' + str(round(velocity.y)) + endID + radiusID + str(radius) + endID + alphaID + str(alpha) + endID + damageID + damage + endID + ownerID + name + endID;    //name[fanshot]location[X,Y]velocity[X,Y]radius[R]alpha[A]damage[D]owner[]
+          addition = nameID + "fanshot" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + velocityID + str(round(velocity.x)) + ',' + str(round(velocity.y)) + endID + radiusID + str(radius) + endID + alphaID + str(alpha) + endID + damageID + damage + endID + ownerID + name + endID;    //name[fanshot]location[X,Y]velocity[X,Y]radius[R]alpha[A]damage[D]owner[]
         }
       }
     }
@@ -801,8 +811,9 @@ class Player {
     }
     
 
-    if (additions.length() > 0) {
-      broadcast(additions,spawnHD);
+    if (addition.length() > 0) {
+      //broadcast(addition,spawnHD);
+      objects.add(new Object(addition, false));
     }
 
     if (subtractions.length() > 0) {
