@@ -1,7 +1,7 @@
 //Round_Client
 
 // BEGUN:         July 18, 2015
-// LAST UPDATED:  May 15, 2016
+// LAST UPDATED:  May 16, 2016
 // VERSION:       8
 // UPDATES:
 //    7 = Flexible field size, drawn boundaries, name changing, AI enemies
@@ -408,14 +408,14 @@ New termite combat package        •••
     holds a gear in front which   •
     spins when building           •
   attack: creates turrets         •
-  special: creates foggers?       •
+  special: creates 
   speed: fast                     •
   health: medium                  •
   coolTime: very long             •
   
 Only draw field when near bounds  √√√
 
-Smokescreens lowers enemy agility •••
+Smokescreens lowers enemy agility √√√
 
 Spawn new enemies faster          √√√
 
@@ -438,7 +438,7 @@ DEBUGGING:
     with demolition grenades      √    (they aren't compatible yet)
   Shotgun ghost bullets           √    (didn't do any damage)
   Machine gun lump                √    (don't draw properly)
-  Pickup problem                  √    (U.J. can't pick up items) solution: use a different splitID (perhaps he doesn't have the diamond char in his OS) TRY: $ 
+  Pickup problem                  √    (U.J. can't pick up items. solution: use a different splitID (perhaps he doesn't have the diamond char in his OS) TRY: $) 
   Chatline                        √    (general user interface improvements)
   Server discards zombies         √    (make it possible for server to remove zombies somehow) HOW: add zombieness[Z] for every client; the server increments Z every loop. If the client updates, it is set back to zero. If it gets past 500, the client is eliminated from the list and a death message is sent.
   Clients w/ numbers die suddenly √    
@@ -472,10 +472,11 @@ DEBUGGING:
   Name taken, but not actually    •    (sometimes, it won't allow the user to make multiple name changes in one round)
   Windows doesn't have font       •    (solution: perhaps have font data stored in sketch folder?)
   Projectiles explode prematurely √    (solution: check if projectiles are past target by checking if abs(vAngle-tAngle) < PI*0.5)
-  Items spawn inside walls        •    (solution: when spawning new items AND when processing addition requests from clients [specifically beavers], check if items are in walls)
+  Items spawn inside walls        √    (solution: when spawning new items AND when processing addition requests from clients [specifically beavers], check if items are in walls)
   Some enemies vibrate            •    (when confronted with projectiles, enemies trying to dodge vibrate)
   Client chatBox won't clear      √    (the chatBox doesn't clear when key pressed initially. solution: I had changed the default text, so conditions had to be changed as well)
   Too many additions              √    (when a new object is requested, too many result. solution: in server, compare stationary objects by location and moving objects by target)
+  Enemies don't move              √    (when the enemy hasn't client nor coin in sight, it doesn't look for a random location. solution: set random location if coin isn't less than range)
 \*****************************************************/
 
 import processing.net.*;

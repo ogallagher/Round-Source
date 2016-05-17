@@ -1,15 +1,16 @@
 void spawn(String objectData) {
   boolean processed = false;
+  int movedObject = -1;
+  String name = extractString(objectData,nameID,endID);
+  int[] location = int(split(extractString(objectData,locationID,endID),','));
   
   for (int i=0; i<objectList.size(); i++) {
     String testObject = objectList.get(i);
     String nameTest = extractString(testObject,nameID,endID);
     int[] locationTest = int(split(extractString(testObject,locationID,endID),','));
     
-    if (extractString(objectData,nameID,endID).equals(nameTest)) {
-      if (nameTest.equals("wall") || nameTest.equals("hazardRing") || nameTest.equals("detonator") || nameTest.equals("smokeScreen") || nameTest.equals("laserPoint") || nameTest.equals("fanshot")) {
-        int[] location = int(split(extractString(objectData,locationID,endID),','));
-        
+    if (name.equals(nameTest)) {
+      if (name.equals("wall") || name.equals("hazardRing") || name.equals("detonator") || name.equals("smokeScreen") || name.equals("laserPoint") || name.equals("fanshot")) {
         if (location[0] == locationTest[0] && location[1] == locationTest[1]) {
           processed = true;
         }
@@ -23,10 +24,61 @@ void spawn(String objectData) {
         }
       }
     }
+    else if (name.equals("wall") && (nameTest.equals("ammoBox") || nameTest.equals("healthBox") || nameTest.equals("coin"))){
+      int radius = int(extractString(objectData,radiusID,endID));
+      PVector difference = new PVector(locationTest[0],locationTest[1]);
+      difference.sub(location[0],location[1]);
+      
+      if (difference.mag() < radius + 20) {
+        difference.normalize();
+        difference.mult(radius + 20);
+        
+        difference.x += location[0];
+        difference.y += location[1];
+        objectList.set(i,replaceString(testObject,str(int(difference.x)) + ',' + str(int(difference.y)),locationID,endID));
+        
+        movedObject = i;
+      }
+    }
   }
   
   if (!processed) {
     objectList.append(objectData);
+  }
+  
+  if (movedObject > -1) {
+    location = int(split(extractString(objectList.get(movedObject),locationID,endID),','));
+    boolean inWall = true;
+    
+    while (inWall) {
+      boolean currentInWall = false;
+      
+      for (int i=0; i<objectList.size() && !currentInWall; i++) {
+        if (extractString(objectList.get(i),nameID,endID).equals("wall")) {
+          int[] difference = int(split(extractString(objectList.get(i),locationID,endID),','));
+          difference[0] -= location[0];
+          difference[1] -= location[1];
+          
+          if (sqrt(pow(difference[0],2) + pow(difference[1],2)) < int(extractString(objectList.get(i),radiusID,endID))) {
+            currentInWall = true; 
+            
+            PVector change = new PVector(difference[0],difference[1]);
+            change.mult(-1);
+            change.normalize();
+            change.mult(int(extractString(objectList.get(i),radiusID,endID)) + 20);
+            
+            location[0] += difference[0] + round(change.x);
+            location[1] += difference[1] + round(change.y);
+          }
+        }
+      }
+      
+      if (!currentInWall) {
+        inWall = false;
+      }
+    }
+    
+    objectList.set(movedObject,replaceString(objectList.get(movedObject),str(location[0]) + ',' + str(location[1]),locationID,endID));
   }
 }
 
@@ -430,7 +482,7 @@ void updateEnvironment() {
 }
 
 void spawnItems() {
-  String location;
+  String location = "";
   
   int h = 0;                //To make sure the environment is up-to-date, we must first check our HACWE.
   int a = 0;
@@ -458,12 +510,64 @@ void spawnItems() {
   e = enemyList.size();
   
   if (h < ceil(clientList.size()/2) + 1) {
-    location = str(int(random(50,fieldWidth-50))) + ',' + str(int(random(50,fieldWidth-50)));
+    int x = 0;
+    int y = 0;
+    boolean inWall = true;
+    
+    while (inWall) {
+      boolean currentInWall = false;
+      x = int(random(50,fieldWidth-50));
+      y = int(random(50,fieldWidth-50));
+      
+      for (int i=0; i<objectList.size() && !currentInWall; i++) {
+        if (extractString(objectList.get(i),nameID,endID).equals("wall")) {
+          int[] difference = int(split(extractString(objectList.get(i),locationID,endID),','));
+          difference[0] -= x;
+          difference[1] -= y;
+          
+          if (sqrt(pow(difference[0],2) + pow(difference[1],2)) < int(extractString(objectList.get(i),radiusID,endID)) + 20) {
+            currentInWall = true; 
+          }
+        }
+      }
+      
+      if (!currentInWall) {
+        inWall = false;
+      }
+    }
+    
+    location = str(x) + ',' + str(y);
     spawn(nameID + "healthBox" + endID + locationID + location + endID);
   }
   
   if (a < ceil(clientList.size()/2) + 1) {
-    location = str(int(random(50,fieldWidth-50))) + ',' + str(int(random(50,fieldWidth-50)));
+    int x = 0;
+    int y = 0;
+    boolean inWall = true;
+    
+    while (inWall) {
+      boolean currentInWall = false;
+      x = int(random(50,fieldWidth-50));
+      y = int(random(50,fieldWidth-50));
+      
+      for (int i=0; i<objectList.size() && !currentInWall; i++) {
+        if (extractString(objectList.get(i),nameID,endID).equals("wall")) {
+          int[] difference = int(split(extractString(objectList.get(i),locationID,endID),','));
+          difference[0] -= x;
+          difference[1] -= y;
+          
+          if (sqrt(pow(difference[0],2) + pow(difference[1],2)) < int(extractString(objectList.get(i),radiusID,endID)) + 20) {
+            currentInWall = true; 
+          }
+        }
+      }
+      
+      if (!currentInWall) {
+        inWall = false;
+      }
+    }
+    
+    location = str(x) + ',' + str(y);
     spawn(nameID + "ammoBox" + endID + locationID + location + endID);
   }
   

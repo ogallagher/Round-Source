@@ -147,18 +147,18 @@ class Object {
           strokeWeight(z*2);
         }
         beginShape();
-          vertex(z*-8,   z*-2);
+          vertex(z*-8, z*-2);
           vertex(z*-2, z*-2);
           vertex(z*-2, z*-8);
           vertex(z*2,  z*-8);
           vertex(z*2,  z*-2);
-          vertex(z*8,    z*-2);
-          vertex(z*8,    z*2);
+          vertex(z*8,  z*-2);
+          vertex(z*8,  z*2);
           vertex(z*2,  z*2);
           vertex(z*2,  z*8);
           vertex(z*-2, z*8);
           vertex(z*-2, z*2);
-          vertex(z*-8,   z*2);
+          vertex(z*-8, z*2);
         endShape(CLOSE);
         popMatrix();
       }

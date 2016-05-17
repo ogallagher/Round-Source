@@ -54,6 +54,9 @@ class Enemy {
   }
   
   void awareness() {  //smokescreens, bullets, grenades, demolition, hazardRings
+    if (inSmokeScreen) {
+      agility *= 0.5;
+    }
     inSmokeScreen = false;
     
     for (int i=0; i<objectList.size(); i++) {
@@ -180,7 +183,7 @@ class Enemy {
           String objectName = extractString(objectList.get(i),nameID,endID);
           
           if (objectName.equals("wall")) {
-            float[] wallLocation = float(split(extractString(objectList.get(i),locationID,endID),','));
+            int[] wallLocation = int(split(extractString(objectList.get(i),locationID,endID),','));
             
             if (wallLocation.length > 1) {
               difference.set(wallLocation[0],wallLocation[1]);
@@ -223,6 +226,7 @@ class Enemy {
       if (!(targetShootFound) || (stuckTime > 300)) {
         while (i < objectList.size()) {
           String objectName = extractString(objectList.get(i),nameID,endID);
+          
           if (objectName.equals("coin")) {
             int[] coinLocation = int(split(extractString(objectList.get(i),locationID,endID),','));
             
@@ -240,7 +244,7 @@ class Enemy {
           i++;
         }
         
-        if (distance > range) {
+        if (distance >= range) {
           targetMove.set(random(60,fieldWidth-60),random(60,fieldWidth-60));
         }
       }
