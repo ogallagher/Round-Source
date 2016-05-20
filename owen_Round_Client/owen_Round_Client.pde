@@ -1,11 +1,11 @@
 //Round_Client
 
 // BEGUN:         July 18, 2015
-// LAST UPDATED:  May 16, 2016
+// LAST UPDATED:  May 17, 2016
 // VERSION:       8
 // UPDATES:
 //    7 = Flexible field size, drawn boundaries, name changing, AI enemies
-//    8 = Tags shortened to reduce lag [x], Round locations and velocities [x], Improve shooting protocols [x], Promote teaming [ ], Improve enemies [x], Change scoring dynamics and upgrades [ ], Worsen spider package (dagger,speed) [ ], Termite combat package [ ]
+//    8 = Tags shortened to reduce lag [x], Round locations and velocities [x], Improve shooting protocols [x], Promote teaming [ ], Improve enemies [x], Change scoring dynamics and upgrades [ ], Worsen spider package (dagger,speed) [ ], Termite combat package [...], Autocomplete username []
 
 
                  //  ALL UPDATES  \\
@@ -401,17 +401,28 @@ Scoring and Upgrades              •••
   upgrades more frequent          •
   
 New termite combat package        •••
-  create icon                     •
-    castle front with jagged top  •
-      rim and square doorway      •
+  stats                           •
+    attack: creates turret        •
+    special: creates base         •
+    speed: fast                   •
+    health: medium                •
+    coolTime: very long           •
+    upgrade info: ???             •
+  selection description           •
+  createButtonTermite()           √
+  create icon                     √
+    castle front with jagged top  √
+      rim and square doorway      √
   display                         •
     holds a gear in front which   •
     spins when building           •
-  attack: creates turrets         •
-  special: creates 
-  speed: fast                     •
-  health: medium                  •
-  coolTime: very long             •
+  myClient functions              •
+    getData()                     •
+    control()                     •
+    changeObjects()               •
+    display()                     • 
+  upgrade()                       •
+  send in createButtonPlay()      √
   
 Only draw field when near bounds  √√√
 
@@ -424,7 +435,28 @@ Improve server reading?           •••
     compile multiple HD requests  •
     of each type before analyzing •
     them                          •
+    
+Increase box spawn quantity       •••
 
+Autocomplete username             •••
+  create owen_Round_Client.txt    •
+  all past usernames that the     •
+    client input in the past      •
+    are stored in this file       •
+  the sketch pulls these names    •
+    and uses them for             •
+    autocomplete                  •
+    
+Introduce towers                  •••
+  create Tower class              º
+  updated locally by client       •
+  has its own heading             •
+  two types (so far)              •
+    turret                        •
+    base                          •
+  client-side                     •
+    create new towers list        •
+    
   
 DEBUGGING:                        
   Show turtle's shield            √    (draw shield, expand alpha interpretation to include shieldLength)
@@ -485,6 +517,7 @@ Client client;
 
 String clientHD = "C:";          //Data headings 
 String objectHD = "O:";
+String towerHD = "T:";
 String messageHD = "M:";
 String newHD = "N:";
 String loadHD = "L:";
@@ -567,6 +600,8 @@ float z = 1;                          //Scale all locations and sizes for spider
 
 void setup() {
   size(800,700);
+  noCursor();
+  
   client = new Client(this, "74.71.101.15", 44445);      //For using internet connection — the ip is that of our home router, the port is the one I chose on which to allow incoming data requests. (test w/ canyouseeme.org)
   
   myClient = new Player();
@@ -612,13 +647,14 @@ void draw() {
     createButtonPlay(700,600);    //If clicked, request to join is sent.
     createButtonBack(50,100);
     
-    createButtonWoodpecker(100,220);
-    createButtonMole(200,220);
-    createButtonSalamander(300,220);
-    createButtonSpider(400,220);
-    createButtonBeaver(500,220);
-    createButtonTurtle(600,220);
-    createButtonHedgehog(700,220);
+    createButtonWoodpecker(50,220);
+    createButtonMole(150,220);
+    createButtonSalamander(250,220);
+    createButtonSpider(350,220);
+    createButtonBeaver(450,220);
+    createButtonTurtle(550,220);
+    createButtonHedgehog(650,220);
+    createButtonTermite(750,220);
     
     drawTitle();
     

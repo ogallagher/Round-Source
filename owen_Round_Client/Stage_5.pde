@@ -1,6 +1,6 @@
 // KILLSCREEN
 
-void displayKillscreen () {
+void displayKillscreen() {
   int textSize = 50;
   pushMatrix();
   textFont(titleFont,textSize);

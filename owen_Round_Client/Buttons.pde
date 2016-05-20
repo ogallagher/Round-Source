@@ -182,6 +182,9 @@ void createButtonPlay(int locationX, int locationY) {
       else if (combatPackage == 7) {
         message += "hedgehog";
       }
+      else if (combatPackage == 8) {
+        message += "termite";
+      }
       
       message += endID;
       
@@ -886,6 +889,55 @@ void createButtonHedgehog(int locationX, int locationY) {
   triangle(locationX-7,locationY+(7*1.75*.5),locationX+7,locationY+(7*1.75*.5),locationX,locationY-(7*1.75*.5));
   translate(-20,0);
   triangle(locationX-7,locationY+(7*1.75*.5),locationX+7,locationY+(7*1.75*.5),locationX,locationY-(7*1.75*.5));
+  popMatrix();
+}
+
+void createButtonTermite(int locationX, int locationY) {
+  PVector mLocation = new PVector(mouseX,mouseY);
+  mLocation.x -= locationX;
+  mLocation.y -= locationY;
+  float distance = mLocation.mag();
+  
+  if (distance < 40 && stage < 4) {
+    if (mousePressed) {
+      combatPackage = 8;
+    }
+    
+    pushMatrix();
+    stroke(255);
+    noFill();
+    ellipseMode(CENTER);
+    ellipse(locationX,locationY,60,60);
+    popMatrix();
+  }
+  
+  pushMatrix();
+  stroke(255);
+  if (distance < 40 || stage == 4) {
+    fill(255);
+  }
+  else {
+    noFill();
+  }
+  translate(locationX,locationY-2);
+  beginShape();
+    vertex(-14,-14);
+    vertex(-8,-14);
+    vertex(-8,-8);
+    vertex(-3,-8);
+    vertex(-3,-14);
+    vertex(3,-14);
+    vertex(3,-8);
+    vertex(8,-8);
+    vertex(8,-14);
+    vertex(14,-14);
+    vertex(14,18);
+    vertex(5,18);
+    vertex(5,10);
+    vertex(-5,10);
+    vertex(-5,18);
+    vertex(-14,18);
+  endShape(CLOSE);
   popMatrix();
 }
 

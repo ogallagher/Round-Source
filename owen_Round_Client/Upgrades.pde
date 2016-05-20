@@ -1,6 +1,6 @@
 // Upgrade Player Stat Var's
 
-float upgrade (String type, float initial) {
+float upgrade(String type, float initial) {
   float constant = 0;
   float root = 1;
   int ceiling = -1;
