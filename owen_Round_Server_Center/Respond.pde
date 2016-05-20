@@ -2,7 +2,6 @@ void respond() {
   Client someClient = server.available();
   if (someClient != null) {
     String clientMessage = someClient.readString();
-    println(clientMessage);
     String clientAddress = extractString(clientMessage,addressID,endID);
     
     if (clientMessage.indexOf(newHD) > -1) {                                            //*** Create new client
@@ -208,7 +207,5 @@ void respond() {
         broadcast("DEATH [" + name + endID, messageHD, "all");
       }
     }
-    
-    server.write("*/*");
   }
 }

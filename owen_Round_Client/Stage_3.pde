@@ -31,7 +31,7 @@ void drawPackageSelection(int selection) {
     text("HEDGEHOG\n  SPEED: 4\n  ATTACK: mid-range fan shotgun\n  SPECIAL: static invisibility\n  INFO: unlock slow invisibility after 230",0,0);
   }
   if (selection == 8) {
-    text("TERMITE\n  SPEED: 8\n  ATTACK: create mid-range turret\n SPECIAL: become turret...?\n INFO: unlock shockwave turrets after ###",0,0);
+    text("TERMITE\n  SPEED: 8\n  ATTACK: create mid-range turret\n SPECIAL: create short-range base\n INFO: turrets shoot bullets, bases shoot health. Unlock...",0,0);
   }
   
   popMatrix();

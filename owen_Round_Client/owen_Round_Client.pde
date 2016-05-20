@@ -400,7 +400,7 @@ Scoring and Upgrades              •••
   make score loss a proportion    •
   upgrades more frequent          •
   
-New termite combat package        •••
+New termite combat package        º••
   stats                           •
     attack: creates turret        •
     special: creates base         •
@@ -413,9 +413,9 @@ New termite combat package        •••
   create icon                     √
     castle front with jagged top  √
       rim and square doorway      √
-  display                         •
-    holds a gear in front which   •
-    spins when building           •
+  display                         √
+    holds a gear in front which   √
+    spins when building           √
   myClient functions              •
     getData()                     •
     control()                     •
@@ -456,6 +456,11 @@ Introduce towers                  •••
     base                          •
   client-side                     •
     create new towers list        •
+    
+Highlight buttons                 √√√
+  help, info                      √
+  combat packages                 √
+  
     
   
 DEBUGGING:                        

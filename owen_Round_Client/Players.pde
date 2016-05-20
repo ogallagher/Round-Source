@@ -812,7 +812,6 @@ class Player {
     
 
     if (addition.length() > 0) {
-      //broadcast(addition,spawnHD);
       objects.add(new Object(addition, false));
     }
 
@@ -1059,6 +1058,63 @@ class Player {
       stroke(80);
       line(-4.5,-40,4.5,-40);
       line(0,-41,0,-60);
+      popMatrix();
+    }
+    else if (cpackage.equals("termite")) {
+      if (bestGraphics && z == 1 && icon.length() == 0) {
+        createButtonTermite(int(location.x-camera.x+width/2),int(location.y-camera.y+height/2));
+      }
+      
+      if (mousePressed && mouseButton == LEFT) {
+        animationAngle += 0.15;
+      }
+      else {
+        animationAngle = 0;
+      }
+      
+      if (animationAngle > 2*PI) {
+          animationAngle = 0;
+      }
+      
+      pushMatrix();
+      translate(location.x-camera.x+width/2,location.y-camera.y+height/2);
+      fill(255);
+      stroke(255);
+      strokeWeight(1.5);
+      rotate(angle);
+      translate(45,0);
+      ellipseMode(CENTER);
+      ellipse(0,0,10,10);
+      fill(80);
+      noStroke();
+      ellipse(0,0,5,5);
+      fill(255);
+      stroke(255);
+      rotate(animationAngle);
+      beginShape();
+        vertex(-2,-4);
+        vertex(-1,-8);
+        vertex(1,-8);
+        vertex(2,-4);
+      endShape(CLOSE);
+      beginShape();
+        vertex(4,-2);
+        vertex(8,-1);
+        vertex(8,1);
+        vertex(4,2);
+      endShape(CLOSE);
+      beginShape();
+        vertex(2,4);
+        vertex(1,8);
+        vertex(-1,8);
+        vertex(-2,4);
+      endShape(CLOSE);
+      beginShape();
+        vertex(-4,-2);
+        vertex(-8,-1);
+        vertex(-8,1);
+        vertex(-4,2);
+      endShape(CLOSE);
       popMatrix();
     }
     

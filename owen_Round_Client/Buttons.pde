@@ -21,7 +21,7 @@ void createButtonInfo(int locationX, int locationY) {
   stroke(255);
   ellipseMode(CENTER);
   rectMode(CENTER);
-  if (distance < 35) { 
+  if (distance < 35 || stage == 1) { 
     fill(255);
   }
   else {
@@ -54,7 +54,7 @@ void createButtonHelp(int locationX, int locationY) {
   
   pushMatrix();
   stroke(255);
-  if (distance < 35) {               
+  if (distance < 35 || stage == 2) {               
     fill(255);
   }
   else {
@@ -482,7 +482,7 @@ void createButtonWoodpecker(int locationX, int locationY) {
   pushMatrix();
   translate(2,0);
   stroke(255);
-  if (distance < 40 || stage == 4) {                                      // 40 is the radius of the button's activation site
+  if (distance < 40 || combatPackage == 1 || stage == 4) {                                      // 40 is the radius of the button's activation site
     fill(255);
   }
   else {
@@ -526,7 +526,7 @@ void createButtonMole(int locationX, int locationY) {
   }
   
   pushMatrix();
-  if (distance < 40 || stage == 4) {
+  if (distance < 40 || combatPackage == 2 || stage == 4) {
     fill(255);
   }
   else {
@@ -546,7 +546,7 @@ void createButtonMole(int locationX, int locationY) {
   popMatrix();
   
   pushMatrix();
-  if (distance < 40 || stage == 4) {
+  if (distance < 40 || combatPackage == 2 || stage == 4) {
     fill(255);
   }
   else {
@@ -581,7 +581,7 @@ void createButtonMole(int locationX, int locationY) {
   line(locationX-10,locationY-2,locationX+10,locationY-2);
   strokeWeight(1.5);
   
-  if (distance < 40 || stage == 4) {
+  if (distance < 40 || combatPackage == 2 || stage == 4) {
     noStroke();
   }
   else {
@@ -600,7 +600,7 @@ void createButtonSalamander(int locationX, int locationY) {
   pushMatrix();
   stroke(255);
   ellipseMode(CENTER);
-  if (distance < 40 || stage == 4) {                                      // 40 is the radius of the button's activation site
+  if (distance < 40 || combatPackage == 3 || stage == 4) {                                      // 40 is the radius of the button's activation site
     fill(255);
   }
   else {
@@ -636,7 +636,7 @@ void createButtonSalamander(int locationX, int locationY) {
   }
   
   pushMatrix();
-  if (distance < 40 || stage == 4) {
+  if (distance < 40 || combatPackage == 3 || stage == 4) {
     fill(255);
   }
   else {
@@ -651,7 +651,7 @@ void createButtonSalamander(int locationX, int locationY) {
     vertex(locationX+10,locationY-3);
     vertex(locationX+14,locationY-5);
     vertex(locationX+15,locationY);
-  if (distance < 40 || stage == 4) {
+  if (distance < 40 || combatPackage == 3 || stage == 4) {
     endShape(CLOSE);
   }
   else {
@@ -680,7 +680,7 @@ void createButtonSpider(int locationX, int locationY) {
     popMatrix();
   }
   pushMatrix();
-  if (distance < 40 || stage == 4) {
+  if (distance < 40 || combatPackage == 4 || stage == 4) {
     fill(255);
   }
   else {
@@ -714,7 +714,7 @@ void createButtonSpider(int locationX, int locationY) {
   
   pushMatrix();
   stroke(255);
-  if (distance < 40 || stage == 4) {
+  if (distance < 40 || combatPackage == 4 || stage == 4) {
     fill(255);
   }
   else {
@@ -755,7 +755,7 @@ void createButtonBeaver(int locationX, int locationY) {
   
   pushMatrix();
   stroke(255);
-  if (distance < 40 || stage == 4) {
+  if (distance < 40 || combatPackage == 5 || stage == 4) {
     fill(255);
   }
   else {
@@ -787,7 +787,7 @@ void createButtonTurtle(int locationX, int locationY) {
   
   pushMatrix();
   stroke(255);
-  if (distance < 40 || stage == 4) {
+  if (distance < 40 || combatPackage == 6 || stage == 4) {
     fill(255);
   }
   else {
@@ -807,7 +807,7 @@ void createButtonTurtle(int locationX, int locationY) {
   
   pushMatrix();
   stroke(255);
-  if (distance < 40 || stage == 4) {
+  if (distance < 40 || combatPackage == 6 || stage == 4) {
     fill(255);
   }
   else {
@@ -821,7 +821,7 @@ void createButtonTurtle(int locationX, int locationY) {
   
   pushMatrix();
   stroke(255);
-  if (distance < 40 || stage == 4) {
+  if (distance < 40 || combatPackage == 6 || stage == 4) {
     fill(255);
   }
   else {
@@ -875,7 +875,7 @@ void createButtonHedgehog(int locationX, int locationY) {
   
   pushMatrix();
   stroke(255);
-  if (distance < 40 || stage == 4) {
+  if (distance < 40 || combatPackage == 7 || stage == 4) {
     fill(255);
   }
   else {
@@ -913,7 +913,7 @@ void createButtonTermite(int locationX, int locationY) {
   
   pushMatrix();
   stroke(255);
-  if (distance < 40 || stage == 4) {
+  if (distance < 40 || combatPackage == 8 || stage == 4) {
     fill(255);
   }
   else {
