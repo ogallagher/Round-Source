@@ -447,15 +447,16 @@ Autocomplete username             •••
     and uses them for             •
     autocomplete                  •
     
-Introduce towers                  •••
-  create Tower class              º
-  updated locally by client       •
-  has its own heading             •
-  two types (so far)              •
-    turret                        •
-    base                          •
+Introduce turrets and beacons     •••
   client-side                     •
-    create new towers list        •
+    add new object id tags        •
+    termite requests              •
+  server-side                     •
+    add new object id tags        •
+    update turrets to aim for     •
+      clients from other 'teams'  •
+    update beacons to aim for     •
+      client of the same 'team'   •
     
 Highlight buttons                 √√√
   help, info                      √
