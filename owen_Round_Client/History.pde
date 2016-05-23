@@ -453,6 +453,9 @@ Introduce turrets and beacons     º••
     display beacons               •
   server-side                     º
     add new object id tags        √
+    edit respond()                •
+      append turretList           •
+      append beaconList           •
     make tower class              º
       turret class extends tower  º
       beacon class extends tower  º
