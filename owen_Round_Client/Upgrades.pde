@@ -1,5 +1,3 @@
-// Upgrade Player Stat Var's
-
 float upgrade(String type, float initial) {
   float constant = 0;
   float root = 1;
@@ -59,7 +57,7 @@ float upgrade(String type, float initial) {
      ceiling = 250;
   }
   else {
-    println("CLIENT: statistic type " + type + " is not compatible.");
+    println("CLIENT: statistic type " + type + " is not compatible for upgrades.");
   }
   
   newStat = (constant * pow(myClient.score,1/root)) + initial;

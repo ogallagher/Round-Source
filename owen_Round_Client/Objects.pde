@@ -11,7 +11,7 @@ class Object {
     int[] locationInt = int(split(locationString,','));
     location = new PVector(locationInt[0],locationInt[1]);
     
-    specifics = data.substring(data.indexOf(endID,data.indexOf(locationID)) + 1);        //Everything else that varies from object type to object type.
+    specifics = data.substring(data.indexOf(endID,data.indexOf(locationID)) + 1);        //Everything else that varies btween object types.
     
     verified = v;      //Whether the server has sent back verification that it processed the request for the new object
   }

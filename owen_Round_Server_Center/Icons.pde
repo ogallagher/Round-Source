@@ -1,12 +1,3 @@
-void createEnvironment() {         
-  for (int i=0; i < 100; i++) {
-    String location = str(int(random(50,fieldWidth-50))) + ',' + str(int(random(50,fieldWidth-50)));
-    String radius = str(int(random(10,120)));
-    
-    spawn(nameID + "wall" + endID + locationID + location + endID + radiusID + radius + endID);
-  }
-}
-
 void createIcons() {
   codeList[0] = "kingpin";
   iconList[0] = "l[0,12]a[255]e[28,10]$l[0,6]a[80]#[-15,0;15,0;14,5;-14,5]$l[0,12]a[255]#[-14,0;-14,-23;-7,-10;0,-23;7,-10;14,-23;14,0]$l[0,6]a[80]#[-15,0;0,2;15,0;15,2;0,4;-15,2]";
@@ -35,6 +26,6 @@ void createIcons() {
   codeList[8] = "well-rounded";
   iconList[8] = "l[0,-6]<[0.65]a[255]e[15,27]$l[0,3]<[0.65]a[255]#[-7.5,-9;7.5,-9;7.5,9;4,12;7,15;-7,15;-4,12;-7.5,9]$l[0,-6]<[0.65]a[80]#[-9,-1.5;9,-1.5;9,1.5;-9,1.5]";
   
-  codeList[9] = "past_future";
+  codeList[9] = "now";
   iconList[9] = "l[-7,-3]a[255]#[-6,-4;4,-4;4,4;-6,4]$l[7,-3]a[255]#[-4,-4;6,-4;6,4;-4,4]$l[7,10]a[255]#[-4,-4;6,-4;6,4;-4,4]$l[-7,10]a[255]#[-6,-4;4,-4;4,4;-6,4]$l[0,-10]a[255]#[0,0;-5,-3;-2,-6;0,-1;4,-4;7,-2]";
 }

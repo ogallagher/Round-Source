@@ -10,6 +10,7 @@ class Player {
   float coolTime2;
   int speed;
   float speedConstant;
+  
   PVector location;
   PVector camera;
   PVector target;
@@ -74,7 +75,7 @@ class Player {
     
     icon = "";
     
-    chatBoxString = "[,],*,:,$,TAB = Unsupported characters. Limit = 60 char.";
+    chatBoxString = "[,],*,:,$,TAB = Not Permitted. Limit = 60 char.";
     chatting = false;
   }
   
@@ -136,6 +137,11 @@ class Player {
         speed = int(upgrade("speed1",4));
         ammo1 = 5;
       }
+      else if (cpackage.equals("termite")) {
+        speed = int(upgrade("speed1",8));
+        ammo1 = 3;
+        ammo2 = 3;
+      }
     }
     if (health < 0) {
       health = int(upgrade("health",int(extractString(data,healthID,endID))));
@@ -150,6 +156,9 @@ class Player {
         if (cpackage.equals("woodpecker")) {
           speedConstant *= 0.5;
         }
+        else if (cpackage.equals("termite")) {
+          speedConstant = 0;
+        }
       }
       if (mousePressed && mouseButton == RIGHT) {
         if (cpackage.equals("hedgehog")) {
@@ -159,6 +168,9 @@ class Player {
           else {
             speedConstant = 0;
           }
+        }
+        else if (cpackage.equals("termite")) {
+          speedConstant = 0;
         }
       }
       if (key == CODED) {
@@ -247,12 +259,13 @@ class Player {
       if (cpackage.equals("hedgehog")) {
         coolTime1 -= upgrade("time",1);
       }
+      if (cpackage.equals("termite")){
+        coolTime1 -= upgrade("time",0.1);
+      }
     }
     else if (mousePressed && mouseButton == LEFT && ammo1 > 0 && !(escapeHover || chatHover || nameHover)){
-      if (!(cpackage.equals("hedgehog") && mouseButton == RIGHT)) {        //Why do I have this? It doesn't make sense — I should test it later...
-        coolTime1 = 100;
-        ammo1--;
-      }
+      coolTime1 = 100;
+      ammo1--;
     }
     
     if (coolTime2 > 0) {
@@ -265,9 +278,12 @@ class Player {
       if (cpackage.equals("spider")) {
         coolTime2 -= upgrade("time",6);
       }
+      if (cpackage.equals("termite")){
+        coolTime2 -= upgrade("time",0.08);
+      }
     }
     else if (mousePressed && mouseButton == RIGHT) {
-      if ((cpackage.equals("woodpecker") || cpackage.equals("salamander")) && ammo2 > 0) {
+      if ((cpackage.equals("woodpecker") || cpackage.equals("salamander") || cpackage.equals("termite")) && ammo2 > 0) {
         coolTime2 = 100;
         ammo2--;
       }
@@ -342,13 +358,16 @@ class Player {
       broadcast += scoreID + str(score) + endID;
     }
     
-    if (cpackage.equals("mole") || cpackage.equals("turtle")) {                              // AND not using special weapon.
+    if (cpackage.equals("mole") || cpackage.equals("turtle")) {
       if (!(mousePressed && mouseButton == RIGHT && cpackage.equals("turtle"))) {
         broadcast += angleID + str(animationAngle) + endID;
       }
       else {
         broadcast += angleID + str(angle) + endID;
       }
+    }
+    else if (cpackage.equals("termite")) {
+      broadcast += angleID + str(angle) + splitID + str(animationAngle) + endID;
     }
     else {
       broadcast += angleID + str(angle) + endID;
@@ -735,6 +754,33 @@ class Player {
       }
     }
     
+    if (cpackage.equals("termite")) {
+      if (mousePressed && !(escapeHover || chatHover || nameHover)) {
+        if (mouseButton == LEFT && coolTime1 < 0.1 && ammo1 > 0) {
+          PVector objectL = PVector.fromAngle(angle);
+          objectL.mult(60);
+          objectL.add(location);
+          
+          PVector targetL = PVector.fromAngle(angle);
+          targetL.mult(upgrade("range",300));
+          targetL.add(objectL);
+          
+          int damage = round(upgrade("damage",10));
+          
+          addition = nameID + "turret" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + targetID + str(round(targetL.x)) + ',' + str(round(targetL.y)) + endID + damageID + str(damage) + endID + iconID + code + endID;
+        }
+        else if (mouseButton == RIGHT && coolTime2 < 0.1 && ammo2 > 0) {
+          PVector objectL = PVector.fromAngle(angle);
+          objectL.mult(60);
+          objectL.add(location);
+          
+          int radius = round(upgrade("range",150));
+          
+          addition = nameID + "beacon" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + radiusID + str(radius) + endID + iconID + code + endID;
+        }
+      }
+    }
+    
     for (int i=0; i<objects.size(); i++) {
       Object object = objects.get(i);
       
@@ -783,6 +829,10 @@ class Player {
             }
             else if (cpackage.equals("hedgehog")) {
               ammo1 = 5;
+            }
+            else if (cpackage.equals("termite")) {
+              ammo1 = 3;
+              ammo2 = 3;
             }
           }
           else if (object.name.equals("coin") && !lastTaken.equals(nameID + object.name + endID + locationID + str(int(object.location.x)) + ',' + str(int(object.location.y)) + endID + object.specifics)) {
@@ -1065,7 +1115,7 @@ class Player {
         createButtonTermite(int(location.x-camera.x+width/2),int(location.y-camera.y+height/2));
       }
       
-      if (mousePressed && mouseButton == LEFT) {
+      if (coolTime1 > 0 || coolTime2 > 0) {
         animationAngle += 0.15;
       }
       else {
@@ -1335,7 +1385,7 @@ class OtherPlayer {
     
     alpha = int(extractString(data,alphaID,endID));
     
-    otherIcon = extractString(data,codeCD,endCD);
+    otherIcon = extractString(data,iconID,endID);
   }
   
   void display() {
@@ -1504,8 +1554,54 @@ class OtherPlayer {
         line(0,z*-41,0,z*-60);
         popMatrix();
       }
+      else if (cpackage.equals("termite")) {
+        if (bestGraphics && z == 1 && icon.length() == 0) {
+          createButtonTermite(int(location.x-myClient.camera.x+width/2),int(location.y-myClient.camera.y+height/2));
+        }
+        
+        pushMatrix();
+        translate(location.x-myClient.camera.x+width/2,location.y-myClient.camera.y+height/2);
+        fill(255);
+        stroke(255);
+        strokeWeight(1.5);
+        rotate(angle);
+        translate(45,0);
+        ellipseMode(CENTER);
+        ellipse(0,0,10,10);
+        fill(80);
+        noStroke();
+        ellipse(0,0,5,5);
+        fill(255);
+        stroke(255);
+        rotate(alpha);
+        beginShape();
+          vertex(-2,-4);
+          vertex(-1,-8);
+          vertex(1,-8);
+          vertex(2,-4);
+        endShape(CLOSE);
+        beginShape();
+          vertex(4,-2);
+          vertex(8,-1);
+          vertex(8,1);
+          vertex(4,2);
+        endShape(CLOSE);
+        beginShape();
+          vertex(2,4);
+          vertex(1,8);
+          vertex(-1,8);
+          vertex(-2,4);
+        endShape(CLOSE);
+        beginShape();
+          vertex(-4,-2);
+          vertex(-8,-1);
+          vertex(-8,1);
+          vertex(-4,2);
+        endShape(CLOSE);
+        popMatrix();
+    }
       
-      if (otherIcon.length() > 0 && bestGraphics && z == 1) {                                           // Format: location[X,Y]alpha[A]shape[x,y;x,y;x,y;x,y]$location[X,Y]alpha[A]ellipse[w,h]
+      if (otherIcon.length() > 0 && z == 1) {                                           // Format: location[X,Y]alpha[A]shape[x,y;x,y;x,y;x,y]$location[X,Y]alpha[A]ellipse[w,h]
         String[] shapes = split(otherIcon,splitID);
         
         for (int i=0; i<shapes.length; i++) {

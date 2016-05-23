@@ -1,3 +1,12 @@
+void createEnvironment() {         
+  for (int i=0; i < 100; i++) {
+    String location = str(int(random(50,fieldWidth-50))) + ',' + str(int(random(50,fieldWidth-50)));
+    String radius = str(int(random(10,120)));
+    
+    spawn(nameID + "wall" + endID + locationID + location + endID + radiusID + radius + endID);
+  }
+}
+
 void spawn(String objectData) {
   boolean processed = false;
   int movedObject = -1;

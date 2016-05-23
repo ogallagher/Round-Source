@@ -150,16 +150,14 @@ void createButtonPlay(int locationX, int locationY) {
     }
     else if (mousePressed && stage == 3 && (username.equals("TYPE USERNAME ([,],*,TAB,: are not allowed)") == false && username.equals("Sorry, the username you gave is already taken.") == false && username.equals("Sorry, the name you gave is already signed in for another player.") == false && username.equals("Sorry, the username you entered was not found on file.") == false && username.equals("Great! Now switch to LOAD FILE and sign in.") == false && username.equals("Sorry, there are too many clients currently playing.") == false)) {
       String message = "";
-      String code = "";
       
-      if (username.indexOf(codeCD) > -1 && username.indexOf(endCD) > -1) {
-        code = extractString(username,codeCD,endCD);
-        username = username.substring(0,username.indexOf(codeCD));
+      if (username.indexOf('_') > -1) {
+        code = username.substring(username.indexOf('_')+1);
         
-        message += codeCD + code + endCD;
+        message += iconID + code + endID;
       }
       
-      message += nameID + username + endID + packageID;
+      message += nameID + username.substring(0,username.indexOf('_')) + endID + packageID;
       
       if (combatPackage == 1) {
         message += "woodpecker";

@@ -1,11 +1,11 @@
 //Round_Server_Center
 
 // BEGUN:         July 18, 2015
-// LAST UPDATED:  May 16, 2016
+// LAST UPDATED:  May 22, 2016
 // VERSION:       8
 // UPDATES:       
 //    7 = Flexible field size, drawn boundaries, name changing, AI enemies
-//    8 = Tags shortened to reduce lag [x], Server split to reduce lag [ ], Round locations and velocities [x], Improve shooting protocols [x], Promote teaming [ ], Improve enemies [x], Change scoring dynamics and upgrades [ ], Worsen spider package (dagger,speed) [ ], Termite combat package [ ]
+//    8 = Tags shortened to reduce lag [x], Round locations and velocities [x], Improve shooting protocols [x], Promote teaming [ ], Improve enemies [x], Change scoring dynamics and upgrades [ ], Worsen spider package (dagger,speed) [ ], Termite combat package [ ], Autocomplete username [...]
 
 /*  
     File Format Example
@@ -13,28 +13,29 @@
       name[player1]score[1]
       
     clientList Format Example
-      name[N]score[S]location[X,Y]angle[T]package[P]health[H]alpha[A]zombie[Z]_code(C)address[#]
+      name[N]score[S]location[X,Y]angle[T]package[P]health[H]alpha[A]zombie[Z]icon[C]address[#]
       
-    objectList Format Example                                                          REMEMBER: clients take away walls, healthBoxes, ammoBoxes, coins, and bullets, as well as change their own healths and scores independently
-      name[field]radius[W/2]                                                                     I send radius so as not to create a new info tag
+    objectList Format Example                                                          REMEMBER: clients take away walls, healthBoxes, ammoBoxes, coins, and bullets, and change their own healths and scores
+      name[field]radius[W/2]                                                                     I send radius so as not to create necessity for new tag
       name[wall]location[X,Y]radius[R]                                                           walls are circles; collision is simple between circles
       name[healthBox]location[X,Y]                                                               returns 50 health                                               
       name[ammoBox]location[X,Y]                                                                 completely refills ammo
       name[coin]location[X,Y]                                                                    always worth 1
-      name[bullet]location[X,Y]velocity[Xv,Yv]target[Xf,Yf]damage[D]owner[player0]               target helps show if bullet has gone too far
+      name[bullet]location[X,Y]velocity[Xv,Yv]target[Xt,Yt]damage[D]owner[player0]               target helps show if bullet has gone too far
       name[detonator]location[X,Y]radius[R]alpha[A]damage[D]owner[player1]                       alpha corresponds to time till detonation
       name[smokescreen]location[X,Y]radius[R]alpha[A]                                            alpha corresponds to transparency
       name[hazardRing]location[X,Y]radius[R]alpha[A]damage[D]owner[player2]                      alpha corresponds to current radius, radius corresponds to final radius
-      name[grenade]location[X,Y]velocity[Xv,Yv]target[Xf,Yf]radius[R]damage[D]owner[player3]     target helps show if grenade has gone too far (like the bullet, but creates hazardRing)
-      name[demolition]location[X,Y]velocity[Xv,Yv]target[Xf,Yf]radius[R]damage[D]owner[player3]  same as grenade, but shrinks/removes walls on contact
-      name[fanshot]location[X,Y]velocity[Xv,Yv]radius[R]alpha[A]damage[D]owner[player4]          alpha corresponds to additional bullets to the original with a deviation angle of 0 ON EACH SIDE (decided not to use it...)
+      name[grenade]location[X,Y]velocity[Xv,Yv]target[Xt,Yt]radius[R]damage[D]owner[player3]     target helps show if grenade has gone too far (like the bullet, but creates hazardRing)
+      name[demolition]location[X,Y]velocity[Xv,Yv]target[Xt,Yt]radius[R]damage[D]owner[player3]  same as grenade, but shrinks/removes walls on contact
+      name[fanshot]location[X,Y]velocity[Xv,Yv]radius[R]alpha[A]damage[D]owner[player4]          alpha corresponds to additional bullets to the original deviation angle of 0 ON EACH SIDE (decided not to use it...)
       name[laserPoint]location[X,Y]alpha[A]                                                      alpha corresponds to whether the sight should be deleted
+      name[turret]location[X,Y]target[Xt,Yt]damage[D]icon[C]                                     target used both to tell range and angle
+      name[beacon]location[X,Y]radius[R]icon[C]                                                  radius corresponds to how far health is distributed
     
     enemyList Format Example
       location[X,Y]angle[T]package[P]
       
     iconList Format Example
-      location[X,Y]alpha[A]shape[x,y;x,y;x,y;x,y]$location[X,Y]alpha[A]shape[x,y;x,y;x,y;x,y]
       location[X,Y]alpha[A]shape[x,y;x,y;x,y;x,y]$location[X,Y]alpha[A]ellipse[w,h]$location[X,Y]alpha[A]shape[x,y;x,y;x,y;x,y]
 */
 
@@ -47,7 +48,9 @@ String[] fileEntries;                                   //Replica of the data fi
 StringList filedList;                                   //Saved clients
 StringList clientList;                                  //Signed clients
 StringList objectList;                                  //List of objects
-ArrayList<Enemy> enemyList = new ArrayList<Enemy>();    //List of enemies, they are objects because they have many individual functions.
+ArrayList<Enemy> enemyList = new ArrayList<Enemy>();    //List of enemies, like objects, but more complicated
+ArrayList<Turret> turretList = new ArrayList<Turret>(); //List of turrets, "                                "
+ArrayList<Beacon> beaconList = new ArrayList<Beacon>(); //List of beacons, "                                "
 
 int iconNumber = 10;                          //Number of special icons
 String[] codeList = new String[iconNumber];   //List of acceptable icon codes
@@ -79,18 +82,16 @@ String damageID = "d[";
 String ownerID = "o[";
 
 String receiverID = ">[";         //The intended receiving client of the following data (for server -> client broadcast) tag
-String codeCD = "_(";             //Special icon code tag
+String iconID = "i[";             //Special icon code tag
 
 String chatID = "c[";              //Tag for chat-line strings.
 StringList chatList;               //Chat-Line
 
 char endID = ']';
-char endCD = ')';
 char endHD = '*';
 
-char splitID = '$';                   //used only when necessary: separation of client DELETE objects; separation of SPAWN objects; separation of shapes in icon drawing instructions.
+char splitID = '$';                //used only when necessary: delete objects, add objects, send angles for termite, split shapes for special icon
 
-int fieldMinimum = 1000;
 int fieldMaximum = 3160;
 int fieldWidth = fieldMaximum;        //Dimensions of the battlefield (field is a square, so width & height) (how far a client can go)
 int playerMaximum = 10;
@@ -131,7 +132,7 @@ void setup() {
 void draw() {  
   printData();                                //Display filed clients, signed clients, and/or objects lists.
   
-  textBoxChat(25,height-25);                  //Enable server to send chats to all players.
+  textBoxChat(25,height-25);                  //Enable server to send chat to all players.
   
   displayChatLine();                          //Show chat history.
   

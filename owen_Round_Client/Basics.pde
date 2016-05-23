@@ -114,16 +114,13 @@ void readServerMessage() {
           loadString = "";
         } 
         else if (message.indexOf("REGISTERED") > -1 && stage == 3) {                    // Name given is acceptable and is now playing.
-          if (message.indexOf(codeCD) > -1) {
-            icon = extractString(message,codeCD,endCD);
-          }
-          if (message.indexOf(radiusID) > -1) {
+          if (message.indexOf(iconID) > -1 && message.indexOf(radiusID) > -1) {
+            icon = message.substring(message.indexOf(iconID) + iconID.length(), message.indexOf(radiusID));
             fieldWidth = (floor((int(extractString(message,radiusID,endID)) * 2) * 0.1)) * 10;
             fieldConfirmed = true;
           }
           
           if (fieldConfirmed) {
-            myClient.name = cleanString(username,"0123456789");
             stage = 4;
             loadString = "";
           }

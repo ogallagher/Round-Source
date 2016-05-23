@@ -33,8 +33,8 @@ void respond() {
         boolean duplicated = false;
         boolean registered = false;
         
-        if (clientMessage.indexOf(codeCD) > -1) {
-          code = extractString(clientMessage,codeCD,endCD);
+        if (clientMessage.indexOf(iconID) > -1) {
+          code = extractString(clientMessage,iconID,endID);
           
           int c=0;
           while (c < codeList.length - 1 && codeList[c].equals(code) == false) {
@@ -42,11 +42,11 @@ void respond() {
           }
           
           if (codeList[c].equals(code)) {
-            code = codeCD + iconList[c] + endCD;
+            code = iconID + iconList[c] + endID;
           }
           else if (code.equals("randomized")) {
             c = int(random(0,iconNumber-1));
-            code = codeCD + iconList[c] + endCD;
+            code = iconID + iconList[c] + endID;
           }
         }
         
@@ -82,7 +82,7 @@ void respond() {
             securedName = cleanString(securedName,"0123456789");
             String secureClientData = replaceString(filedList.get(i),securedName,nameID,endID);
             
-            String signedClient = secureClientData + locationID + clientLocation + endID + angleID + clientAngle + endID + packageID + clientPackage + endID + healthID + clientHealth + endID + alphaID + "1" + endID + zombieID + clientZombie + endID + codeCD + code + endCD + ownerID + endID + addressID + clientAddress + endID;  
+            String signedClient = secureClientData + locationID + clientLocation + endID + angleID + clientAngle + endID + packageID + clientPackage + endID + healthID + clientHealth + endID + alphaID + "1" + endID + zombieID + clientZombie + endID + iconID + code + endID + ownerID + endID + addressID + clientAddress + endID;  
             clientList.append(signedClient);
             
             broadcast("REGISTERED" + code + radiusID + str(round(fieldWidth/2)) + endID, messageHD, clientAddress);            // Name given is acceptable and is now playing.
