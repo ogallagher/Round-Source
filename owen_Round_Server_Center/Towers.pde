@@ -1,12 +1,12 @@
 class Tower {
   PVector location;
-  PVector target;
+  PVector target;   //Beacons don't really need targets, right? Beacons actually just need to sit still... like regular objects.
   int radius;
   String icon;
   
   Tower(int[] loc, String icn) {
     location = new PVector(loc[0],loc[1]);
-    target = new PVector(loc[0]+1,loc[1]);
+    target = new PVector();
     icon = icn;
   }
 }
@@ -30,6 +30,16 @@ class Turret extends Tower {
         
       }
     }
+  }
+
+  void fire() {
+    PVector bLocation = new PVector(target.x,target.y);
+    bLocation.sub(location);
+    bLocation.normalize();
+    bLocation.mult(55);
+    bLocation.add(location);
+
+    String bullet = nameID + "bullet" + endID + locationID + str(round(bLocation.x)) + ',' + str(round(bLocation.y)) + endID;//...
   }
 }
 
