@@ -1,7 +1,7 @@
 //Round_Server_Center
 
 // BEGUN:         July 18, 2015
-// LAST UPDATED:  May 22, 2016
+// LAST UPDATED:  May 23, 2016
 // VERSION:       8
 // UPDATES:       
 //    7 = Flexible field size, drawn boundaries, name changing, AI enemies
@@ -29,8 +29,8 @@
       name[demolition]location[X,Y]velocity[Xv,Yv]target[Xt,Yt]radius[R]damage[D]owner[player3]  same as grenade, but shrinks/removes walls on contact
       name[fanshot]location[X,Y]velocity[Xv,Yv]radius[R]alpha[A]damage[D]owner[player4]          alpha corresponds to additional bullets to the original deviation angle of 0 ON EACH SIDE (decided not to use it...)
       name[laserPoint]location[X,Y]alpha[A]                                                      alpha corresponds to whether the sight should be deleted
-      name[turret]location[X,Y]target[Xt,Yt]damage[D]icon[C]                                     target used both to tell range and angle
-      name[beacon]location[X,Y]radius[R]icon[C]                                                  radius corresponds to how far health is distributed
+      name[turret]location[X,Y]target[Xt,Yt]damage[D]health[H]icon[C]                            target used both to tell range and angle
+      name[beacon]location[X,Y]radius[R]icon[C]                                                  radius corresponds to how far health is distributed and how much health the beacon still has
     
     enemyList Format Example
       location[X,Y]angle[T]package[P]
@@ -50,7 +50,6 @@ StringList clientList;                                  //Signed clients
 StringList objectList;                                  //List of objects
 ArrayList<Enemy> enemyList = new ArrayList<Enemy>();    //List of enemies, like objects, but more complicated
 ArrayList<Turret> turretList = new ArrayList<Turret>(); //List of turrets, "                                "
-ArrayList<Beacon> beaconList = new ArrayList<Beacon>(); //List of beacons, "                                "
 
 int iconNumber = 10;                          //Number of special icons
 String[] codeList = new String[iconNumber];   //List of acceptable icon codes
@@ -145,6 +144,8 @@ void draw() {
   spawnItems();                               //Create healthBoxes, ammoBoxes, coins, walls, and enemies depending upon #items, #clients, #score, and #coinTimer.
   
   updateEnemies();                            //Run enemy functions for every enemy in the enemyList
+  
+  updateTurrets();                            //Run turret functions for every turret in the turretList
   
   adjustLimits();                             //Adjust limits of view for clients and stretch fieldWidth
   

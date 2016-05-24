@@ -75,14 +75,13 @@ void respond() {
             String clientLocation = str(round(random(0,fieldWidth))) + ',' + str(round(random(0,fieldWidth)));
             String clientAngle = "0";
             String clientPackage = extractString(clientMessage,packageID,endID);
-            String clientHealth = "100";
             String clientZombie = "0"; 
             
             String securedName = extractString(filedList.get(i),nameID,endID);
             securedName = cleanString(securedName,"0123456789");
             String secureClientData = replaceString(filedList.get(i),securedName,nameID,endID);
             
-            String signedClient = secureClientData + locationID + clientLocation + endID + angleID + clientAngle + endID + packageID + clientPackage + endID + healthID + clientHealth + endID + alphaID + "1" + endID + zombieID + clientZombie + endID + iconID + code + endID + ownerID + endID + addressID + clientAddress + endID;  
+            String signedClient = secureClientData + locationID + clientLocation + endID + angleID + clientAngle + endID + packageID + clientPackage + endID + alphaID + "1" + endID + zombieID + clientZombie + endID + iconID + code + endID + ownerID + endID + addressID + clientAddress + endID;  
             clientList.append(signedClient);
             
             broadcast("REGISTERED" + code + radiusID + str(round(fieldWidth/2)) + endID, messageHD, clientAddress);            // Name given is acceptable and is now playing.

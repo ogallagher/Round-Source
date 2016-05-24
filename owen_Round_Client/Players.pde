@@ -101,8 +101,7 @@ class Player {
     }
     
     if (location.x == -1 && location.y == -1) {
-      String locationString = extractString(data,locationID,endID);
-      int[] locationInt = int(split(locationString,','));
+      int[] locationInt = int(split(extractString(data,locationID,endID),','));
       location.set(locationInt[0],locationInt[1]);
     }
     if (cpackage.length() == 0) {
@@ -144,7 +143,7 @@ class Player {
       }
     }
     if (health < 0) {
-      health = int(upgrade("health",int(extractString(data,healthID,endID))));
+      health = int(upgrade("health",100));
     }
     
     speedConstant = 0.8;   //... probably should put this in initialization later
@@ -766,8 +765,9 @@ class Player {
           targetL.add(objectL);
           
           int damage = round(upgrade("damage",10));
+          int objectH = round(upgrade("health",100));
           
-          addition = nameID + "turret" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + targetID + str(round(targetL.x)) + ',' + str(round(targetL.y)) + endID + damageID + str(damage) + endID + iconID + code + endID;
+          addition = nameID + "turret" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + targetID + str(round(targetL.x)) + ',' + str(round(targetL.y)) + endID + damageID + str(damage) + endID + healthID + objectH + endID + iconID + code + endID;
         }
         else if (mouseButton == RIGHT && coolTime2 < 0.1 && ammo2 > 0) {
           PVector objectL = PVector.fromAngle(angle);

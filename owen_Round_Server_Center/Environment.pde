@@ -19,7 +19,7 @@ void spawn(String objectData) {
     int[] locationTest = int(split(extractString(testObject,locationID,endID),','));
     
     if (name.equals(nameTest)) {
-      if (name.equals("wall") || name.equals("hazardRing") || name.equals("detonator") || name.equals("smokeScreen") || name.equals("laserPoint") || name.equals("fanshot")) {
+      if (name.equals("wall") || name.equals("hazardRing") || name.equals("detonator") || name.equals("smokeScreen") || name.equals("laserPoint") || name.equals("fanshot") || name.equals("beacon")) {
         if (location[0] == locationTest[0] && location[1] == locationTest[1]) {
           processed = true;
         }
@@ -52,7 +52,20 @@ void spawn(String objectData) {
   }
   
   if (!processed) {
-    objectList.append(objectData);
+    if (name.equals("turret")) {
+      for (int i=0; i<turretList.size() && !processed; i++) {
+        if (location[0] == round(turretList.get(i).location.x) && location[1] == round(turretList.get(i).location.y)) {
+          processed = true;
+        }
+      }
+      
+      if (!processed) {
+        turretList.add(new Turret(location,int(split(extractString(objectData,targetID,endID),',')),int(extractString(objectData,damageID,endID)),int(extractString(objectData,healthID,endID)),extractString(objectData,iconID,endID)));
+      }
+    }
+    else {
+      objectList.append(objectData);
+    }
   }
   
   if (movedObject > -1) {
@@ -161,7 +174,6 @@ void updateEnvironment() {
         }
       }
       
-      
       if (touching == false) {
         location[0] += velocity[0];
         location[1] += velocity[1];
@@ -171,6 +183,7 @@ void updateEnvironment() {
       }
       else {
         objectList.remove(i);
+        i--;
       }
     }
     
@@ -183,6 +196,7 @@ void updateEnvironment() {
       }
       else {
         objectList.remove(i);
+        i--;
       }
     }
     
@@ -374,7 +388,7 @@ void updateEnvironment() {
             }
           }
         }
-        for (int j=0; j<enemyList.size(); j++) {                                                                     //Detonate if touching enemy
+        for (int j=0; j<enemyList.size(); j++) {                                             //Detonate if touching enemy
           if (touching == false) {
             Enemy other = enemyList.get(j);
             
@@ -393,6 +407,7 @@ void updateEnvironment() {
       
       if (touching && objectList.size() > i) {
         objectList.remove(i);
+        i--;
 
         String newObject = nameID + "hazardRing" + endID + locationID + extractString(object,locationID,endID) + endID + radiusID + str(radius) + endID + alphaID + str(10) + endID + damageID + extractString(object,damageID,endID) + endID + ownerID + owner + endID;
         spawn(newObject);
@@ -417,6 +432,7 @@ void updateEnvironment() {
       }
       else {
         objectList.remove(i);
+        i--;
       }
     }
     
@@ -426,6 +442,7 @@ void updateEnvironment() {
       
       if (alpha > radius) {
         objectList.remove(i);
+        i--;
       }
       else {
         if (radius < 11) {
@@ -466,37 +483,60 @@ void updateEnvironment() {
       }
       
       objectList.remove(i);
+      i--;
     }
     
-    //if (objectName.equals("healthBox") || objectName.equals("ammoBox") || objectName.equals("coin")) {       ——THIS WAS USED WHEN THE FIELD HAD DYNAMIC BOUNDARIES——
-    //  int[] locationInt = int(split(extractString(object,locationID,endID),','));
-    //  if (locationInt[0] < 30) {
-    //    locationInt[0] += abs(30-locationInt[0]);
-    //  }
-    //  if (locationInt[0] > fieldWidth - 30) {
-    //    locationInt[0] -= abs(locationInt[0] - (fieldWidth-30));
-    //  }
-    //  if (locationInt[1] < 30) {
-    //    locationInt[1] += abs(30-locationInt[1]);
-    //  }
-    //  if (locationInt[1] > fieldWidth - 30) {
-    //    locationInt[1] -= abs(locationInt[1] - (fieldWidth-30));
-    //  }
+    if (objectName.equals("beacon")) {
+      int[] locationInt = int(split(extractString(object,locationID,endID),','));
+      int radius = int(extractString(object,radiusID,endID));
       
-    //  object = replaceString(object,str(locationInt[0]) + ',' + str(locationInt[1]),locationID,endID);
-    //  objectList.set(i,object);
-    //}
-    
+      for (int j=0; j<objectList.size(); j++) {
+        if (i != j) {
+          String otherObject = objectList.get(j);
+          String otherName = extractString(otherObject,nameID,endID);
+          
+          if (otherName.equals("bullet") || otherName.equals("hazardRing")) {
+            int[] otherLocation = int(split(extractString(otherObject,locationID,endID),','));
+            int minDistance = 30;
+            
+            if (otherName.equals("bullet")) {
+              minDistance += 4;
+            }
+            else {
+              minDistance += int(extractString(object,alphaID,endID));
+            }
+            
+            PVector difference = new PVector(otherLocation[0],otherLocation[1]);
+            difference.sub(locationInt[0],locationInt[1]);
+            
+            if (difference.mag() < minDistance) {
+              radius -= int(extractString(object,damageID,endID));
+              object = replaceString(object,str(radius),radiusID,endID);
+              objectList.set(i,object);
+              
+              if (otherName.equals("bullet")) {
+                objectList.remove(j);
+                j--;
+              }
+            }
+          }
+        }
+      }
+      
+      if (radius < 30) {
+        objectList.remove(i);
+        i--;
+      }
+    }
   }
 }
 
 void spawnItems() {
   String location = "";
   
-  int h = 0;                //To make sure the environment is up-to-date, we must first check our HACWE.
+  int h = 0;                //To make sure the environment is up-to-date, we must first check our HACE.
   int a = 0;
   int c = 0;
-  int w = 0;
   int e = 0;
   
   for (int i=0; i<objectList.size(); i++) {
@@ -510,10 +550,6 @@ void spawnItems() {
     
     else if (extractString(objectList.get(i),nameID,endID).equals("coin")) {
       c++;
-    }
-    
-    else if (extractString(objectList.get(i),nameID,endID).equals("wall")) {
-      w++;
     }
   }
   e = enemyList.size();
@@ -598,28 +634,6 @@ void spawnItems() {
     }
   }
   
-  //int maxFieldClientNumber = fieldMinimum * (clientList.size()+1);      ——THIS WAS USED FOR CREATING NEW WALLS WHEN MORE CLIENTS JOINED——
-  //if (maxFieldClientNumber > fieldMaximum) {
-  //  maxFieldClientNumber = fieldMaximum;
-  //}
-  //if (w < round(pow(maxFieldClientNumber,2)/100000)) {  
-  //  float section = random(1);                    //Place walls anywhere within the L-shaped area outside of default
-  //  location = "";
-    
-  //  if (section < 0.3333) {
-  //      location = str(int(random(0,fieldMinimum))) + ',' + str(int(random(fieldMinimum,maxFieldClientNumber-50)));
-  //  }
-  //  else if (section > 0.3333 && section < 0.6666) { 
-  //      location = str(int(random(fieldMinimum,maxFieldClientNumber-50))) + ',' + str(int(random(0,fieldMinimum)));
-  //  }
-  //  else {
-  //      location = str(int(random(fieldMinimum,maxFieldClientNumber-50))) + ',' + str(int(random(fieldMinimum,maxFieldClientNumber-50)));
-  //  }
-  //  String radius = str(int(random(10,120)));
-    
-  //  spawn(nameID + "wall" + endID + locationID + location + endID + radiusID + radius + endID);
-  //}
-  
   if (enemyTimer > 500) {
     enemyTimer = 0;
     
@@ -684,14 +698,6 @@ void adjustLimits() {
       viewLimits[3] = location[1] + clientScope;
     }
   }
-  
-  int diameter = round(viewLimits[1]);
-  if (viewLimits[3] > viewLimits[1]) {
-    diameter = round(viewLimits[3]);
-  }
-  //if (diameter > fieldMinimum && diameter < fieldMinimum * (clientList.size()+1) && diameter < fieldMaximum) {
-  //  fieldWidth = diameter;
-  //}
   
   if (fieldWidth < viewLimits[1]) {
     viewLimits[1] = fieldWidth;

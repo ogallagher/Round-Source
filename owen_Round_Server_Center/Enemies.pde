@@ -355,7 +355,8 @@ class Enemy {
             }
             
             if (!extractString(object,nameID,endID).equals("hazardRing")) {
-              delete(object);
+              objectList.remove(i);
+              i--;
             }
           }
         }

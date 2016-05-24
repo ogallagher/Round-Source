@@ -354,14 +354,15 @@ Systems for Cooperative Play      •••
       if special icon is the same •
       as myClient's               •
   new objects to promote grouping •
-    health restorers?             •
-    coin spawners?                •
+    health restorers (created by  •
+      players w/ termite package) •
     foggers?                      •
       they create smokescreens    •
         which are transparent to  •
         players on its team       •
       to change a fogger to your  •
         team, touch it            •
+  systems for team requests       •    //page lists all taken and available team icons. client requests team code or new team. clients can send private messages for team joining (default receiver is the team?)
       
 Improve Enemies                   √√√
   make aim less perfect           √
@@ -445,29 +446,59 @@ Autocomplete username             •••
     and uses them for             •
     autocomplete                  •
     
-Introduce turrets and beacons     º••
+Introduce turrets and beacons     √º•
   client-side                     º
     add new object id tags        √
-    termite requests              √
+    edit changeObjects() for the  √
+      termite package             √
     display turrets               •
     display beacons               •
+    add to help menu (OBJECTS)    •
   server-side                     º
     add new object id tags        √
-    edit respond()                •
-      append turretList           •
-      append beaconList           •
+    edit respond()                √
+        beacon                    √
+        turret                    √
     make tower class              º
-      turret class extends tower  º
-      beacon class extends tower  º
-    update turrets to aim for     •
-      clients from other 'teams'  •
-    update beacons to aim for     •
-      client of the same 'team'   •
-    
+      turret class extends tower  √
+      turret.time()               √
+      turret.aim()                º
+        for clients               √
+        for enemies               •
+      turret.shoot()              √
+      turret.collide()            º
+        subtract health           •
+        delete projectiles        •
+    updateTurrets()               √
+    edit updateEnvironment()      º
+      beacon                      √
+        decrease radius           √
+          for bullets and rings   √
+        delete                    √
+      update other object         •
+        collisions with beacons   •
+        
 Highlight buttons                 √√√
   help, info                      √
   combat packages                 √
   
+Give object information on hover  •••
+  create hoverDialogue() function •
+    when mouse is over an object  •
+      (check every X ms) display  •
+      explanation of that object  •
+   ammo: "RELOAD SITE"            •
+   health: "HEALTH BOX"           •
+   coin: "COIN"                   •
+   turret: "TURRET"               •
+   beacon: "BEACON"               •
+    
+Move teaming explanation to help  •••
+  "TEAMS: following the username  •
+    in the sign-in, some code     •
+    inputs in the format:         •
+    _•••• correspond to special   •
+    icons..."                     •
     
   
 DEBUGGING:                        
