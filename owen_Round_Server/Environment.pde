@@ -19,7 +19,7 @@ void spawn(String objectData) {
     int[] locationTest = int(split(extractString(testObject,locationID,endID),','));
     
     if (name.equals(nameTest)) {
-      if (name.equals("wall") || name.equals("hazardRing") || name.equals("detonator") || name.equals("smokeScreen") || name.equals("laserPoint") || name.equals("fanshot") || name.equals("beacon")) {
+      if (name.equals("wall") || name.equals("hazardRing") || name.equals("detonator") || name.equals("smokeScreen") || name.equals("laserPoint") || name.equals("fanshot") || name.equals("base")) {
         if (location[0] == locationTest[0] && location[1] == locationTest[1]) {
           processed = true;
         }
@@ -60,7 +60,7 @@ void spawn(String objectData) {
       }
       
       if (!processed) {
-        turretList.add(new Turret(location,int(split(extractString(objectData,targetID,endID),',')),int(extractString(objectData,damageID,endID)),int(extractString(objectData,healthID,endID)),extractString(objectData,iconID,endID)));
+        turretList.add(new Turret(location,int(split(extractString(objectData,targetID,endID),',')),int(extractString(objectData,damageID,endID)),int(extractString(objectData,healthID,endID)),extractString(objectData,iconID,endID),extractString(objectData,ownerID,endID)));
       }
     }
     else {
@@ -218,13 +218,10 @@ void updateEnvironment() {
             }
             
             int[] otherLocation = int(split(extractString(other,locationID,endID),','));
+            PVector difference = new PVector(otherLocation[0],otherLocation[1]);
+            difference.sub(locationInt[0],locationInt[1]);
             
-            PVector dLocation = new PVector(locationInt[0],locationInt[1]);
-            PVector bLocation = new PVector(otherLocation[0],otherLocation[1]);
-            bLocation.sub(dLocation);
-            
-            float dbDistance = bLocation.mag();
-            if (dbDistance < 15 + otherRadius) {
+            if (difference.mag() < 15 + otherRadius) {
               alpha = -1;
             }
           }
@@ -235,13 +232,10 @@ void updateEnvironment() {
           String other = clientList.get(j);
           int[] otherLocation = int(split(extractString(other,locationID,endID),','));
           
-          PVector dLocation = new PVector(locationInt[0],locationInt[1]);
-          PVector cLocation = new PVector(otherLocation[0],otherLocation[1]);
-          cLocation.sub(dLocation);
-          
-          float dcDistance = cLocation.mag();
-          
-          if (dcDistance < 27) {
+          PVector difference = new PVector(otherLocation[0],otherLocation[1]);
+          difference.sub(locationInt[0],locationInt[1]);
+                    
+          if (difference.mag() < 33) {
             alpha = -1;
           }
         }
@@ -250,13 +244,10 @@ void updateEnvironment() {
         if (alpha > -1) {
           Enemy other = enemyList.get(j);
           
-          PVector dLocation = new PVector(locationInt[0],locationInt[1]);
-          PVector eLocation = new PVector(other.location.x,other.location.y);
-          eLocation.sub(dLocation);
-          
-          float deDistance = eLocation.mag();
-          
-          if (deDistance < 27) {
+          PVector difference = new PVector(other.location.x,other.location.y);
+          difference.sub(locationInt[0],locationInt[1]);
+                    
+          if (difference.mag() < 33) {
             alpha = -1;
           }
         }
@@ -343,14 +334,21 @@ void updateEnvironment() {
             String other = objectList.get(j);
             String otherName = extractString(other,nameID,endID);
             
-            if (otherName.equals("bullet") || otherName.equals("wall")) {                     //Explode if touching bullet or wall
+            if (otherName.equals("bullet") || otherName.equals("wall") || otherName.equals("hazardRing") || otherName.equals("base")) {                     //Explode if touching bullet or wall
               int[] otherLocation = int(split(extractString(other,locationID,endID),','));
               int otherRadius;
-              if (other.indexOf(radiusID) > -1) {
+              
+              if (otherName.equals("base")) {
+                otherRadius = 30;
+              }
+              else if (otherName.equals("hazardRing")) {
+                otherRadius = int(extractString(other,alphaID,endID));
+              }
+              else if (otherName.equals("wall")) {
                 otherRadius = int(extractString(other,radiusID,endID));
               }
               else {
-                otherRadius = 1;
+                otherRadius = 2;
               }
               
               PVector oLocation = new PVector(otherLocation[0],otherLocation[1]);
@@ -383,7 +381,7 @@ void updateEnvironment() {
             
             float distance = oLocation.mag();
             
-            if (distance < 27) {
+            if (distance < 33) {
               touching = true;
             }
           }
@@ -392,13 +390,22 @@ void updateEnvironment() {
           if (touching == false) {
             Enemy other = enemyList.get(j);
             
-            PVector dLocation = new PVector(locationInt[0],locationInt[1]);
-            PVector eLocation = new PVector(other.location.x,other.location.y);
-            eLocation.sub(dLocation);
+            PVector difference = new PVector(other.location.x,other.location.y);
+            difference.sub(locationInt[0],locationInt[1]);
+                        
+            if (difference.mag() < 33) {
+              touching = true;
+            }
+          }
+        }
+        for (int j=0; j<turretList.size(); j++) {                                            //Detonate if touching turret
+          if (touching == false) {
+            Turret other = turretList.get(j);
             
-            float deDistance = eLocation.mag();
+            PVector difference = new PVector(other.location.x,other.location.y);
+            difference.sub(locationInt[0],locationInt[1]);
             
-            if (deDistance < 27) {
+            if (difference.mag() < 33) {
               touching = true;
             }
           }
@@ -486,7 +493,7 @@ void updateEnvironment() {
       i--;
     }
     
-    if (objectName.equals("beacon")) {
+    if (objectName.equals("base")) {
       int[] locationInt = int(split(extractString(object,locationID,endID),','));
       int radius = int(extractString(object,radiusID,endID));
       

@@ -71,5 +71,5 @@ void updateFile() {
   }
 
   // Writes the strings to a file, each on a separate line
-  saveStrings("owen_Round_Server_Center.txt", newFile);
+  saveStrings("owen_Round_Server.txt", newFile);
 }

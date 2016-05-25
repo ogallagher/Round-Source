@@ -33,5 +33,13 @@ void broadcastObjectList() {
     }
   }
   
+  for (int i=0; i<turretList.size(); i++) {
+    Turret turret = turretList.get(i);
+    
+    if ((turret.location.x > viewLimits[0] && turret.location.x < viewLimits[1]) && (turret.location.y > viewLimits[2] && turret.location.y < viewLimits[3])) {
+      broadcast += nameID + "turret" + endID + locationID + str(round(turret.location.x)) + ',' + str(round(turret.location.y)) + endID + targetID + str(round(turret.target.x)) + ',' + str(round(turret.target.y)) + endID + iconID + turret.icon + endID + ownerID + turret.owner + endID;
+    }
+  }
+  
   broadcast(broadcast, objectHD, "all");
 }

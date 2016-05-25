@@ -1,5 +1,6 @@
                  //  HISTORY  \\
 /*****************************************************\ 
+ 
 readServerMessage();              √√√
   messageHD                       √
   if (stage == 4) {
@@ -212,6 +213,7 @@ Icons                             √••
   simple fish                     •
   dollar sign                     •
   bowling ball                    •
+  cloud                           •
 
 Create Enemies w/ A.I.            √√√
   Server-side                     √
@@ -352,7 +354,8 @@ Systems for Cooperative Play      •••
       info for each projectile    •
     decrease health subtraction   •
       if special icon is the same •
-      as myClient's               •
+      as myClient's or client is  •
+      the owner                   •
   new objects to promote grouping •
     health restorers (created by  •
       players w/ termite package) •
@@ -362,7 +365,7 @@ Systems for Cooperative Play      •••
         players on its team       •
       to change a fogger to your  •
         team, touch it            •
-  systems for team requests       •    //page lists all taken and available team icons. client requests team code or new team. clients can send private messages for team joining (default receiver is the team?)
+  systems for team requests       • —— page lists all taken and available team icons. client requests team code or new team. clients can send private messages for team joining (default receiver is the team?)
       
 Improve Enemies                   √√√
   make aim less perfect           √
@@ -391,13 +394,14 @@ Scoring and Upgrades              •••
   make score loss a proportion    •
   upgrades more frequent          •
   
-New termite combat package        √√•
+New termite combat package        √√º
   stats                           º
     attack: creates turret        √
     special: creates base         √
     speed: fast                   √
     coolTime: very long           √
-    upgrade info: ???             •
+    upgrade: turrets shoot        •
+      grenades                    •
   selection description           •
   createButtonTermite()           √
   create icon                     √
@@ -412,16 +416,16 @@ New termite combat package        √√•
     changeObjects()               √
     display()                     √ 
     sendData()                    √
-  otherClients.display()          √
+  otherClients.display()          ?
+    angle == angle, animationA.   √
+      == alpha                    √
   upgrade()                       √
   send in createButtonPlay()      √
-  server-side                     •
-    add termite clients           •
-    read client sendData for      •
-      termites (2 angles given)   •
-    angle -> angle, animationA.   •
-      -> alpha                    •
- introduce turrets and beacons    º
+  server-side                     ?
+    add termite clients           √
+    read client sendData for      √
+      termites (2 angles given)   √
+ introduce turrets and bases      º
   
 Only draw field when near bounds  √√√
 
@@ -438,45 +442,73 @@ Improve server reading?           •••
 Increase box spawn quantity       •••
 
 Autocomplete username             •••
-  create owen_Round_Client.txt    √
+  create usernames.txt            √
   all past usernames that the     •
-    client input in the past      •
-    are stored in this file       •
+    client input are stored in    •
+    this file                     •
   the sketch pulls these names    •
     and uses them for             •
     autocomplete                  •
     
-Introduce turrets and beacons     √º•
+Introduce turrets and bases       √√º
   client-side                     º
     add new object id tags        √
     edit changeObjects() for the  √
       termite package             √
-    display turrets               •
-    display beacons               •
+    display turrets               º
+      looks like title frame      º
+      diameter = 60               √
+    display bases                 º
+      looks like saturn?          º
+      diameter = 60               √
     add to help menu (OBJECTS)    •
-  server-side                     º
+    clients collide with bases    •
+      and turrets                 •
+    clients restore health when   •
+      near bases they own or      •
+      those of the same team      •
+  server-side                     √
     add new object id tags        √
     edit respond()                √
-        beacon                    √
+        base                      √
         turret                    √
-    make tower class              º
+    make tower class              √
       turret class extends tower  √
       turret.time()               √
-      turret.aim()                º
+      turret.aim()                √
         for clients               √
-        for enemies               •
+        for enemies               √
+        for enemy turrets         √
+        for enemy bases           √
       turret.shoot()              √
-      turret.collide()            º
-        subtract health           •
-        delete projectiles        •
+      turret.collide()            √
+        bullets                   √
+        hazardRing                √
+        coin                      √
+        subtract health           √
+        delete projectiles        √
+    edit enemy.collide() to       √
+      collide with turrets and    √
+      bases                       √
     updateTurrets()               √
-    edit updateEnvironment()      º
-      beacon                      √
+    edit updateEnvironment()      √
+      base                        √
         decrease radius           √
-          for bullets and rings   √
+          for bullets and h.Rings √
         delete                    √
-      update other object         •
-        collisions with beacons   •
+        delete otherObject        √
+      other projectiles           √
+        grenades: bases+turrets   √
+        demolitions: ""           √
+        detonators don't move :)  √ 
+    edit broadcastObjectList()    √
+      broadcast turrets           √
+      broadcast bases             √
+  incorporate owner[]             √
+    adjust changeObjects()        √
+    turrets                       √
+      adjust initialization       √
+      adjust turret.aim()         √
         
 Highlight buttons                 √√√
   help, info                      √
@@ -491,14 +523,21 @@ Give object information on hover  •••
    health: "HEALTH BOX"           •
    coin: "COIN"                   •
    turret: "TURRET"               •
-   beacon: "BEACON"               •
+   base: "BASE"                   •
     
 Move teaming explanation to help  •••
-  "TEAMS: following the username  •
+  TEAMS: following the username   •
     in the sign-in, some code     •
     inputs in the format:         •
     _•••• correspond to special   •
-    icons..."                     •
+    icons. For example, if a code •
+    is "popcorn", then type       •`
+    "yourName_popcorn" in the     •
+    sign-in. To create a team,    •
+    players who know the same     •
+    icon code can sign in with    •
+    that code and enjoy reduced   •
+    damage from friendly fire.    •
     
   
 DEBUGGING:                        
@@ -552,4 +591,8 @@ DEBUGGING:
   Client chatBox won't clear      √    (the chatBox doesn't clear when key pressed initially. solution: I had changed the default text, so conditions had to be changed as well)
   Too many additions              √    (when a new object is requested, too many result. solution: in server, compare stationary objects by location and moving objects by target)
   Enemies don't move              √    (when the enemy hasn't client nor coin in sight, it doesn't look for a random location. solution: set random location if coin isn't less than range)
+  Client doesn't enter game       √    (solution: include i[] in REGISTERED response from server, make sure to add a h[100] datum in new client so the server can update it)
+  Server sends empty death mess.  •    (reading out incoming messages, the server keeps sending "DEATH []". solution: ...?)
+  Enemy collision is off          √    (solution: fix math where enemies collide with turrets)
+  Turrets don't shoot correctly   √    (bullets have very short range, and have wrong targets. solution: fix bullet velocity to match trajectory)
 \*****************************************************/

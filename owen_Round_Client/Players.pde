@@ -320,10 +320,10 @@ class Player {
       }
     }
     
-    for (int i=0; i<objects.size(); i++) {            // repel with other objects (walls and enemies)
+    for (int i=0; i<objects.size(); i++) {            // repel with other objects (walls and enemies and bases and turrets)
       Object object = objects.get(i);
       
-      if (object.name.equals("wall") || object.name.equals("enemy")) {
+      if (object.name.equals("wall") || object.name.equals("enemy") || object.name.equals("base") || object.name.equals("turret")) {
         PVector objectLocation = new PVector(object.location.x,object.location.y);
         objectLocation.sub(location);
         
@@ -365,9 +365,6 @@ class Player {
         broadcast += angleID + str(angle) + endID;
       }
     }
-    else if (cpackage.equals("termite")) {
-      broadcast += angleID + str(angle) + splitID + str(animationAngle) + endID;
-    }
     else {
       broadcast += angleID + str(angle) + endID;
     }
@@ -377,11 +374,14 @@ class Player {
     }
     else if (cpackage.equals("turtle") && mousePressed && mouseButton == RIGHT) {
       if (score > 200) {
-       broadcast += alphaID + str(round(upgrade("shield",-80))) + endID;
+        broadcast += alphaID + str(round(upgrade("shield",-80))) + endID;
       }
       else {
-      broadcast += alphaID + str(round(upgrade("shield",10))) + endID;
+        broadcast += alphaID + str(round(upgrade("shield",10))) + endID;
       }
+    }
+    else if (cpackage.equals("termite")) {
+      broadcast += alphaID + str(animationAngle) + endID;
     }
     else {
       broadcast += alphaID + "1" + endID;
@@ -767,16 +767,16 @@ class Player {
           int damage = round(upgrade("damage",10));
           int objectH = round(upgrade("health",100));
           
-          addition = nameID + "turret" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + targetID + str(round(targetL.x)) + ',' + str(round(targetL.y)) + endID + damageID + str(damage) + endID + healthID + objectH + endID + iconID + code + endID;
+          addition = nameID + "turret" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + targetID + str(round(targetL.x)) + ',' + str(round(targetL.y)) + endID + damageID + str(damage) + endID + healthID + objectH + endID + iconID + code + endID + ownerID + name + endID;
         }
         else if (mouseButton == RIGHT && coolTime2 < 0.1 && ammo2 > 0) {
           PVector objectL = PVector.fromAngle(angle);
           objectL.mult(60);
           objectL.add(location);
           
-          int radius = round(upgrade("range",150));
+          int radius = round(upgrade("range",180));
           
-          addition = nameID + "beacon" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + radiusID + str(radius) + endID + iconID + code + endID;
+          addition = nameID + "base" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + radiusID + str(radius) + endID + iconID + code + endID + ownerID + name + endID;
         }
       }
     }
@@ -838,7 +838,7 @@ class Player {
           else if (object.name.equals("coin") && !lastTaken.equals(nameID + object.name + endID + locationID + str(int(object.location.x)) + ',' + str(int(object.location.y)) + endID + object.specifics)) {
             score += 1;
           }
-          else if ((object.name.equals("bullet")|| object.name.equals("hazardRing")) && lastTaken.equals(nameID + object.name + endID + locationID + str(object.location.x) + ',' + str(object.location.y) + endID + object.specifics) == false) {
+          else if ((object.name.equals("bullet")|| object.name.equals("hazardRing")) && !lastTaken.equals(nameID + object.name + endID + locationID + str(object.location.x) + ',' + str(object.location.y) + endID + object.specifics)) {
             health -= int(extractString(object.specifics,damageID,endID));
             
             if (health < 0) {
@@ -846,7 +846,7 @@ class Player {
             }
           }
           
-          if (object.name.equals("hazardRing") == false) {
+          if (!object.name.equals("hazardRing")) {
             if (object.name.equals("bullet")) {
               subtractions += nameID + object.name + endID + locationID + str(round(object.location.x)) + ',' + str(round(object.location.y)) + endID + object.specifics + splitID;
               lastTaken = nameID + object.name + endID + locationID + str(round(object.location.x)) + ',' + str(round(object.location.y)) + endID + object.specifics;
@@ -1257,7 +1257,7 @@ class Player {
         beam.x += (sightLine.x * i * skipCount);
         beam.y += (sightLine.y * i * skipCount);
         
-        for (int j=0; j<objects.size(); j++) {        //Check if there is a wall/enemy obstruction.
+        for (int j=0; j<objects.size(); j++) {        //Check if there is a wall/enemy/base/turret obstruction.
           if (obstructed == false) {
             Object object = objects.get(j);
             int objectRadius = 30;
@@ -1265,7 +1265,7 @@ class Player {
               objectRadius = int(extractString(object.specifics,radiusID,endID));
             }
             
-            if (object.name.equals("wall") || object.name.equals("enemy")) {            
+            if (object.name.equals("wall") || object.name.equals("enemy") || object.name.equals("base") || object.name.equals("turret")) {            
               PVector gap = new PVector(object.location.x,object.location.y);
               gap.sub(beam);
               
@@ -1555,7 +1555,7 @@ class OtherPlayer {
         popMatrix();
       }
       else if (cpackage.equals("termite")) {
-        if (bestGraphics && z == 1 && icon.length() == 0) {
+        if (bestGraphics && z == 1 && otherIcon.length() == 0) {
           createButtonTermite(int(location.x-myClient.camera.x+width/2),int(location.y-myClient.camera.y+height/2));
         }
         
@@ -1599,7 +1599,7 @@ class OtherPlayer {
           vertex(-4,2);
         endShape(CLOSE);
         popMatrix();
-    }
+      }
       
       if (otherIcon.length() > 0 && z == 1) {                                           // Format: location[X,Y]alpha[A]shape[x,y;x,y;x,y;x,y]$location[X,Y]alpha[A]ellipse[w,h]
         String[] shapes = split(otherIcon,splitID);

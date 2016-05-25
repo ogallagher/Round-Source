@@ -30,6 +30,7 @@ void respond() {
       if (clientList.size() < 10) {
         String clientName = extractString(clientMessage,nameID,endID);
         String code = "";
+        String icon = "";
         boolean duplicated = false;
         boolean registered = false;
         
@@ -42,12 +43,18 @@ void respond() {
           }
           
           if (codeList[c].equals(code)) {
-            code = iconID + iconList[c] + endID;
+            icon = iconID + iconList[c] + endID;
           }
           else if (code.equals("randomized")) {
             c = int(random(0,iconNumber-1));
-            code = iconID + iconList[c] + endID;
+            icon = iconID + iconList[c] + endID;
           }
+          else {
+            icon = iconID + endID;
+          }
+        }
+        else {
+          icon = iconID + endID;
         }
         
         for (int i=0; i<clientList.size(); i++) {
@@ -57,7 +64,7 @@ void respond() {
             if (testAddress.equals(clientAddress)) {
               registered = true;
               
-              broadcast("REGISTERED" + code + radiusID + str(round(fieldWidth/2)) + endID, messageHD, clientAddress);   // Name given is acceptable; the client just didn't receive the message the first time and is still in the menu screen.
+              broadcast("REGISTERED" + icon + radiusID + str(round(fieldWidth/2)) + endID, messageHD, clientAddress);   // Name given is acceptable; the client just didn't receive the message the first time and is still in the menu screen.
             }
             else {
               duplicated = true;
@@ -69,7 +76,7 @@ void respond() {
         
         for (int i=0; i<filedList.size(); i++) {
           String testName = extractString(filedList.get(i),nameID,endID);
-          if (testName.equals(clientName) && duplicated == false && registered == false) {
+          if (testName.equals(clientName) && !duplicated && !registered) {
             registered = true;
             
             String clientLocation = str(round(random(0,fieldWidth))) + ',' + str(round(random(0,fieldWidth)));
@@ -81,10 +88,10 @@ void respond() {
             securedName = cleanString(securedName,"0123456789");
             String secureClientData = replaceString(filedList.get(i),securedName,nameID,endID);
             
-            String signedClient = secureClientData + locationID + clientLocation + endID + angleID + clientAngle + endID + packageID + clientPackage + endID + alphaID + "1" + endID + zombieID + clientZombie + endID + iconID + code + endID + ownerID + endID + addressID + clientAddress + endID;  
+            String signedClient = secureClientData + locationID + clientLocation + endID + angleID + clientAngle + endID + packageID + clientPackage + endID + healthID + "100" + endID + alphaID + "1" + endID + zombieID + clientZombie + endID + iconID + code + endID + ownerID + endID + addressID + clientAddress + endID;  
             clientList.append(signedClient);
             
-            broadcast("REGISTERED" + code + radiusID + str(round(fieldWidth/2)) + endID, messageHD, clientAddress);            // Name given is acceptable and is now playing.
+            broadcast("REGISTERED" + icon + radiusID + str(round(fieldWidth/2)) + endID, messageHD, clientAddress);            // Name given is acceptable and is now playing.
           }
         }
         
@@ -101,8 +108,8 @@ void respond() {
       String editMessage =    extractString(clientMessage,clientHD,endHD);
       
       String clientName =     extractString(editMessage,nameID,endID);
-      String clientScore =    extractString(editMessage,scoreID,endID);
       String clientLocation = extractString(editMessage,locationID,endID);
+      String clientScore =    extractString(editMessage,scoreID,endID);
       String clientAngle =    extractString(editMessage,angleID,endID);
       String clientAlpha =    extractString(editMessage,alphaID,endID);
       String clientHealth =   extractString(editMessage,healthID,endID);

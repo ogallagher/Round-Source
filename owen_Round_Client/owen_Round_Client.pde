@@ -1,11 +1,11 @@
 //Round_Client
 
 // BEGUN:         July 18, 2015
-// LAST UPDATED:  May 23, 2016
+// LAST UPDATED:  May 24, 2016
 // VERSION:       8
 // UPDATES:
-//   v.7 =        Flexible field size [x], drawn boundaries [x], name changing [x], AI enemies [x]
-//   v.8 =        Tags shortened to reduce lag [x], Round locations and velocities [x], Improve shooting protocols [x], Promote teaming [ ], Improve enemies [x], Change scoring dynamics and upgrades [ ], Worsen spider package (dagger,speed) [ ], Termite combat package [...], Autocomplete username [...], Hover info [ ]
+//   v.7 =        Flexible field size [x], Drawn boundaries [x], name changing [x], AI enemies [x]
+//   v.8 =        Tags shortened to reduce lag [x], Round locations and velocities [x], Improve shooting protocols [x], Promote teaming [ ], Improve enemies [x], Change scoring dynamics and upgrades [ ], Worsen spider package (dagger,speed) [ ], Termite combat package [...], Autocomplete username [...]
 
 
 import processing.net.*;
@@ -14,7 +14,6 @@ Client client;
 
 String clientHD = "C:";          //Data headings 
 String objectHD = "O:";
-String towerHD = "T:";
 String messageHD = "M:";
 String newHD = "N:";
 String loadHD = "L:";

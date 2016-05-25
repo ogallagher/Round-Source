@@ -1,6 +1,6 @@
 // PLAY
 
-void readServerLists(String text) {
+void readServerLists(String text) {  
   if (text.indexOf(clientHD) > -1 && text.indexOf(endHD,text.indexOf(clientHD)) > -1) {                    // Go through string, finding instances of "name[". if client matches myClient.name — myClient.getData(); else — otherClients.append();.
     otherClients.clear();
     

@@ -317,13 +317,22 @@ class Enemy {
     
     for (int i=0; i<objectList.size(); i++) {                                           // repel with walls, react with and delete coins/bullets/hazardRings
       String object = objectList.get(i);
-      float[] objectLocation = float(split(extractString(object,locationID,endID),','));
+      int[] objectLocation = int(split(extractString(object,locationID,endID),','));
       
       if (objectLocation.length > 1) {
-        if (extractString(object,nameID,endID).equals("wall")) {
+        String objectName = extractString(object,nameID,endID);
+        if (objectName.equals("wall") || objectName.equals("base")) {
           PVector otherLocation = new PVector(objectLocation[0],objectLocation[1]);
           otherLocation.sub(location);
-          float distance = otherLocation.mag() - (30 + int(extractString(object,radiusID,endID)) + 2);
+          float distance = otherLocation.mag() - 30;
+          
+          if (objectName.equals("wall")) {
+            distance -= int(extractString(object,radiusID,endID)) + 2;
+          }
+          else {
+            distance -= 30;
+          }
+          
           otherLocation.normalize();
           otherLocation.mult(distance);
           
@@ -376,6 +385,20 @@ class Enemy {
         if (distance < 0) {
           location.add(otherLocation);
         }
+      }
+    }
+    
+    for (int i=0; i<turretList.size(); i++) {                                        // repel with turrets
+      Turret turret = turretList.get(i);
+      
+      PVector difference = new PVector(turret.location.x,turret.location.y);
+      difference.sub(location);
+      
+      if (difference.mag() < 60) {
+        difference.normalize();
+        difference.mult(-60);
+        location.set(turret.location);
+        location.add(difference);
       }
     }
     

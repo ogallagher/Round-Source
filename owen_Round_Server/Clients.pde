@@ -23,7 +23,7 @@ void updateClient(String name, String score, String location, String angle, Stri
         while(cleanString(extractString(filedList.get(i),nameID,endID),"0123456789").equals(name) == false && i<filedList.size()-1) {
           i++;
         }
-        if (score.equals(extractString(filedList.get(i),scoreID,endID)) == false) {
+        if (!score.equals(extractString(filedList.get(i),scoreID,endID))) {
           String newFiledClient = replaceString(filedList.get(i),score,scoreID,endID);
           filedList.set(i,newFiledClient);
           

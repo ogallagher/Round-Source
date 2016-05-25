@@ -148,16 +148,17 @@ void createButtonPlay(int locationX, int locationY) {
       stage = 3;
       titleOrigin.set(width/2,60);
     }
-    else if (mousePressed && stage == 3 && (username.equals("TYPE USERNAME ([,],*,TAB,: are not allowed)") == false && username.equals("Sorry, the username you gave is already taken.") == false && username.equals("Sorry, the name you gave is already signed in for another player.") == false && username.equals("Sorry, the username you entered was not found on file.") == false && username.equals("Great! Now switch to LOAD FILE and sign in.") == false && username.equals("Sorry, there are too many clients currently playing.") == false)) {
+    else if (mousePressed && stage == 3 && !(username.equals("TYPE USERNAME ([,],*,TAB,: are not allowed)")) && !(username.equals("Sorry, the username you gave is already taken.")) && !(username.equals("Sorry, the name you gave is already signed in for another player.")) && !(username.equals("Sorry, the username you entered was not found on file.")) && !(username.equals("Great! Now switch to LOAD FILE and sign in.")) && !(username.equals("Sorry, there are too many clients currently playing."))) {
       String message = "";
       
       if (username.indexOf('_') > -1) {
         code = username.substring(username.indexOf('_')+1);
         
-        message += iconID + code + endID;
+        message += iconID + code + endID + nameID + username.substring(0,username.indexOf('_')) + endID + packageID;
       }
-      
-      message += nameID + username.substring(0,username.indexOf('_')) + endID + packageID;
+      else {
+        message += nameID + username + endID + packageID;
+      }
       
       if (combatPackage == 1) {
         message += "woodpecker";

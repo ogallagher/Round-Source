@@ -1,7 +1,7 @@
 //Round_Server_Center
 
 // BEGUN:         July 18, 2015
-// LAST UPDATED:  May 23, 2016
+// LAST UPDATED:  May 24, 2016
 // VERSION:       8
 // UPDATES:       
 //    7 = Flexible field size, drawn boundaries, name changing, AI enemies
@@ -29,8 +29,8 @@
       name[demolition]location[X,Y]velocity[Xv,Yv]target[Xt,Yt]radius[R]damage[D]owner[player3]  same as grenade, but shrinks/removes walls on contact
       name[fanshot]location[X,Y]velocity[Xv,Yv]radius[R]alpha[A]damage[D]owner[player4]          alpha corresponds to additional bullets to the original deviation angle of 0 ON EACH SIDE (decided not to use it...)
       name[laserPoint]location[X,Y]alpha[A]                                                      alpha corresponds to whether the sight should be deleted
-      name[turret]location[X,Y]target[Xt,Yt]damage[D]health[H]icon[C]                            target used both to tell range and angle
-      name[beacon]location[X,Y]radius[R]icon[C]                                                  radius corresponds to how far health is distributed and how much health the beacon still has
+      name[turret]location[X,Y]target[Xt,Yt]damage[D]health[H]icon[C]owner[player5]              target used both to tell range and angle
+      name[base]location[X,Y]radius[R]icon[C]owner[player6]                                      radius corresponds to how far health is distributed and how much health the base still has
     
     enemyList Format Example
       location[X,Y]angle[T]package[P]
@@ -109,7 +109,7 @@ void setup() {
   size(600,600);
   server = new Server(this,serverPort);
   
-  fileEntries = loadStrings("owen_Round_Server_Center.txt");
+  fileEntries = loadStrings("owen_Round_Server.txt");
   filedList = new StringList();
   clientList = new StringList();
   objectList = new StringList();

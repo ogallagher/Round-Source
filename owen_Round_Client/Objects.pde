@@ -307,6 +307,28 @@ class Object {
         ellipse(0,0,z*60,z*60);
         popMatrix();
       }
+      
+      if (name.equals("base")) {
+        pushMatrix();
+        translate((z*location.x)-myClient.camera.x+width/2,(z*location.y)-myClient.camera.y+height/2);
+        noFill();
+        strokeWeight(1.5);
+        stroke(255);
+        ellipseMode(CENTER);
+        ellipse(0,0,z*60,z*60);
+        popMatrix();
+      }
+      
+      if (name.equals("turret")) {
+        pushMatrix();
+        translate((z*location.x)-myClient.camera.x+width/2,(z*location.y)-myClient.camera.y+height/2);
+        noFill();
+        strokeWeight(1.5);
+        stroke(255);
+        ellipseMode(CENTER);
+        ellipse(0,0,z*60,z*60);
+        popMatrix();
+      }
     }
   }
 }

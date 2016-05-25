@@ -97,7 +97,7 @@ void readServerMessage() {
       
       if (text.indexOf(messageHD) > -1 && text.indexOf(endID,text.indexOf(messageHD)) > -1 && text.indexOf(endHD,text.indexOf(endID,text.indexOf(messageHD))) > -1) {
         String message = text.substring(text.indexOf(endID,text.indexOf(messageHD))+1,text.indexOf(endHD,text.indexOf(endID,text.indexOf(messageHD))));
-        //                                                                         println("message: " + message);
+        println("message: " + message);
         
         if (message.equals("TAKEN")) {                                                  // Name given is already on-file.
           username = "Sorry, the username you gave is already taken.";
@@ -115,7 +115,7 @@ void readServerMessage() {
         } 
         else if (message.indexOf("REGISTERED") > -1 && stage == 3) {                    // Name given is acceptable and is now playing.
           if (message.indexOf(iconID) > -1 && message.indexOf(radiusID) > -1) {
-            icon = message.substring(message.indexOf(iconID) + iconID.length(), message.indexOf(radiusID));
+            icon = extractString(message,iconID,endID);
             fieldWidth = (floor((int(extractString(message,radiusID,endID)) * 2) * 0.1)) * 10;
             fieldConfirmed = true;
           }
