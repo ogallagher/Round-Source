@@ -64,11 +64,7 @@ void broadcast(String text, String heading, String clientIP) {       // (HEADING
 }
 
 void updateFile() {
-  String[] newFile = new String[filedList.size()];
-  
-  for (int i=0; i<newFile.length; i++) {
-    newFile[i] = filedList.get(i);
-  }
+  String[] newFile = filedList.array();
 
   // Writes the strings to a file, each on a separate line
   saveStrings("owen_Round_Server.txt", newFile);

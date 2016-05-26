@@ -60,7 +60,12 @@ void updateClient(String name, String score, String location, String angle, Stri
         for (int j=0; j<filedList.size(); j++) {
           String testName = extractString(filedList.get(j),nameID,endID);
           if (cleanString(testName,"0123456789 ").equals(cleanString(owner,"0123456789 "))) {
-            nameTaken = true;      // Name given is already on-file
+            if (extractString(filedList.get(j),addressID,endID).equals(address)) {
+              nameTaken = false;     // Though the given name is on file, the client asked before but didn't hear the server's response.
+            }
+            else {
+              nameTaken = true;      // Name given is already on-file
+            }
           }
         }
         
@@ -79,6 +84,7 @@ void updateClient(String name, String score, String location, String angle, Stri
           
           if (cleanString(extractString(filedList.get(i),nameID,endID),"0123456789").equals(name)) {
             String newFiledClient = replaceString(filedList.get(i),owner,nameID,endID);
+            newFiledClient = replaceString(filedList.get(i),address,addressID,endID);
             filedList.set(i,newFiledClient);
             
             updateFile();

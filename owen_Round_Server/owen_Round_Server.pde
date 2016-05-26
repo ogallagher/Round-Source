@@ -5,7 +5,7 @@
 // VERSION:       8
 // UPDATES:       
 //    7 = Flexible field size, drawn boundaries, name changing, AI enemies
-//    8 = Tags shortened to reduce lag [x], Round locations and velocities [x], Improve shooting protocols [x], Promote teaming [ ], Improve enemies [x], Change scoring dynamics and upgrades [ ], Worsen spider package (dagger,speed) [ ], Termite combat package [...], Autocomplete username [...]
+//    8 = Tags shortened to reduce lag [x], Round locations and velocities [x], Improve shooting protocols [x], Promote teaming [ ], Improve enemies [x], Change scoring dynamics and upgrades [ ], Worsen spider package (dagger,speed) [ ], Termite combat package [...], Autocomplete username [x]
 
 /*  
     File Format Example
@@ -13,7 +13,7 @@
       name[player1]score[1]
       
     clientList Format Example
-      name[N]score[S]location[X,Y]angle[T]package[P]health[H]alpha[A]zombie[Z]icon[C]address[#]
+      name[N]score[S]location[X,Y]angle[T]package[P]health[H]alpha[A]zombie[Z]icon[C]owner[O]address[#]
       
     objectList Format Example                                                          REMEMBER: clients take away walls, healthBoxes, ammoBoxes, coins, and bullets, and change their own healths and scores
       name[field]radius[W/2]                                                                     I send radius so as not to create necessity for new tag

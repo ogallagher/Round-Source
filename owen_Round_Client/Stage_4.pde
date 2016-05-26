@@ -22,7 +22,6 @@ void readServerLists(String text) {
       if (clientName.equals(myClient.name) || myAddress.equals(extractString(clientData,addressID,endID))) {
         myClient.getData(clientData);
       }
-      
       else if (clientData.length() > 0) {
         otherClients.add(new OtherPlayer(clientData));
       }

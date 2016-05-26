@@ -5,12 +5,15 @@
 // VERSION:       8
 // UPDATES:
 //   v.7 =        Flexible field size [x], Drawn boundaries [x], name changing [x], AI enemies [x]
-//   v.8 =        Tags shortened to reduce lag [x], Round locations and velocities [x], Improve shooting protocols [x], Promote teaming [ ], Improve enemies [x], Change scoring dynamics and upgrades [ ], Worsen spider package (dagger,speed) [ ], Termite combat package [...], Autocomplete username [...]
+//   v.8 =        Tags shortened to reduce lag [x], Round locations and velocities [x], Improve shooting protocols [x], Promote teaming [ ], Improve enemies [x], Change scoring dynamics and upgrades [ ], Worsen spider package (dagger,speed) [ ], Termite combat package [...], Autocomplete username [x]
 
 
 import processing.net.*;
 
 Client client;
+
+String[] fileEntries;            //Replica of usernames.txt. (each entry is a new line)
+StringList pastUsernames;        //Past usernames
 
 String clientHD = "C:";          //Data headings 
 String objectHD = "O:";
@@ -99,6 +102,12 @@ void setup() {
   noCursor();
   
   client = new Client(this, "74.71.101.15", 44445);      //For using internet connection — the ip is that of our home router, the port is the one I chose on which to allow incoming data requests. (test w/ canyouseeme.org)
+  
+  fileEntries = loadStrings("usernames.txt");
+  pastUsernames = new StringList();
+  for (int i=0; i<fileEntries.length; i++) {
+    pastUsernames.append(fileEntries[i]);
+  }
   
   for (int i=0; i<6; i++) {
     myAddress += str(round(random(9)));
@@ -192,7 +201,7 @@ void draw() {
     displayField();
     
     chatLine();                           //for the textBox and the displays
-    rename();                             //"                              "
+    rename();                             //"   "
   }
   
   if (stage == 5) {

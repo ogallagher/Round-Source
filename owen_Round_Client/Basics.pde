@@ -54,6 +54,20 @@ String cleanString(String text, String silt) {
   return cleaned;
 }
 
+int getIndexOf(StringList list, String search) {
+  int index = -1;
+  
+  if (list.size() > 0 && search.length() > 0) {
+    for (int i=0; i<list.size() && index < 0; i++) {
+      if (list.get(i).equals(search)) {
+        index = i;
+      }
+    }
+  }
+  
+  return index;
+}
+
 void broadcast(String text, String heading) {
   if (text.length() > 0) {
     String broadcast = addressID + myAddress + endID + heading + text + endHD;
@@ -166,6 +180,36 @@ void readServerMessage() {
           if (fieldConfirmed) {
             stage = 4;
             loadString = "";
+            
+            String[] newList = pastUsernames.array();
+            
+            if (username.indexOf('_') > -1) {
+              if (!pastUsernames.hasValue(username.substring(0,username.indexOf('_')))) {
+                pastUsernames.clear();
+                pastUsernames.append(username.substring(0,username.indexOf('_')));
+              }
+              else {
+                pastUsernames.remove(getIndexOf(pastUsernames,username.substring(0,username.indexOf('_'))));
+                newList = pastUsernames.array();
+                pastUsernames.clear();
+                pastUsernames.append(username.substring(0,username.indexOf('_')));
+              }
+            }
+            else {
+              if (!pastUsernames.hasValue(username)) {
+                pastUsernames.clear();
+                pastUsernames.append(username);
+              }
+              else {
+                pastUsernames.remove(getIndexOf(pastUsernames,username));
+                newList = pastUsernames.array();
+                pastUsernames.clear();
+                pastUsernames.append(username);
+              }
+            }
+            
+            pastUsernames.append(newList);
+            updateFile();
           }
         }
         else if (message.equals("DEATH [" + myClient.name + endID) && stage == 4) {
@@ -192,6 +236,17 @@ void readServerMessage() {
       } 
     }
   }
+}
+
+void updateFile() {
+  String[] newFile = new String[pastUsernames.size()];
+  
+  for (int i=0; i<newFile.length; i++) {
+    newFile[i] = pastUsernames.get(i);
+  }
+
+  // Writes the strings to a file, each on a separate line
+  saveStrings("usernames.txt", newFile);
 }
 
 void mouseWheel(MouseEvent event) {

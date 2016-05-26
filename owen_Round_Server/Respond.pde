@@ -19,14 +19,14 @@ void respond() {
       if (registered == false) {
         broadcast("ADDED", messageHD, clientAddress);        // Name given is acceptable and has been added
         
-        String newClient = nameID + clientName + endID + scoreID + "0" + endID;
+        String newClient = nameID + clientName + endID + scoreID + "0" + endID + addressID + clientAddress + endID;
         filedList.append(newClient);
         
         updateFile();
       }
     }
     
-    if (clientMessage.indexOf(loadHD) > -1) {                                            //*** Load existing client
+    if (clientMessage.indexOf(loadHD) > -1) {                                            //*** Load existing client    
       if (clientList.size() < 10) {
         String clientName = extractString(clientMessage,nameID,endID);
         String code = "";
@@ -76,7 +76,7 @@ void respond() {
         
         for (int i=0; i<filedList.size(); i++) {
           String testName = extractString(filedList.get(i),nameID,endID);
-          if (testName.equals(clientName) && !duplicated && !registered) {
+          if (testName.equals(clientName) && !duplicated && !registered) {            
             registered = true;
             
             String clientLocation = str(round(random(0,fieldWidth))) + ',' + str(round(random(0,fieldWidth)));
@@ -88,8 +88,11 @@ void respond() {
             securedName = cleanString(securedName,"0123456789");
             String secureClientData = replaceString(filedList.get(i),securedName,nameID,endID);
             
-            String signedClient = secureClientData + locationID + clientLocation + endID + angleID + clientAngle + endID + packageID + clientPackage + endID + healthID + "100" + endID + alphaID + "1" + endID + zombieID + clientZombie + endID + icon + ownerID + endID + addressID + clientAddress + endID;  
+            String signedClient = secureClientData.substring(0,secureClientData.indexOf(addressID)) + locationID + clientLocation + endID + angleID + clientAngle + endID + packageID + clientPackage + endID + healthID + "100" + endID + alphaID + "1" + endID + zombieID + clientZombie + endID + icon + ownerID + endID + addressID + clientAddress + endID;  
             clientList.append(signedClient);
+            
+            filedList.set(i,replaceString(filedList.get(i),clientAddress,addressID,endID));
+            updateFile();
             
             broadcast("REGISTERED" + icon + radiusID + str(round(fieldWidth/2)) + endID, messageHD, clientAddress);            // Name given is acceptable and is now playing.
           }

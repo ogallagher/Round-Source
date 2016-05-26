@@ -425,7 +425,7 @@ New termite combat package        √√º
     add termite clients           √
     read client sendData for      √
       termites (2 angles given)   √
- introduce turrets and bases      º
+ introduce turrets and bases      √
   
 Only draw field when near bounds  √√√
 
@@ -439,19 +439,19 @@ Improve server reading?           •••
     of each type before analyzing •
     them                          •
     
-Increase box spawn quantity       •••
+Increase boxes' spawn quantity    •••
 
-Autocomplete username             •••
+Autocomplete username             √√√
   create usernames.txt            √
-  all past usernames that the     •
-    client input are stored in    •
-    this file                     •
-  the sketch pulls these names    •
-    and uses them for             •
-    autocomplete                  •
+  all past usernames that the     √
+    client input are stored in    √
+    this file                     √
+  the sketch pulls these names    √
+    and uses them for             √
+    autocomplete                  √
     
-Introduce turrets and bases       √√º
-  client-side                     º
+Introduce turrets and bases       √√√
+  client-side                     √
     add new object id tags        √
     edit changeObjects() for the  √
       termite package             √
@@ -471,9 +471,9 @@ Introduce turrets and bases       √√º
       players on their team)      √
     clients collide with bases    √
       and turrets                 √
-    clients restore health when   º
-      near bases they own or      º
-      those of the same team      º
+    clients restore health when   √
+      near bases they own or      √
+      those of the same team      √
   server-side                     √
     add new object id tags        √
     edit respond()                √
@@ -592,7 +592,7 @@ DEBUGGING:
   Items outside bounds            √    (when spawned @ edge, which changes depending on # of players)
   Bullet wasted to press button   √    (solution: don't shoot if mouse near a button)
   Can't press RETURN for newname  √
-  Name taken, but not actually    •    (sometimes, it won't allow the user to make multiple name changes in one round?)
+  Name taken, but not actually    √    (sometimes, it won't allow the user to make multiple name changes in one round. solution: server checks if filedList.get(i).address == askingClient.address to see if client didn't hear the answer before)
   Windows doesn't have font       ?    (solution: try to have have font data stored in sketch folder. current fonts imported: hanzipen, avenir-book)
   Projectiles explode prematurely √    (solution: check if projectiles are past target by checking if abs(vAngle-tAngle) < PI*0.5)
   Items spawn inside walls        √    (solution: when spawning new items AND when processing addition requests from clients [specifically beavers], check if items are in walls)
@@ -609,4 +609,5 @@ DEBUGGING:
   Termites move when building     √    (solution: movement disabled when coolTime > 0)
   Turrets don't display icons     √    (solition: account for the fact that an icon has splitID's within it)
   Turrets shoot at team players   √    (solution: server was storing icon codes for clients instead of icons)
+  Other termites don't show up    √    (solution: clients used to only draw others if (other.alpha > 0), so I made an exception if (other.cpackage.equals("termite"))
 \*****************************************************/

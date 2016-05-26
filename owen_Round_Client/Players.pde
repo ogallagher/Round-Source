@@ -21,6 +21,7 @@ class Player {
   String lastTaken;
   String lastPlaced;                  //For bullet/grenade/demolition placement (shield deflection)
   boolean switch1 = false;            //Currently used to switch between bullets in woodpecker dual machine gun.
+  boolean healthEstablished = false;
   
   Player() {
     name = "";
@@ -77,6 +78,7 @@ class Player {
     
     chatBoxString = "[,],*,:,$,TAB = Not Permitted. Limit = 60 char.";
     chatting = false;
+    healthEstablished = false;
   }
   
   void getData(String data) {
@@ -142,8 +144,9 @@ class Player {
         ammo2 = 3;
       }
     }
-    if (health < 0) {
+    if (health < 0 && !healthEstablished) {
       health = int(upgrade("health",100));
+      healthEstablished = true;
     }
     
     speedConstant = 0.8;   //... probably should put this in initialization later
@@ -317,6 +320,7 @@ class Player {
       }
     }
     
+    boolean inBase = false;
     for (int i=0; i<objects.size(); i++) {            // repel with other objects (walls and enemies and bases and turrets)
       Object object = objects.get(i);
       
@@ -329,6 +333,15 @@ class Player {
           distance -= (30 + int(extractString(object.specifics,radiusID,endID)) + 2);
         }
         else {
+          if (object.name.equals("base") && !inBase) {
+            if (distance < 30 + int(extractString(object.specifics,radiusID,endID)) && (extractString(object.specifics,ownerID,endID).equals(name) || object.specifics.substring(object.specifics.indexOf(iconID) + iconID.length(), object.specifics.indexOf(endID + ownerID)).equals(icon))) {
+              health += 1;
+              inBase = true;
+              if (health > upgrade("health",100)) {
+                health = round(upgrade("health",100));
+              }
+            }
+          }
           distance -= 62;
         }
         
@@ -340,12 +353,16 @@ class Player {
           if (object.name.equals("enemy")) {
             health -= 2; 
           }
+          
+          if (health < 0) {
+            health = 0;
+          }
         }
       }
     }
   }
   
-  void sendData() {                                                                           
+  void sendData() {
     String broadcast =  nameID     + name                                    + endID
                       + locationID + str(round(location.x)) + ',' + str(round(location.y)) + endID 
                       + packageID  + cpackage                                + endID
@@ -1345,11 +1362,11 @@ class OtherPlayer {
     
     alpha = int(extractString(data,alphaID,endID));
     
-    otherIcon = icon = data.substring(data.indexOf(iconID) + iconID.length(), data.indexOf(endID + addressID));
+    otherIcon = data.substring(data.indexOf(iconID) + iconID.length(), data.indexOf(endID + ownerID));
   }
   
   void display() {
-    if (alpha > 0 && (((z*location.x)-myClient.camera.x+width/2 > -400 && (z*location.x)-myClient.camera.x+width/2 < width+400) && ((z*location.y)-myClient.camera.y+height/2 > -400 && (z*location.y)-myClient.camera.y+height/2 < height+400))) {
+    if ((cpackage.equals("termite") || alpha > 0) && (((z*location.x)-myClient.camera.x+width/2 > -400 && (z*location.x)-myClient.camera.x+width/2 < width+400) && ((z*location.y)-myClient.camera.y+height/2 > -400 && (z*location.y)-myClient.camera.y+height/2 < height+400))) {
       if (cpackage.equals("woodpecker")) {
         if (bestGraphics && z == 1 && otherIcon.length() == 0) {
           createButtonWoodpecker(int(location.x)-int(myClient.camera.x)+width/2,int(location.y)-int(myClient.camera.y)+height/2);
@@ -1527,36 +1544,36 @@ class OtherPlayer {
         rotate(angle);
         translate(45,0);
         ellipseMode(CENTER);
-        ellipse(0,0,10,10);
+        ellipse(0,0,z*10,z*10);
         fill(80);
         noStroke();
-        ellipse(0,0,5,5);
+        ellipse(0,0,z*5,z*5);
         fill(255);
         stroke(255);
         rotate(alpha);
         beginShape();
-          vertex(-2,-4);
-          vertex(-1,-8);
-          vertex(1,-8);
-          vertex(2,-4);
+          vertex(z*-2,z*-4);
+          vertex(z*-1,z*-8);
+          vertex(z*1,z*-8);
+          vertex(z*2,z*-4);
         endShape(CLOSE);
         beginShape();
-          vertex(4,-2);
-          vertex(8,-1);
-          vertex(8,1);
-          vertex(4,2);
+          vertex(z*4,z*-2);
+          vertex(z*8,z*-1);
+          vertex(z*8,z*1);
+          vertex(z*4,z*2);
         endShape(CLOSE);
         beginShape();
-          vertex(2,4);
-          vertex(1,8);
-          vertex(-1,8);
-          vertex(-2,4);
+          vertex(z*2,z*4);
+          vertex(z*1,z*8);
+          vertex(z*-1,z*8);
+          vertex(z*-2,z*4);
         endShape(CLOSE);
         beginShape();
-          vertex(-4,-2);
-          vertex(-8,-1);
-          vertex(-8,1);
-          vertex(-4,2);
+          vertex(z*-4,z*-2);
+          vertex(z*-8,z*-1);
+          vertex(z*-8,z*1);
+          vertex(z*-4,z*2);
         endShape(CLOSE);
         popMatrix();
       }
