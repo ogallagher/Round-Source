@@ -309,6 +309,11 @@ class Object {
       }
       
       if (name.equals("base")) {
+        String objectIcon = specifics.substring(specifics.indexOf(iconID) + iconID.length(), specifics.indexOf(endID + ownerID));
+        if (objectIcon.length() > 0) {
+          drawIcon(objectIcon, location);
+        }
+        
         pushMatrix();
         translate((z*location.x)-myClient.camera.x+width/2,(z*location.y)-myClient.camera.y+height/2);
         noFill();
@@ -316,10 +321,52 @@ class Object {
         stroke(255);
         ellipseMode(CENTER);
         ellipse(0,0,z*60,z*60);
+        
+        int radius = int(extractString(specifics,radiusID,endID));
+        stroke(255,50);
+        for (int i=75; i<radius; i+=15) {
+          ellipse(0,0,z*i*2,z*i*2);
+        }
+        
         popMatrix();
       }
       
       if (name.equals("turret")) {
+        float[] target = float(split(extractString(specifics,targetID,endID),','));
+        PVector targetVector = new PVector(target[0],target[1]);
+        targetVector.sub(location);
+        float angle = targetVector.heading();
+        
+        String objectIcon = specifics.substring(specifics.indexOf(iconID) + iconID.length(), specifics.indexOf(endID + ownerID));
+        if (objectIcon.length() > 0) {
+          drawIcon(objectIcon, location);
+        }
+        
+        pushMatrix();
+        translate(z*(location.x)-myClient.camera.x+width/2,z*(location.y)-myClient.camera.y+height/2);
+        fill(255);
+        noStroke();
+        strokeWeight(1.5);
+        rectMode(CENTER);
+        rotate(angle + PI/2);
+        translate(0,z*-8);
+        beginShape();
+          vertex(z*-10,z*-20);
+          vertex(z*-10,z*-38);
+          vertex(z*10,z*-38);
+          vertex(z*10,z*-20);
+          vertex(z*5,z*-21.5);
+          vertex(0,z*-22);
+          vertex(z*-5,z*-21.5);
+        endShape(CLOSE);
+        
+        stroke(255);
+        strokeWeight(z*3);
+        line(z*-10,z*-38,z*10,z*-38);
+        stroke(80);
+        line(z*-10,z*-32,z*10,z*-32);
+        popMatrix();
+        
         pushMatrix();
         translate((z*location.x)-myClient.camera.x+width/2,(z*location.y)-myClient.camera.y+height/2);
         noFill();

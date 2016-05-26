@@ -1,7 +1,7 @@
 //Round_Client
 
 // BEGUN:         July 18, 2015
-// LAST UPDATED:  May 24, 2016
+// LAST UPDATED:  May 25, 2016
 // VERSION:       8
 // UPDATES:
 //   v.7 =        Flexible field size [x], Drawn boundaries [x], name changing [x], AI enemies [x]
@@ -124,11 +124,11 @@ void draw() {
   }
   
   if (stage == 1) {
-    drawInfo(150,200);
+    drawInfo(150,240);
   }
   
   if (stage == 2) {
-    drawHelp(150,200);
+    drawHelp(130,200);
     createButtonScroll(770,350);
   }
   
@@ -142,7 +142,7 @@ void draw() {
   }
   
   if (stage == 3) {
-    createButtonPlay(700,600);    //If clicked, request to join is sent.
+    createButtonPlay(750,630);    //If clicked, request to join is sent.
     createButtonBack(50,100);
     
     createButtonWoodpecker(50,220);

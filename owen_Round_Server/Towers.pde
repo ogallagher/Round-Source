@@ -18,6 +18,7 @@ class Turret extends Tower {
   int damage;
   int timer;
   String owner;
+  String trueTarget;
   boolean targetFound;
   
   Turret(int[] loc, int[] tar, int dam, int hth, String icn, String own) {
@@ -27,6 +28,7 @@ class Turret extends Tower {
     damage = dam;
     timer = 0;
     owner = own;
+    trueTarget = "";
     targetFound = false;
     
     PVector magnitude = new PVector(tar[0],tar[1]);
@@ -35,72 +37,153 @@ class Turret extends Tower {
   }
   
   void aim() {
-    target.sub(location);
-    targetFound = false;
-    
-    for (int i=0; i<clientList.size(); i++) {
-      String client = clientList.get(i);
-      
-      if ((!extractString(client,iconID,endID).equals(icon) || extractString(client,iconID,endID).length() == 0) && !extractString(client,nameID,endID).equals(owner)) {
-        PVector difference = new PVector();
-        int[] clientL = int(split(extractString(client,locationID,endID),','));
-        
-        difference.set(clientL[0],clientL[1]);
-        difference.sub(location);
-        
-        if (difference.mag() < target.mag()) {
-          target.set(difference);
-          targetFound = true;
-        }
-      }
-    }
-    
-    for (int i=0; i<enemyList.size(); i++) {
-      PVector difference = new PVector();
-      difference.set(enemyList.get(i).location);
-      difference.sub(location);
-      
-      if (difference.mag() < target.mag()) {
-        target.set(difference);
-        targetFound = true;
-      }
-    }
-    
-    for (int i=0; i<turretList.size(); i++) {
-      if (!turretList.get(i).location.equals(location) && (!turretList.get(i).icon.equals(icon) || turretList.get(i).icon.length() == 0) && !turretList.get(i).owner.equals(owner)) {
-        PVector difference = new PVector();
-        difference.set(turretList.get(i).location);
-        difference.sub(location);
-        
-        if (difference.mag() < target.mag()) {
-          target.set(difference);
-          targetFound = true;
-        }
-      }
-    }
-    
-    for (int i=0; i<objectList.size(); i++) {
-      String name = extractString(objectList.get(i),nameID,endID);
-      String objectI = extractString(objectList.get(i),iconID,endID);
-      String objectO = extractString(objectList.get(i),ownerID,endID);
-      
-      if (name.equals("base") && (!objectI.equals(icon) || objectI.length() == 0) && !objectO.equals(owner)) {
-        PVector difference = new PVector();
-        int[] objectL = int(split(extractString(objectList.get(i),locationID,endID),','));
-        difference.set(objectL[0],objectL[1]);
-        difference.sub(location);
-        
-        if (difference.mag() < target.mag()) {
-          target.set(difference);
-          targetFound = true;
-        }
-      }
-    }
-    
-    if (targetFound) {
+    if (!targetFound) {
+      target.sub(location);
       target.normalize();
       target.mult(radius);
+      
+      for (int i=0; i<clientList.size(); i++) {
+        String client = clientList.get(i);
+        
+        if ((!client.substring(client.indexOf(iconID)+iconID.length(),client.indexOf(endID+ownerID)).equals(icon) || extractString(client,iconID,endID).length() == 0) && !extractString(client,nameID,endID).equals(owner)) {
+          PVector difference = new PVector();
+          int[] clientL = int(split(extractString(client,locationID,endID),','));
+          
+          difference.set(clientL[0],clientL[1]);
+          difference.sub(location);
+          
+          if (difference.mag() < target.mag()) {
+            target.set(difference);
+            trueTarget = nameID + "client" + endID + addressID + str(i) + endID;
+            targetFound = true;
+          }
+        }
+      }
+      
+      for (int i=0; i<enemyList.size(); i++) {
+        PVector difference = new PVector();
+        difference.set(enemyList.get(i).location);
+        difference.sub(location);
+        
+        if (difference.mag() < target.mag()) {
+          target.set(difference);
+          trueTarget = nameID + "enemy" + endID + addressID + str(i) + endID;
+          targetFound = true;
+        }
+      }
+      
+      for (int i=0; i<turretList.size(); i++) {
+        if (!turretList.get(i).location.equals(location) && (!turretList.get(i).icon.equals(icon) || turretList.get(i).icon.length() == 0) && !turretList.get(i).owner.equals(owner)) {
+          PVector difference = new PVector();
+          difference.set(turretList.get(i).location);
+          difference.sub(location);
+          
+          if (difference.mag() < target.mag()) {
+            target.set(difference);
+            trueTarget = nameID + "turret" + endID + addressID + str(i) + endID;
+            targetFound = true;
+          }
+        }
+      }
+      
+      for (int i=0; i<objectList.size(); i++) {
+        String name = extractString(objectList.get(i),nameID,endID);
+        String objectI = extractString(objectList.get(i),iconID,endID);
+        String objectO = extractString(objectList.get(i),ownerID,endID);
+        
+        if (name.equals("base") && (!objectI.equals(icon) || objectI.length() == 0) && !objectO.equals(owner)) {
+          PVector difference = new PVector();
+          int[] objectL = int(split(extractString(objectList.get(i),locationID,endID),','));
+          difference.set(objectL[0],objectL[1]);
+          difference.sub(location);
+          
+          if (difference.mag() < target.mag()) {
+            target.set(difference);
+            trueTarget = nameID + "object" + endID + addressID + str(i) + endID;
+            targetFound = true;
+          }
+        }
+      }
+      
+      if (targetFound) {
+        target.normalize();
+        target.mult(radius);
+      }
       target.add(location);
+    }
+    else if (targetFound) {
+      PVector difference = new PVector();
+      
+      if (extractString(trueTarget,nameID,endID).equals("client")) {
+        if (clientList.size() > int(extractString(trueTarget,addressID,endID))) {
+          String client = clientList.get(int(extractString(trueTarget,addressID,endID)));
+          int[] clientL = int(split(extractString(client,locationID,endID),','));
+          
+          difference.set(clientL[0],clientL[1]);
+          difference.sub(location);
+          if (difference.mag() < radius) {
+            target.set(clientL[0],clientL[1]);
+          }
+          else {
+            targetFound = false;
+          }
+        }
+        else {
+          targetFound = false;
+        }
+      }
+      else if (extractString(trueTarget,nameID,endID).equals("enemy")) {
+        if (enemyList.size() > int(extractString(trueTarget,addressID,endID))) {
+          Enemy enemy = enemyList.get(int(extractString(trueTarget,addressID,endID)));
+          
+          difference.set(enemy.location);
+          difference.sub(location);
+          if (difference.mag() < radius) {
+            target.set(enemy.location);
+          }
+          else {
+            targetFound = false;
+          }
+        }
+        else {
+          targetFound = false;
+        }
+      }
+      else if (extractString(trueTarget,nameID,endID).equals("turret")) {
+        if (turretList.size() > int(extractString(trueTarget,addressID,endID))) {
+          Turret turret = turretList.get(int(extractString(trueTarget,addressID,endID)));
+          
+          difference.set(turret.location);
+          difference.sub(location);
+          if (difference.mag() < radius) {
+            target.set(turret.location);
+          }
+          else {
+            targetFound = false;
+          }
+        }
+        else {
+          targetFound = false;
+        }
+      }
+      else if (extractString(trueTarget,nameID,endID).equals("object")) {
+        if (objectList.size() > int(extractString(trueTarget,addressID,endID))) {
+          String object = objectList.get(int(extractString(trueTarget,addressID,endID)));
+          int[] objectL = int(split(extractString(object,locationID,endID),','));
+          
+          difference.set(objectL[0],objectL[1]);
+          difference.sub(location);
+          if (difference.mag() < radius) {
+            target.set(objectL[0],objectL[1]);
+          }
+          else {
+            targetFound = false;
+          }
+        }
+        else {
+          targetFound = false;
+        }
+      }
     }
   }
 

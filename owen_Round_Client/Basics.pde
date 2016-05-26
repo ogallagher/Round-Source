@@ -87,6 +87,49 @@ void drawSights() {
   popMatrix();
 }
 
+void drawIcon(String icon, PVector location) {
+  String[] shapes = split(icon,splitID);
+      
+  for (int i=0; i<shapes.length; i++) {
+    pushMatrix();
+    translate((z*location.x)-myClient.camera.x+width/2,(z*location.y)-myClient.camera.y+height/2);
+    
+    float rotation = 0;
+    if (shapes[i].indexOf(angleID) > -1) {
+      rotation = float(extractString(shapes[i],angleID,endID));
+    }
+    rotate(rotation);
+    
+    if (shapes[i].indexOf(locationID) > -1) {
+      float[] translation = float(split(extractString(shapes[i],locationID,endID),','));
+      translate(z*translation[0],z*translation[1]);
+    }
+    
+    int fillColor = int(extractString(shapes[i],alphaID,endID));
+    fill(fillColor);
+    stroke(fillColor);
+    strokeWeight(z*1.5);
+    
+    if (shapes[i].indexOf(shapeID) > -1) {
+      String[] vertices = split(extractString(shapes[i],shapeID,endID),';');
+      
+      beginShape();
+        for (int j=0; j<vertices.length; j++) {
+          float[] vertex = float(split(vertices[j],','));
+          vertex(z*vertex[0],z*vertex[1]);
+        }
+      endShape(CLOSE);
+    }
+    
+    else if (shapes[i].indexOf(ellipseID) > -1) {
+      float[] dimensions = float(split(extractString(shapes[i],ellipseID,endID),','));
+      ellipseMode(CENTER);
+      ellipse(0,0,z*dimensions[0],z*dimensions[1]);
+    }
+    popMatrix();
+  }
+}
+
 void readServerMessage() {
   if (client.available() > 0) {
     String text = client.readString();
@@ -115,7 +158,7 @@ void readServerMessage() {
         } 
         else if (message.indexOf("REGISTERED") > -1 && stage == 3) {                    // Name given is acceptable and is now playing.
           if (message.indexOf(iconID) > -1 && message.indexOf(radiusID) > -1) {
-            icon = extractString(message,iconID,endID);
+            icon = message.substring(message.indexOf(iconID) + iconID.length(), message.indexOf(endID + radiusID));
             fieldWidth = (floor((int(extractString(message,radiusID,endID)) * 2) * 0.1)) * 10;
             fieldConfirmed = true;
           }

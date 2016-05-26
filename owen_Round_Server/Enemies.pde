@@ -122,7 +122,7 @@ class Enemy {
       int[] clientLocation = int(split(extractString(clientList.get(i),locationID,endID),','));
       int clientAlpha = int(extractString(clientList.get(i),alphaID,endID));
       
-      if (clientLocation.length > 1 && clientAlpha > 0) {
+      if (clientLocation.length > 1 && (clientAlpha > 0 || extractString(clientList.get(i),packageID,endID).equals("termite"))) {
         difference.set(clientLocation[0],clientLocation[1]);
         difference.sub(location);
         distance = difference.mag();
@@ -163,6 +163,100 @@ class Enemy {
       }
       
       i++;
+    }
+    
+    if (!targetShootFound) {
+      i = 0;
+      while (i < turretList.size()) {
+        difference.set(turretList.get(i).location);
+        difference.sub(location);
+        distance = difference.mag();
+        if (inSmokeScreen) {
+          distance *= 1.3333;
+        }
+        
+        if (distance < range) {
+          float change = difference.heading()+accuracy[1];
+          float currentAngle = current.heading();
+          
+          while (change > PI*2) {
+            change -= PI*2;
+          }
+          while (change < 0) {
+            change += PI*2;
+          }
+          while (currentAngle > PI*2) {
+            currentAngle -= PI*2;
+          }
+          while (currentAngle < 0) {
+            currentAngle += PI*2;
+          }
+          
+          change -= currentAngle;
+          
+          if (abs(change) > PI) {
+            change = -1*(change/abs(change))*(PI*2-abs(change));
+          }
+          
+          difference = PVector.fromAngle(current.heading() + (change)*0.2*aimSpeed);
+          difference.mult(distance);
+          targetShoot.set(location);
+          targetShoot.add(difference);
+          
+          targetShootFound = true;
+        }
+        
+        i++;
+      }
+    }
+    
+    if (!targetShootFound) {
+      i = 0;
+      while (i < objectList.size()) {
+        String object = objectList.get(i);
+        
+        if (extractString(object,nameID,endID).equals("base")) {
+          int[] objectLocation = int(split(extractString(object,locationID,endID),','));
+          difference.set(objectLocation[0],objectLocation[1]);
+          difference.sub(location);
+          distance = difference.mag();
+          if (inSmokeScreen) {
+            distance *= 1.3333;
+          }
+          
+          if (distance < range) {
+            float change = difference.heading()+accuracy[1];
+            float currentAngle = current.heading();
+            
+            while (change > PI*2) {
+              change -= PI*2;
+            }
+            while (change < 0) {
+              change += PI*2;
+            }
+            while (currentAngle > PI*2) {
+              currentAngle -= PI*2;
+            }
+            while (currentAngle < 0) {
+              currentAngle += PI*2;
+            }
+            
+            change -= currentAngle;
+            
+            if (abs(change) > PI) {
+              change = -1*(change/abs(change))*(PI*2-abs(change));
+            }
+            
+            difference = PVector.fromAngle(current.heading() + (change)*0.2*aimSpeed);
+            difference.mult(distance);
+            targetShoot.set(location);
+            targetShoot.add(difference);
+            
+            targetShootFound = true;
+          }
+        }
+        i++;
+      }
     }
   }
   

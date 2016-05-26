@@ -60,7 +60,7 @@ void spawn(String objectData) {
       }
       
       if (!processed) {
-        turretList.add(new Turret(location,int(split(extractString(objectData,targetID,endID),',')),int(extractString(objectData,damageID,endID)),int(extractString(objectData,healthID,endID)),extractString(objectData,iconID,endID),extractString(objectData,ownerID,endID)));
+        turretList.add(new Turret(location,int(split(extractString(objectData,targetID,endID),',')),int(extractString(objectData,damageID,endID)),int(extractString(objectData,healthID,endID)),objectData.substring(objectData.indexOf(iconID)+iconID.length(),objectData.indexOf(endID+ownerID)),extractString(objectData,ownerID,endID)));
       }
     }
     else {
@@ -504,23 +504,20 @@ void updateEnvironment() {
           
           if (otherName.equals("bullet") || otherName.equals("hazardRing")) {
             int[] otherLocation = int(split(extractString(otherObject,locationID,endID),','));
-            int minDistance = 30;
+            int maxDistance = 30;
             
             if (otherName.equals("bullet")) {
-              minDistance += 4;
+              maxDistance += 4;
             }
             else {
-              minDistance += int(extractString(object,alphaID,endID));
+              maxDistance += int(extractString(object,alphaID,endID));
             }
             
             PVector difference = new PVector(otherLocation[0],otherLocation[1]);
             difference.sub(locationInt[0],locationInt[1]);
             
-            if (difference.mag() < minDistance) {
-              radius -= int(extractString(object,damageID,endID));
-              object = replaceString(object,str(radius),radiusID,endID);
-              objectList.set(i,object);
-              
+            if (difference.mag() < maxDistance) {
+              radius -= int(extractString(otherObject,damageID,endID));
               if (otherName.equals("bullet")) {
                 objectList.remove(j);
                 j--;
@@ -529,6 +526,9 @@ void updateEnvironment() {
           }
         }
       }
+      
+      object = replaceString(object,str(radius),radiusID,endID);
+      objectList.set(i,object);
       
       if (radius < 30) {
         objectList.remove(i);

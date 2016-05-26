@@ -35,7 +35,7 @@ void respond() {
         boolean registered = false;
         
         if (clientMessage.indexOf(iconID) > -1) {
-          code = extractString(clientMessage,iconID,endID);
+          code = clientMessage.substring(clientMessage.indexOf(iconID)+iconID.length(),clientMessage.indexOf(endID+nameID));
           
           int c=0;
           while (c < codeList.length - 1 && codeList[c].equals(code) == false) {
@@ -88,7 +88,7 @@ void respond() {
             securedName = cleanString(securedName,"0123456789");
             String secureClientData = replaceString(filedList.get(i),securedName,nameID,endID);
             
-            String signedClient = secureClientData + locationID + clientLocation + endID + angleID + clientAngle + endID + packageID + clientPackage + endID + healthID + "100" + endID + alphaID + "1" + endID + zombieID + clientZombie + endID + iconID + code + endID + ownerID + endID + addressID + clientAddress + endID;  
+            String signedClient = secureClientData + locationID + clientLocation + endID + angleID + clientAngle + endID + packageID + clientPackage + endID + healthID + "100" + endID + alphaID + "1" + endID + zombieID + clientZombie + endID + icon + ownerID + endID + addressID + clientAddress + endID;  
             clientList.append(signedClient);
             
             broadcast("REGISTERED" + icon + radiusID + str(round(fieldWidth/2)) + endID, messageHD, clientAddress);            // Name given is acceptable and is now playing.
@@ -137,8 +137,8 @@ void respond() {
             String subSpawn = spawn.substring(spawn.indexOf(nameID,i));
             String spawnObject = "";
             
-            if (subSpawn.indexOf(splitID) > -1) {
-              spawnObject = subSpawn.substring(0,subSpawn.indexOf(splitID));
+            if (subSpawn.indexOf(splitID+nameID) > -1) {
+              spawnObject = subSpawn.substring(0,subSpawn.indexOf(splitID+nameID));
             }
             else {
               spawnObject = subSpawn;

@@ -155,9 +155,6 @@ class Player {
         if (cpackage.equals("woodpecker")) {
           speedConstant *= 0.5;
         }
-        else if (cpackage.equals("termite")) {
-          speedConstant = 0;
-        }
       }
       if (mousePressed && mouseButton == RIGHT) {
         if (cpackage.equals("hedgehog")) {
@@ -168,9 +165,9 @@ class Player {
             speedConstant = 0;
           }
         }
-        else if (cpackage.equals("termite")) {
-          speedConstant = 0;
-        }
+      }
+      if (cpackage.equals("termite") && (coolTime1 > 0 || coolTime2 > 0)) {
+        speedConstant = 0;
       }
       if (key == CODED) {
         if (keyCode == UP && location.y > 30) {
@@ -259,7 +256,7 @@ class Player {
         coolTime1 -= upgrade("time",1);
       }
       if (cpackage.equals("termite")){
-        coolTime1 -= upgrade("time",0.1);
+        coolTime1 -= 0.8;
       }
     }
     else if (mousePressed && mouseButton == LEFT && ammo1 > 0 && !(escapeHover || chatHover || nameHover)){
@@ -278,7 +275,7 @@ class Player {
         coolTime2 -= upgrade("time",6);
       }
       if (cpackage.equals("termite")){
-        coolTime2 -= upgrade("time",0.08);
+        coolTime2 -= 0.8;
       }
     }
     else if (mousePressed && mouseButton == RIGHT) {
@@ -397,7 +394,9 @@ class Player {
     for (int i=0; i<objects.size(); i++) {
       if (!objects.get(i).verified) {
         broadcast += nameID + objects.get(i).name + endID + locationID + str(round(objects.get(i).location.x)) + ',' + str(round(objects.get(i).location.y)) + endID + objects.get(i).specifics;
-        broadcast += splitID;
+        if (i<objects.size()-1) {
+          broadcast += splitID;
+        }
       }
     }
     
@@ -767,7 +766,7 @@ class Player {
           int damage = round(upgrade("damage",10));
           int objectH = round(upgrade("health",100));
           
-          addition = nameID + "turret" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + targetID + str(round(targetL.x)) + ',' + str(round(targetL.y)) + endID + damageID + str(damage) + endID + healthID + objectH + endID + iconID + code + endID + ownerID + name + endID;
+          addition = nameID + "turret" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + targetID + str(round(targetL.x)) + ',' + str(round(targetL.y)) + endID + damageID + str(damage) + endID + healthID + objectH + endID + iconID + icon + endID + ownerID + name + endID;
         }
         else if (mouseButton == RIGHT && coolTime2 < 0.1 && ammo2 > 0) {
           PVector objectL = PVector.fromAngle(angle);
@@ -776,7 +775,7 @@ class Player {
           
           int radius = round(upgrade("range",180));
           
-          addition = nameID + "base" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + radiusID + str(radius) + endID + iconID + code + endID + ownerID + name + endID;
+          addition = nameID + "base" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + radiusID + str(radius) + endID + iconID + icon + endID + ownerID + name + endID;
         }
       }
     }
@@ -1169,46 +1168,7 @@ class Player {
     }
     
     if (icon.length() > 0) {                                           // Format: location[X,Y]alpha[A]shape[x,y;x,y;x,y;x,y]$location[X,Y]alpha[A]ellipse[w,h]
-      String[] shapes = split(icon,splitID);
-      
-      for (int i=0; i<shapes.length; i++) {
-        pushMatrix();
-        translate((z*location.x)-camera.x+width/2,(z*location.y)-camera.y+height/2);
-        
-        float rotation = 0;
-        if (shapes[i].indexOf(angleID) > -1) {
-          rotation = float(extractString(shapes[i],angleID,endID));
-        }
-        rotate(rotation);
-        
-        if (shapes[i].indexOf(locationID) > -1) {
-          float[] translation = float(split(extractString(shapes[i],locationID,endID),','));
-          translate(z*translation[0],z*translation[1]);
-        }
-        
-        int fillColor = int(extractString(shapes[i],alphaID,endID));
-        fill(fillColor);
-        stroke(fillColor);
-        strokeWeight(z*1.5);
-        
-        if (shapes[i].indexOf(shapeID) > -1) {
-          String[] vertices = split(extractString(shapes[i],shapeID,endID),';');
-          
-          beginShape();
-            for (int j=0; j<vertices.length; j++) {
-              float[] vertex = float(split(vertices[j],','));
-              vertex(z*vertex[0],z*vertex[1]);
-            }
-          endShape(CLOSE);
-        }
-        
-        else if (shapes[i].indexOf(ellipseID) > -1) {
-          float[] dimensions = float(split(extractString(shapes[i],ellipseID,endID),','));
-          ellipseMode(CENTER);
-          ellipse(0,0,z*dimensions[0],z*dimensions[1]);
-        }
-        popMatrix();
-      }
+      drawIcon(icon, location);
     }
     
     pushMatrix();
@@ -1385,7 +1345,7 @@ class OtherPlayer {
     
     alpha = int(extractString(data,alphaID,endID));
     
-    otherIcon = extractString(data,iconID,endID);
+    otherIcon = icon = data.substring(data.indexOf(iconID) + iconID.length(), data.indexOf(endID + addressID));
   }
   
   void display() {
@@ -1602,46 +1562,7 @@ class OtherPlayer {
       }
       
       if (otherIcon.length() > 0 && z == 1) {                                           // Format: location[X,Y]alpha[A]shape[x,y;x,y;x,y;x,y]$location[X,Y]alpha[A]ellipse[w,h]
-        String[] shapes = split(otherIcon,splitID);
-        
-        for (int i=0; i<shapes.length; i++) {
-          pushMatrix();
-          translate(location.x-myClient.camera.x+width/2,location.y-myClient.camera.y+height/2);
-          
-          float rotation = 0;
-          if (shapes[i].indexOf(angleID) > -1) {
-            rotation = float(extractString(shapes[i],angleID,endID));
-          }
-          rotate(rotation);
-          
-          if (shapes[i].indexOf(locationID) > -1) {
-            float[] translation = float(split(extractString(shapes[i],locationID,endID),','));
-            translate(translation[0],translation[1]);
-          }
-          
-          int fillColor = int(extractString(shapes[i],alphaID,endID));
-          fill(fillColor);
-          stroke(fillColor);
-          strokeWeight(1.5);
-          
-          if (shapes[i].indexOf(shapeID) > -1) {
-            String[] vertices = split(extractString(shapes[i],shapeID,endID),';');
-            
-            beginShape();
-              for (int j=0; j<vertices.length; j++) {
-                float[] vertex = float(split(vertices[j],','));
-                vertex(vertex[0],vertex[1]);
-              }
-            endShape(CLOSE);
-          }
-          
-          else if (shapes[i].indexOf(ellipseID) > -1) {
-            float[] dimensions = float(split(extractString(shapes[i],ellipseID,endID),','));
-            ellipseMode(CENTER);
-            ellipse(0,0,dimensions[0],dimensions[1]);
-          }
-          popMatrix();
-        }
+        drawIcon(otherIcon, location);
       }
   
       pushMatrix();

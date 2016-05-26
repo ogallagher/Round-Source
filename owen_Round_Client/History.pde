@@ -455,18 +455,25 @@ Introduce turrets and bases       √√º
     add new object id tags        √
     edit changeObjects() for the  √
       termite package             √
-    display turrets               º
-      looks like title frame      º
+    display turrets               √
+      looks like title frame      √
       diameter = 60               √
-    display bases                 º
-      looks like saturn?          º
+    display bases                 √
+      looks like saturn?          √
       diameter = 60               √
-    add to help menu (OBJECTS)    •
-    clients collide with bases    •
-      and turrets                 •
-    clients restore health when   •
-      near bases they own or      •
-      those of the same team      •
+    add to help menu              √
+      TOWERS: the termite combat  √
+      package was made to promote √
+      teaming. It makes turrets   √
+      (shoot at enemies and       √
+      players on other teams) and √
+      bases (restore health to    √
+      players on their team)      √
+    clients collide with bases    √
+      and turrets                 √
+    clients restore health when   º
+      near bases they own or      º
+      those of the same team      º
   server-side                     √
     add new object id tags        √
     edit respond()                √
@@ -490,6 +497,8 @@ Introduce turrets and bases       √√º
     edit enemy.collide() to       √
       collide with turrets and    √
       bases                       √
+    edit enemy.setTargetShoot()   √
+      shoot bases and turrets     √
     updateTurrets()               √
     edit updateEnvironment()      √
       base                        √
@@ -525,19 +534,19 @@ Give object information on hover  •••
    turret: "TURRET"               •
    base: "BASE"                   •
     
-Move teaming explanation to help  •••
-  TEAMS: following the username   •
-    in the sign-in, some code     •
-    inputs in the format:         •
-    _•••• correspond to special   •
-    icons. For example, if a code •
-    is "popcorn", then type       •`
-    "yourName_popcorn" in the     •
-    sign-in. To create a team,    •
-    players who know the same     •
-    icon code can sign in with    •
-    that code and enjoy reduced   •
-    damage from friendly fire.    •
+Move teaming explanation to help  √√√
+  TEAMS: following the username   √
+    in the sign-in, some code     √
+    inputs in the format:         √
+    _•••• correspond to special   √
+    icons. For example, if a code √
+    is "popcorn", then type       √`
+    "yourName_popcorn" in the     √
+    sign-in. To create a team,    √
+    players who know the same     √
+    icon code can sign in with    √
+    that code and enjoy reduced   √
+    damage from friendly fire.    √
     
   
 DEBUGGING:                        
@@ -595,4 +604,9 @@ DEBUGGING:
   Server sends empty death mess.  •    (reading out incoming messages, the server keeps sending "DEATH []". solution: ...?)
   Enemy collision is off          √    (solution: fix math where enemies collide with turrets)
   Turrets don't shoot correctly   √    (bullets have very short range, and have wrong targets. solution: fix bullet velocity to match trajectory)
+  Enemies don't aim for termites  √    (solution: enemies now aim for clients with alpha>0 OR package.equals("termite"))
+  Turrets.target flicker          √    (solution: have turrets store trueTarget (the object/enemy/client) and only change trueTarget when trueTarget is no longer within range)
+  Termites move when building     √    (solution: movement disabled when coolTime > 0)
+  Turrets don't display icons     √    (solition: account for the fact that an icon has splitID's within it)
+  Turrets shoot at team players   √    (solution: server was storing icon codes for clients instead of icons)
 \*****************************************************/
