@@ -20,14 +20,14 @@ void updateClient(String name, String score, String location, String angle, Stri
         clientList.set(i, replaceString(clientList.get(i),health,healthID,endID));
         
         i=0;
-        while(cleanString(extractString(filedList.get(i),nameID,endID),"0123456789").equals(name) == false && i<filedList.size()-1) {
+        while(cleanString(extractString(accountList.get(i),nameID,endID),"0123456789").equals(name) == false && i<accountList.size()-1) {
           i++;
         }
-        if (!score.equals(extractString(filedList.get(i),scoreID,endID))) {
-          String newFiledClient = replaceString(filedList.get(i),score,scoreID,endID);
-          filedList.set(i,newFiledClient);
+        if (!score.equals(extractString(accountList.get(i),scoreID,endID))) {
+          String newFiledClient = replaceString(accountList.get(i),score,scoreID,endID);
+          accountList.set(i,newFiledClient);
           
-          updateFile();
+          updateAccounts();
         }
       }
       
@@ -42,13 +42,13 @@ void updateClient(String name, String score, String location, String angle, Stri
         }
         
         int j=0;
-        while(cleanString(extractString(filedList.get(j),nameID,endID),"0123456789").equals(name) == false && j<filedList.size()-1) {
+        while(cleanString(extractString(accountList.get(j),nameID,endID),"0123456789").equals(name) == false && j<accountList.size()-1) {
           j++;
         }
-        String newFiledClient = replaceString(filedList.get(j),str(newScore),scoreID,endID);
-        filedList.set(j,newFiledClient);
+        String newFiledClient = replaceString(accountList.get(j),str(newScore),scoreID,endID);
+        accountList.set(j,newFiledClient);
         
-        updateFile();
+        updateAccounts();
         
         broadcast("DEATH [" + name + endID, messageHD, "all");
         clientList.remove(i);
@@ -57,10 +57,10 @@ void updateClient(String name, String score, String location, String angle, Stri
       if (owner.length() > 0) {
         boolean nameTaken = false; 
         
-        for (int j=0; j<filedList.size(); j++) {
-          String testName = extractString(filedList.get(j),nameID,endID);
+        for (int j=0; j<accountList.size(); j++) {
+          String testName = extractString(accountList.get(j),nameID,endID);
           if (cleanString(testName,"0123456789 ").equals(cleanString(owner,"0123456789 "))) {
-            if (extractString(filedList.get(j),addressID,endID).equals(address)) {
+            if (extractString(accountList.get(j),addressID,endID).equals(address)) {
               nameTaken = false;     // Though the given name is on file, the client asked before but didn't hear the server's response.
             }
             else {
@@ -78,16 +78,16 @@ void updateClient(String name, String score, String location, String angle, Stri
           clientList.set(i, replaceString(clientList.get(i),"APPROVED",ownerID,endID));
           
           i=0;
-          while(cleanString(extractString(filedList.get(i),nameID,endID),"0123456789").equals(name) == false && i<filedList.size()-1) {
+          while(cleanString(extractString(accountList.get(i),nameID,endID),"0123456789").equals(name) == false && i<accountList.size()-1) {
             i++;
           }
           
-          if (cleanString(extractString(filedList.get(i),nameID,endID),"0123456789").equals(name)) {
-            String newFiledClient = replaceString(filedList.get(i),owner,nameID,endID);
-            newFiledClient = replaceString(filedList.get(i),address,addressID,endID);
-            filedList.set(i,newFiledClient);
+          if (cleanString(extractString(accountList.get(i),nameID,endID),"0123456789").equals(name)) {
+            String newFiledClient = replaceString(accountList.get(i),owner,nameID,endID);
+            newFiledClient = replaceString(accountList.get(i),address,addressID,endID);
+            accountList.set(i,newFiledClient);
             
-            updateFile();
+            updateAccounts();
           }
         }
         else {

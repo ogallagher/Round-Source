@@ -347,25 +347,70 @@ Improve Shooting Protocols        √√√
     edit respond() to process     √
       multiple spawn() requests   √
           
-Systems for Cooperative Play      •••
-  decrease damage from 'friendly  •
-    fire' to promote teaming      •
-    add special icon to owner     •
-      info for each projectile    •
-    decrease health subtraction   •
-      if special icon is the same •
-      as myClient's or client is  •
-      the owner                   •
-  new objects to promote grouping •
-    health restorers (created by  •
-      players w/ termite package) •
-    foggers?                      •
-      they create smokescreens    •
-        which are transparent to  •
-        players on its team       •
-      to change a fogger to your  •
-        team, touch it            •
-  systems for team requests       • —— page lists all taken and available team icons. client requests team code or new team. clients can send private messages for team joining (default receiver is the team?)
+Promote teaming                   √√º
+  decrease damage from 'friendly  √
+    fire' to promote teaming      √
+    add icon code to info         √
+      for each projectile         √
+      myClient.changeObjects()    √
+      turrets.shoot()             √
+      updateEnvironment()         √
+        detonators                √
+        grenades+demolition       √
+        fanshots                  √
+    decrease damage (client)      √
+      if special icon is the same √
+      as myClient's or client is  √
+      the owner                   √
+    decrease damage (turret)      √
+      if special icon is the same √
+      as turrets's or turret is   √
+      the owner through client    √
+      master                      √
+  new objects to promote grouping √
+    health restorers (created by  √
+      players w/ termite package) √
+    foggers? - for now, no.       x
+      they create smokescreens    x
+        which are transparent to  x
+        players on its team       x
+      to change a fogger to your  x
+        team, touch it            x
+  systems for team requests       º
+    page lists all taken and      •
+      available team icons        •
+    client requests team code or  •
+      new team.                   •
+    client-side                   •
+      new icons menu button and   •
+        corresponding stage #     •
+      createButtonIcons()         •
+      broadcast @[#]T:DATA* to    •
+        get taken and available   •
+        list                      •
+      createButtonGet() switch    •
+        used to request team code •
+        vs. create a new team     •
+      broadcast @[#]T:NEW*        •
+      broadcast @[#]T:GET*        •
+    server-side                   º
+      respond to teamHD requests  •
+        data                      •
+        get                       •
+        new                       •
+      create icons.txt            √
+      method to read txt to       √
+        codeList + iconList       √
+      updateIcons()               •
+      edit respond() for team     •
+        heading messages          •  
+        get code                  •
+        new team                  •
+  clients can send private        √
+    messages to specific players  √
+    (default receiver is the      √
+    team)                         √
+    explain in HELP menu          √
       
 Improve Enemies                   √√√
   make aim less perfect           √
@@ -402,6 +447,8 @@ New termite combat package        √√º
     coolTime: very long           √
     upgrade: turrets shoot        •
       grenades                    •
+      turrets not affected by     •
+        their own grenades        •
   selection description           •
   createButtonTermite()           √
   create icon                     √
@@ -416,15 +463,15 @@ New termite combat package        √√º
     changeObjects()               √
     display()                     √ 
     sendData()                    √
-  otherClients.display()          ?
+  otherClients.display()          √
     angle == angle, animationA.   √
       == alpha                    √
   upgrade()                       √
   send in createButtonPlay()      √
-  server-side                     ?
+  server-side                     √
     add termite clients           √
     read client sendData for      √
-      termites (2 angles given)   √
+      termites                    √
  introduce turrets and bases      √
   
 Only draw field when near bounds  √√√
@@ -437,7 +484,7 @@ Improve server reading?           •••
   in respond()                    •
     compile multiple HD requests  •
     of each type before analyzing •
-    them                          •
+    them?                         •
     
 Increase boxes' spawn quantity    •••
 
@@ -523,7 +570,7 @@ Highlight buttons                 √√√
   help, info                      √
   combat packages                 √
   
-Give object information on hover  •••
+Give object information on hover? •••
   create hoverDialogue() function •
     when mouse is over an object  •
       (check every X ms) display  •
@@ -547,6 +594,12 @@ Move teaming explanation to help  √√√
     icon code can sign in with    √
     that code and enjoy reduced   √
     damage from friendly fire.    √
+    
+Allow complex movement            √√√
+  use function to store           √
+    pressed keys in an array      √  
+  get the function from           √
+    owen_Complex_Client           √
     
   
 DEBUGGING:                        
@@ -610,4 +663,7 @@ DEBUGGING:
   Turrets don't display icons     √    (solition: account for the fact that an icon has splitID's within it)
   Turrets shoot at team players   √    (solution: server was storing icon codes for clients instead of icons)
   Other termites don't show up    √    (solution: clients used to only draw others if (other.alpha > 0), so I made an exception if (other.cpackage.equals("termite"))
+  Bases aren't affected by rings  √    (solution: simple typo meant radius of hazardRing was nil)
+  Chat messages are often lost    •    (clients don't always receive messages sent by the server. solution: change server.chatList to store receivers, and send chatList on every X ms?)
+  
 \*****************************************************/

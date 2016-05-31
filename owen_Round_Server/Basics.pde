@@ -53,19 +53,16 @@ String cleanString(String text, String silt) {      //Used currently to secure a
   return cleaned;
 }
 
-void broadcast(String text, String heading, String clientIP) {       // (HEADING:)(receiver[)(IP)(])(message_content)(*)
+void broadcast(String text, String heading, String destination) {       // (HEADING:)(receiver[)(IP)(])(message_content)(*)
   String broadcast = "";
   
   broadcast += heading;
-  broadcast += receiverID + clientIP + endID;
+  broadcast += receiverID + destination + endID;
   broadcast += text;
 
   server.write(broadcast + endHD);
 }
 
-void updateFile() {
-  String[] newFile = filedList.array();
-
-  // Writes the strings to a file, each on a separate line
-  saveStrings("owen_Round_Server.txt", newFile);
-}
+void updateAccounts() {
+  saveStrings("accounts.txt", accountList.array());    // Writes the strings to a file, each on a separate line
+}  

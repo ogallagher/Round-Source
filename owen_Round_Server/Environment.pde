@@ -28,7 +28,7 @@ void spawn(String objectData) {
         int[] target = int(split(extractString(objectData,targetID,endID),','));
         int[] targetTest = int(split(extractString(testObject,targetID,endID),','));
         
-        if (target.length > 1 && targetTest.length > 1 && target[0] == targetTest[0] && target[1] == targetTest[1]) {
+        if (target.length > 1 && targetTest.length > 1 && abs(target[0]-targetTest[0]) < 5 && abs(target[1]-targetTest[1]) < 5 && abs(location[0]-locationTest[0]) < 5 && abs(location[1]-locationTest[1]) < 5) {
           processed = true;
         }
       }
@@ -271,7 +271,7 @@ void updateEnvironment() {
         target.y -= radius;
         velocity.set(0,-7);
         
-        newObject = nameID + "bullet" + endID + locationID + str(round(location.x)) + ',' + str(round(location.y)) + endID + velocityID + str(round(velocity.x)) + ',' + str(round(velocity.y)) + endID + targetID + str(round(target.x)) + ',' + str(round(target.y)) + endID + damageID + extractString(object,damageID,endID) + endID + ownerID + owner + endID;
+        newObject = nameID + "bullet" + endID + locationID + str(round(location.x)) + ',' + str(round(location.y)) + endID + velocityID + str(round(velocity.x)) + ',' + str(round(velocity.y)) + endID + targetID + str(round(target.x)) + ',' + str(round(target.y)) + endID + damageID + extractString(object,damageID,endID) + endID + iconID + extractString(object,iconID,endID) + endID + ownerID + owner + endID;
         spawn(newObject);
         
         target.set(location);
@@ -416,7 +416,7 @@ void updateEnvironment() {
         objectList.remove(i);
         i--;
 
-        String newObject = nameID + "hazardRing" + endID + locationID + extractString(object,locationID,endID) + endID + radiusID + str(radius) + endID + alphaID + str(10) + endID + damageID + extractString(object,damageID,endID) + endID + ownerID + owner + endID;
+        String newObject = nameID + "hazardRing" + endID + locationID + extractString(object,locationID,endID) + endID + radiusID + str(radius) + endID + alphaID + str(10) + endID + damageID + extractString(object,damageID,endID) + endID + iconID + extractString(object,iconID,endID) + endID + ownerID + owner + endID;
         spawn(newObject);
       }
       else {
@@ -468,6 +468,7 @@ void updateEnvironment() {
       int[] velocityInt = int(split(extractString(object,velocityID,endID),','));
       int alpha = int(extractString(object,alphaID,endID));
       int radius = int(extractString(object,radiusID,endID));
+      String code = extractString(object,iconID,endID);
       String damage = extractString(object,damageID,endID);
       String owner = extractString(object,ownerID,endID);
       
@@ -484,7 +485,7 @@ void updateEnvironment() {
         target.mult(radius);
         target.add(location);
         
-        String bullet = nameID + "bullet" + endID + locationID + extractString(object,locationID,endID) + endID + velocityID + str(round(velocity.x)) + ',' + str(round(velocity.y)) + endID + targetID + str(round(target.x)) + ',' + str(round(target.y)) + endID + damageID + damage + endID + ownerID + owner + endID;
+        String bullet = nameID + "bullet" + endID + locationID + extractString(object,locationID,endID) + endID + velocityID + str(round(velocity.x)) + ',' + str(round(velocity.y)) + endID + targetID + str(round(target.x)) + ',' + str(round(target.y)) + endID + damageID + damage + endID + iconID + code + endID + ownerID + owner + endID;
         
         spawn(bullet);
       }
@@ -510,7 +511,7 @@ void updateEnvironment() {
               maxDistance += 4;
             }
             else {
-              maxDistance += int(extractString(object,alphaID,endID));
+              maxDistance += int(extractString(otherObject,alphaID,endID));
             }
             
             PVector difference = new PVector(otherLocation[0],otherLocation[1]);

@@ -1,16 +1,22 @@
-//Round_Server_Center
+//Round_Server
 
 // BEGUN:         July 18, 2015
-// LAST UPDATED:  May 25, 2016
+// LAST UPDATED:  May 30, 2016
 // VERSION:       8
 // UPDATES:       
 //    7 = Flexible field size, drawn boundaries, name changing, AI enemies
-//    8 = Tags shortened to reduce lag [x], Round locations and velocities [x], Improve shooting protocols [x], Promote teaming [ ], Improve enemies [x], Change scoring dynamics and upgrades [ ], Worsen spider package (dagger,speed) [ ], Termite combat package [...], Autocomplete username [x]
+//    8 = Tags shortened to reduce lag [x], Round locations and velocities [x], Improve shooting protocols [x], Promote teaming [...], Improve enemies [x], Change scoring dynamics and upgrades [ ], Worsen spider package (dagger,speed) [ ], Termite combat package [...], Autocomplete username [x], Allow complex movement [x], Various bug fixes [...]
 
 /*  
     File Format Example
       name[player0]score[0]
       name[player1]score[1]
+      
+    Message Format Example
+      name[player0]receiver[player1]chat[M] —— from client
+      name[player2]icon[C]chat[M]           —— from client
+      receiver[all]name[SERVER]chat[M]      —— from server
+      receiver[player3]name[SERVER]MESSAGE  —— from server
       
     clientList Format Example
       name[N]score[S]location[X,Y]angle[T]package[P]health[H]alpha[A]zombie[Z]icon[C]owner[O]address[#]
@@ -21,22 +27,25 @@
       name[healthBox]location[X,Y]                                                               returns 50 health                                               
       name[ammoBox]location[X,Y]                                                                 completely refills ammo
       name[coin]location[X,Y]                                                                    always worth 1
-      name[bullet]location[X,Y]velocity[Xv,Yv]target[Xt,Yt]damage[D]owner[player0]               target helps show if bullet has gone too far
-      name[detonator]location[X,Y]radius[R]alpha[A]damage[D]owner[player1]                       alpha corresponds to time till detonation
+      name[bullet]location[X,Y]velocity[Xv,Yv]target[Xt,Yt]damage[D]icon[C]owner[player0]        target helps show if bullet has gone too far
+      name[detonator]location[X,Y]radius[R]alpha[A]damage[D]icon[C]owner[player1]                alpha corresponds to time till detonation
       name[smokescreen]location[X,Y]radius[R]alpha[A]                                            alpha corresponds to transparency
-      name[hazardRing]location[X,Y]radius[R]alpha[A]damage[D]owner[player2]                      alpha corresponds to current radius, radius corresponds to final radius
-      name[grenade]location[X,Y]velocity[Xv,Yv]target[Xt,Yt]radius[R]damage[D]owner[player3]     target helps show if grenade has gone too far (like the bullet, but creates hazardRing)
-      name[demolition]location[X,Y]velocity[Xv,Yv]target[Xt,Yt]radius[R]damage[D]owner[player3]  same as grenade, but shrinks/removes walls on contact
-      name[fanshot]location[X,Y]velocity[Xv,Yv]radius[R]alpha[A]damage[D]owner[player4]          alpha corresponds to additional bullets to the original deviation angle of 0 ON EACH SIDE (decided not to use it...)
+      name[hazardRing]location[X,Y]radius[R]alpha[A]damage[D]icon[C]owner[player2]               alpha corresponds to current radius, radius corresponds to final radius
+      name[grenade]location[X,Y]velocity[Xv,Yv]target[Xt,Yt]radius[R]damage[D]icon[C]            target helps show if grenade has gone too far (like the bullet, but creates hazardRing)
+        owner[player4]     
+      name[demolition]location[X,Y]velocity[Xv,Yv]target[Xt,Yt]radius[R]damage[D]icon[C]         same as grenade, but shrinks/removes walls on contact
+        owner[player5]  
+      name[fanshot]location[X,Y]velocity[Xv,Yv]radius[R]alpha[A]damage[D]icon[C]owner[player6]   alpha corresponds to additional bullets to the original deviation angle of 0 ON EACH SIDE (decided not to use it...)
       name[laserPoint]location[X,Y]alpha[A]                                                      alpha corresponds to whether the sight should be deleted
-      name[turret]location[X,Y]target[Xt,Yt]damage[D]health[H]icon[C]owner[player5]              target used both to tell range and angle
-      name[base]location[X,Y]radius[R]icon[C]owner[player6]                                      radius corresponds to how far health is distributed and how much health the base still has
+      name[turret]location[X,Y]target[Xt,Yt]damage[D]health[H]icon[C]owner[player7]              target used both to tell range and angle
+      name[base]location[X,Y]radius[R]icon[C]owner[player8]                                      radius corresponds to how far health is distributed and how much health the base still has
     
     enemyList Format Example
       location[X,Y]angle[T]package[P]
       
-    iconList Format Example
-      location[X,Y]alpha[A]shape[x,y;x,y;x,y;x,y]$location[X,Y]alpha[A]ellipse[w,h]$location[X,Y]alpha[A]shape[x,y;x,y;x,y;x,y]
+    icons Format Example
+      name[N]owner[player0]icon[C]location[X,Y]angle[T]alpha[A]shape[x,y;x,y;x,y;x,y]$location[X,Y]alpha[A]ellipse[W,H]
+      name[N]owner[player1]icon[C]location[X,Y]alpha[A]shape[x,y;x,y;x,y;x,y]$alpha[A]shape[x,y;x,y;x,y;x,y;x,y]
 */
 
 import processing.net.*;
@@ -44,17 +53,18 @@ import processing.net.*;
 Server server;
 int serverPort = 44445;
 
-String[] fileEntries;                                   //Replica of the data file. (each entry is a new line)
-StringList filedList;                                   //Saved clients
+String[] accounts;                                      //Replica of the accounts.txt file. (each entry is a new line)
+StringList accountList;                                 //Saved clients
 StringList clientList;                                  //Signed clients
 StringList objectList;                                  //List of objects
 ArrayList<Enemy> enemyList = new ArrayList<Enemy>();    //List of enemies, like objects, but more complicated
 ArrayList<Turret> turretList = new ArrayList<Turret>(); //List of turrets, "                                "
 
-int iconNumber = 10;                          //Number of special icons
-String[] codeList = new String[iconNumber];   //List of acceptable icon codes
-String[] iconList = new String[iconNumber];   //List of icon drawing instructions
-
+String[] icons;                                         //Replica of the icons.txt file. (each entry is a new line)
+StringList idList;                                      //List of names and owners
+StringList codeList;                                    //List of acceptable icon codes
+StringList iconList;                                    //List of icon drawing instructions
+    
 String clientHD = "C:";          //Data headings
 String objectHD = "O:";
 String messageHD = "M:";
@@ -89,7 +99,7 @@ StringList chatList;               //Chat-Line
 char endID = ']';
 char endHD = '*';
 
-char splitID = '$';                //used only when necessary: delete objects, add objects, send angles for termite, split shapes for special icon
+char splitID = '$';                //used only when necessary: delete objects, add objects, split shapes for special icon
 
 int fieldMaximum = 3160;
 int fieldWidth = fieldMaximum;        //Dimensions of the battlefield (field is a square, so width & height) (how far a client can go)
@@ -109,14 +119,14 @@ void setup() {
   size(600,600);
   server = new Server(this,serverPort);
   
-  fileEntries = loadStrings("owen_Round_Server.txt");
-  filedList = new StringList();
+  accounts = loadStrings("accounts.txt");
+  accountList = new StringList();
   clientList = new StringList();
   objectList = new StringList();
   chatList = new StringList();
   
-  for(int i=0; i<fileEntries.length; i++) {
-    filedList.append(fileEntries[i]);
+  for(int i=0; i<accounts.length; i++) {
+    accountList.append(accounts[i]);
   }
   
   createIcons();

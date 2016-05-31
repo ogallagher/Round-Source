@@ -147,14 +147,12 @@ void drawIcon(String icon, PVector location) {
 void readServerMessage() {
   if (client.available() > 0) {
     String text = client.readString();
-    //                                                                             println("serverBroadcast: " + text);
     String receiverAddress = extractString(text,receiverID,endID);
     //                                                                             println("receiverAddress: " + receiverAddress);
-    if (receiverAddress.equals(myAddress) || receiverAddress.equals("all")) {
-      
+    if (receiverAddress.equals(myAddress) || receiverAddress.equals(code) || receiverAddress.equals("all")) {
       if (text.indexOf(messageHD) > -1 && text.indexOf(endID,text.indexOf(messageHD)) > -1 && text.indexOf(endHD,text.indexOf(endID,text.indexOf(messageHD))) > -1) {
         String message = text.substring(text.indexOf(endID,text.indexOf(messageHD))+1,text.indexOf(endHD,text.indexOf(endID,text.indexOf(messageHD))));
-        println("message: " + message);
+        println("  message: " + message);
         
         if (message.equals("TAKEN")) {                                                  // Name given is already on-file.
           username = "Sorry, the username you gave is already taken.";
@@ -247,6 +245,38 @@ void updateFile() {
 
   // Writes the strings to a file, each on a separate line
   saveStrings("usernames.txt", newFile);
+}
+
+void updateKeys() {
+  if (keyPressed) {
+    if (key == 'w' || keyCode == UP) {
+      keys[0] = true;
+    }
+    if (key == 'a' || keyCode == LEFT) {
+      keys[1] = true;
+    }
+    if (key == 's' || keyCode == DOWN) {
+      keys[2] = true;
+    }
+    if (key == 'd' || keyCode == RIGHT) {
+      keys[3] = true;
+    }
+  }
+}
+
+void keyReleased() {
+  if (key == 'w' || keyCode == UP) {
+    keys[0] = false;
+  }
+  if (key == 'a' || keyCode == LEFT) {
+    keys[1] = false;
+  }
+  if (key == 's' || keyCode == DOWN) {
+    keys[2] = false;
+  }
+  if (key == 'd' || keyCode == RIGHT) {
+    keys[3] = false;
+  }
 }
 
 void mouseWheel(MouseEvent event) {

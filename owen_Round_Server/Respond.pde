@@ -8,8 +8,8 @@ void respond() {
       String clientName = extractString(clientMessage,nameID,endID);
       boolean registered = false;
       
-      for (int i=0; i<filedList.size(); i++) {
-        String testName = extractString(filedList.get(i),nameID,endID);
+      for (int i=0; i<accountList.size(); i++) {
+        String testName = extractString(accountList.get(i),nameID,endID);
         if (cleanString(testName,"0123456789 ").equals(cleanString(clientName,"0123456789 "))) {
           registered = true;
           broadcast("TAKEN", messageHD, clientAddress);      // Name given is already on-file
@@ -20,9 +20,9 @@ void respond() {
         broadcast("ADDED", messageHD, clientAddress);        // Name given is acceptable and has been added
         
         String newClient = nameID + clientName + endID + scoreID + "0" + endID + addressID + clientAddress + endID;
-        filedList.append(newClient);
+        accountList.append(newClient);
         
-        updateFile();
+        updateAccounts();
       }
     }
     
@@ -38,16 +38,12 @@ void respond() {
           code = clientMessage.substring(clientMessage.indexOf(iconID)+iconID.length(),clientMessage.indexOf(endID+nameID));
           
           int c=0;
-          while (c < codeList.length - 1 && codeList[c].equals(code) == false) {
+          while (c < codeList.size() - 1 && codeList.get(c).equals(code) == false) {
             c++; 
           }
           
-          if (codeList[c].equals(code)) {
-            icon = iconID + iconList[c] + endID;
-          }
-          else if (code.equals("randomized")) {
-            c = int(random(0,iconNumber-1));
-            icon = iconID + iconList[c] + endID;
+          if (codeList.get(c).equals(code)) {
+            icon = iconID + iconList.get(c) + endID;
           }
           else {
             icon = iconID + endID;
@@ -74,8 +70,8 @@ void respond() {
           }
         }
         
-        for (int i=0; i<filedList.size(); i++) {
-          String testName = extractString(filedList.get(i),nameID,endID);
+        for (int i=0; i<accountList.size(); i++) {
+          String testName = extractString(accountList.get(i),nameID,endID);
           if (testName.equals(clientName) && !duplicated && !registered) {            
             registered = true;
             
@@ -84,15 +80,15 @@ void respond() {
             String clientPackage = extractString(clientMessage,packageID,endID);
             String clientZombie = "0"; 
             
-            String securedName = extractString(filedList.get(i),nameID,endID);
+            String securedName = extractString(accountList.get(i),nameID,endID);
             securedName = cleanString(securedName,"0123456789");
-            String secureClientData = replaceString(filedList.get(i),securedName,nameID,endID);
+            String secureClientData = replaceString(accountList.get(i),securedName,nameID,endID);
             
             String signedClient = secureClientData.substring(0,secureClientData.indexOf(addressID)) + locationID + clientLocation + endID + angleID + clientAngle + endID + packageID + clientPackage + endID + healthID + "100" + endID + alphaID + "1" + endID + zombieID + clientZombie + endID + icon + ownerID + endID + addressID + clientAddress + endID;  
             clientList.append(signedClient);
             
-            filedList.set(i,replaceString(filedList.get(i),clientAddress,addressID,endID));
-            updateFile();
+            accountList.set(i,replaceString(accountList.get(i),clientAddress,addressID,endID));
+            updateAccounts();
             
             broadcast("REGISTERED" + icon + radiusID + str(round(fieldWidth/2)) + endID, messageHD, clientAddress);            // Name given is acceptable and is now playing.
           }
@@ -189,7 +185,7 @@ void respond() {
       }
     }
     
-    if (clientMessage.indexOf(messageHD) > -1) {                                         //*** Kill existing client (only use for messageHD as of yet)
+    if (clientMessage.indexOf(messageHD) > -1) {                                         //*** Chat, Kill existing client upon request
       String message = extractString(clientMessage,messageHD,endHD);
       String name = extractString(message,nameID,endID);
       int i=0;
@@ -200,8 +196,37 @@ void respond() {
       
         if (extractString(clientList.get(i),nameID,endID).equals(name)) {
           if (message.indexOf(chatID) > -1) {
-            broadcast(message, messageHD, "all");
-            chatList.append(message);
+            if (message.indexOf(iconID) > -1) {
+              String receivers = "";
+              receivers = message.substring(message.indexOf(iconID)+iconID.length(),message.indexOf(endID+chatID));
+              
+              broadcast(message, messageHD, receivers);
+              chatList.append(message);
+            }
+            else if (message.indexOf(receiverID) > -1) {
+              String receiver = "";
+              
+              for (int j=0; j<clientList.size() && receiver.length() == 0; j++) {
+                if (extractString(clientList.get(j),nameID,endID).equals(extractString(message,receiverID,endID))) {
+                  receiver = extractString(clientList.get(j),addressID,endID);
+                }
+              }
+              
+              if (receiver.length() > 0) {
+                message = message.substring(0,message.indexOf(receiverID)) + message.substring(message.indexOf(endID,message.indexOf(receiverID))+1);
+                broadcast(message, messageHD, receiver);
+                chatList.append(message);
+              }
+              else {
+                message = nameID + "SERVER" + endID + chatID + name + ", your chat to " + extractString(message,receiverID,endID) + " was not sent." + endID;
+                broadcast(message,messageHD,clientAddress);
+                chatList.append(message);
+              }
+            }
+            else {
+              broadcast(message, messageHD, "all");
+              chatList.append(message);
+            }
           }
           else {
             broadcast("DEATH [" + name + endID, messageHD, "all");

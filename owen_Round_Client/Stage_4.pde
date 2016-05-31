@@ -6,6 +6,7 @@ void readServerLists(String text) {
     
     String clientText = extractString(text,clientHD,endHD);
     int i = -1;
+    
     while (clientText.indexOf(nameID,i) > -1) {
       int j = clientText.indexOf(nameID,i) + 1;
       String clientData;
@@ -143,7 +144,16 @@ void textBoxChat(int locationX,int locationY) {
         reading = false;
         
         if (chatBoxString.equals("[,],*,:,$,TAB = Not Permitted. Limit = 60 char.") == false && chatBoxString.length() > 0) {
-          String chat = nameID + myClient.name + endID + chatID + chatBoxString + endID;
+          String receiver = "";
+          if (chatBoxString.indexOf('-') > -1) {
+            receiver = receiverID + chatBoxString.substring(chatBoxString.indexOf('-')+1) + endID;
+            chatBoxString = chatBoxString.substring(0,chatBoxString.indexOf('-'));
+          }
+          else if (code.length() > 0) {
+            receiver = iconID + code + endID;
+          }
+          
+          String chat = nameID + myClient.name + endID + receiver + chatID + chatBoxString + endID;
           chatBoxString = "";
           
           broadcast(chat, messageHD);

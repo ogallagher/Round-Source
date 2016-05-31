@@ -1,18 +1,18 @@
 //Round_Client
 
 // BEGUN:         July 18, 2015
-// LAST UPDATED:  May 25, 2016
+// LAST UPDATED:  May 30, 2016
 // VERSION:       8
 // UPDATES:
 //   v.7 =        Flexible field size [x], Drawn boundaries [x], name changing [x], AI enemies [x]
-//   v.8 =        Tags shortened to reduce lag [x], Round locations and velocities [x], Improve shooting protocols [x], Promote teaming [ ], Improve enemies [x], Change scoring dynamics and upgrades [ ], Worsen spider package (dagger,speed) [ ], Termite combat package [...], Autocomplete username [x]
+//   v.8 =        Tags shortened to reduce lag [x], Round locations and velocities [x], Improve shooting protocols [x], Promote teaming [...], Improve enemies [x], Change scoring dynamics and upgrades [ ], Worsen spider package (dagger,speed) [ ], Termite combat package [...], Autocomplete username [x], Allow complex movement [x], Various bug fixes [...]
 
 
 import processing.net.*;
 
 Client client;
 
-String[] fileEntries;            //Replica of usernames.txt. (each entry is a new line)
+String[] fileEntries;            //Replica of usernames.txt (each entry is a new line)
 StringList pastUsernames;        //Past usernames
 
 String clientHD = "C:";          //Data headings 
@@ -39,7 +39,7 @@ String targetID = "t[";
 String damageID = "d[";
 String ownerID = "o[";
 
-String receiverID = ">[";         //The intended receiving client of the following data (for server -> client broadcast) tag
+String receiverID = ">[";         //The intended receiving client of the following data (for server -> client broadcast and client -> otherClients chat) tag
 
 String iconID = "i[";             //Special icon tags
 String shapeID = "#["; 
@@ -90,6 +90,8 @@ String username = "TYPE USERNAME ([,],*,TAB,: are not allowed)";
 String icon = "";
 String code = "";
 
+Boolean[] keys = {false,false,false,false};                        //To keep track of multiple keys at once
+
 int stage = 0;
 boolean bestGraphics = true;
 boolean escapeHover = false;
@@ -101,7 +103,8 @@ void setup() {
   size(800,700);
   noCursor();
   
-  client = new Client(this, "74.71.101.15", 44445);      //For using internet connection — the ip is that of our home router, the port is the one I chose on which to allow incoming data requests. (test w/ canyouseeme.org)
+  //client = new Client(this, "74.71.101.15", 44445);      //For using internet connection — the ip is that of our home router, the port is the one I chose on which to allow incoming data requests. (test w/ canyouseeme.org)
+  client = new Client(this, "localhost", 44445);
   
   fileEntries = loadStrings("usernames.txt");
   pastUsernames = new StringList();

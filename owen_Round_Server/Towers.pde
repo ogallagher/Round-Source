@@ -19,6 +19,7 @@ class Turret extends Tower {
   int timer;
   String owner;
   String trueTarget;
+  String code;
   boolean targetFound;
   
   Turret(int[] loc, int[] tar, int dam, int hth, String icn, String own) {
@@ -34,6 +35,17 @@ class Turret extends Tower {
     PVector magnitude = new PVector(tar[0],tar[1]);
     magnitude.sub(location);
     radius = round(magnitude.mag());
+    
+    if (icon.length() > 0) {
+      int i = 0;
+      while (i<iconList.size() && !iconList.get(i).equals(icon)) {
+        i++;
+      }
+      
+      if (iconList.get(i).equals(icon)) {
+        code = codeList.get(i);
+      }
+    }
   }
   
   void aim() {
@@ -200,8 +212,8 @@ class Turret extends Tower {
     bLocation.mult(55);
     bLocation.add(location);
 
-    String bullet = nameID + "bullet" + endID + locationID + str(round(bLocation.x)) + ',' + str(round(bLocation.y)) + endID + velocityID + str(round(velocity.x)) + ',' + str(round(velocity.y)) + endID + targetID + str(round(target.x)) + ',' + str(round(target.y)) + endID + damageID + str(damage) + endID + iconID + icon + endID;
-    objectList.append(bullet);
+    String bullet = nameID + "bullet" + endID + locationID + str(round(bLocation.x)) + ',' + str(round(bLocation.y)) + endID + velocityID + str(round(velocity.x)) + ',' + str(round(velocity.y)) + endID + targetID + str(round(target.x)) + ',' + str(round(target.y)) + endID + damageID + str(damage) + endID + iconID + code + endID + ownerID + owner + endID;
+    objectList.append(bullet); //<>//
   }
   
   void time() {
@@ -236,7 +248,14 @@ class Turret extends Tower {
         
         if (difference.mag() < minDistance) {
           if (extractString(object,nameID,endID).equals("bullet") || extractString(object,nameID,endID).equals("hazardRing")) {
-            health -= int(extractString(object,damageID,endID));
+            if (!extractString(object,ownerID,endID).equals(owner)) {
+              float damage = int(extractString(object,damageID,endID));
+              if (object.substring(object.indexOf(iconID)+iconID.length(),object.indexOf(endID+ownerID)).equals(code)) {
+                damage *= 0.5;
+              }
+              
+              health -= damage;
+            }
           }
           
           if (!extractString(object,nameID,endID).equals("hazardRing")) {
