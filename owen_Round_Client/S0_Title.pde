@@ -1,36 +1,18 @@
 // TITLE
 
 void moveTitle() {
-  if (keyPressed) {
-    if (key == CODED) {
-      if (keyCode == UP) {
-        titleOrigin.y -= 2;
-      }
-      if (keyCode == DOWN) {
-        titleOrigin.y += 2;
-      }
-      if (keyCode == LEFT) {
-        titleOrigin.x -= 2;
-      }
-      if (keyCode == RIGHT) {
-        titleOrigin.x += 2;
-      }
-    }
-    
-    else {
-      if (key == 'w') {
-        titleOrigin.y -= 2;
-      }
-      if (key == 's') {
-        titleOrigin.y += 2;
-      }
-      if (key == 'a') {
-        titleOrigin.x -= 2;
-      }
-      if (key == 'd') {
-        titleOrigin.x += 2;
-      }
-    }
+  updateKeys();
+  if (keys[0] && titleOrigin.y > 47) {
+    titleOrigin.y -= 2;
+  }
+  if (keys[2] && titleOrigin.y < 160-47) {
+    titleOrigin.y += 2;
+  }
+  if (keys[1] && titleOrigin.x > 47) {
+    titleOrigin.x -= 2;
+  }
+  if (keys[3] && titleOrigin.x < width-47) {
+    titleOrigin.x += 2;
   }
 }
 

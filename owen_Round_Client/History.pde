@@ -214,6 +214,8 @@ Icons                             √••
   dollar sign                     •
   bowling ball                    •
   cloud                           •
+  shield                          •
+  ellipses                        •
 
 Create Enemies w/ A.I.            √√√
   Server-side                     √
@@ -377,25 +379,31 @@ Promote teaming                   √√º
       to change a fogger to your  x
         team, touch it            x
   systems for team requests       º
-    page lists all taken and      •
-      available team icons        •
+    page lists all taken and      √
+      available team icons        √
     client requests team code or  •
       new team.                   •
-    client-side                   •
-      new icons menu button and   •
-        corresponding stage #     •
-      createButtonIcons()         •
-      broadcast @[#]T:DATA* to    •
-        get taken and available   •
-        list                      •
-      createButtonGet() switch    •
+    client-side                   º
+      new icons menu button and   √
+        corresponding stage #     √
+      createButtonIcons()         √
+        logo is a shield          √
+      icons menu contents         º
+        list (scrollable)         √
+        text-box to send requests •
+      broadcast @[#]T:DATA* to    √
+        get taken and available   √
+        list                      √
+      createButtonCode() switch   •
         used to request team code •
         vs. create a new team     •
       broadcast @[#]T:NEW*        •
-      broadcast @[#]T:GET*        •
+      broadcast @[#]T:CODE*       •
+      myClient.restart()          •
+        clear teams and teamIcons •
     server-side                   º
-      respond to teamHD requests  •
-        data                      •
+      respond to teamHD requests  º
+        data                      √
         get                       •
         new                       •
       create icons.txt            √

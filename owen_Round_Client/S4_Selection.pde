@@ -1,4 +1,4 @@
-// SELECTIONS
+// SELECTION
 
 void drawPackageSelection(int selection) {
   pushMatrix();

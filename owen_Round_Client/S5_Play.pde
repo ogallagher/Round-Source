@@ -86,7 +86,7 @@ void displayField() {
   }
 }
 
-void chatLine() {
+void chat() {
   if (chatting && chatAlpha < 255) {
     chatAlpha += 1.5;
   }

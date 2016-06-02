@@ -120,6 +120,11 @@ void drawIcon(String icon, PVector location) {
     }
     
     int fillColor = int(extractString(shapes[i],alphaID,endID));
+    if (stage == 3) {
+      if (fillColor < 255) {
+        fillColor = 0;
+      }
+    }
     fill(fillColor);
     stroke(fillColor);
     strokeWeight(z*1.5);
@@ -168,7 +173,7 @@ void readServerMessage() {
           username = "Sorry, that name is already signed in for another player.";
           loadString = "";
         } 
-        else if (message.indexOf("REGISTERED") > -1 && stage == 3) {                    // Name given is acceptable and is now playing.
+        else if (message.indexOf("REGISTERED") > -1 && stage == 4) {                    // Name given is acceptable and is now playing.
           if (message.indexOf(iconID) > -1 && message.indexOf(radiusID) > -1) {
             icon = message.substring(message.indexOf(iconID) + iconID.length(), message.indexOf(endID + radiusID));
             fieldWidth = (floor((int(extractString(message,radiusID,endID)) * 2) * 0.1)) * 10;
@@ -176,7 +181,7 @@ void readServerMessage() {
           }
           
           if (fieldConfirmed) {
-            stage = 4;
+            stage = 5;
             loadString = "";
             
             String[] newList = pastUsernames.array();
@@ -210,8 +215,8 @@ void readServerMessage() {
             updateFile();
           }
         }
-        else if (message.equals("DEATH [" + myClient.name + endID) && stage == 4) {
-          stage = 5;
+        else if (message.equals("DEATH [" + myClient.name + endID) && stage == 5) {
+          stage = 6;
         }
         else if (message.equals("LOSS")) {
           myClient.score -= 1;
@@ -229,7 +234,44 @@ void readServerMessage() {
         }
       }
       
-      if (stage == 4) {
+      if (teams.length() == 0 && text.indexOf(teamHD) > -1 && text.indexOf(endID,text.indexOf(teamHD)) > -1 && text.indexOf(endHD,text.indexOf(endID,text.indexOf(teamHD))) > -1) {
+        teams = text.substring(text.indexOf(endID,text.indexOf(teamHD))+1,text.indexOf(endHD,text.indexOf(endID,text.indexOf(teamHD))));
+        
+        String newTeams = "";
+        int i=0;
+        
+        while(i < teams.length()) {
+          String team = teams.substring(i);
+          int teamEnd = team.indexOf('\n');
+          
+          String teamName = extractString(team,nameID,endID);
+          String teamOwner = extractString(team,ownerID,endID);
+          String teamCode = extractString(team,iconID,endID);
+          String teamIcon = team.substring(team.indexOf(iconID + teamCode + endID) + iconID.length() + teamCode.length() + 1, teamEnd);
+          
+          newTeams += "Name: " + teamName + "\nOwner: ";
+          if (teamOwner.length() > 0) {
+            newTeams += teamOwner;
+          }
+          else {
+            newTeams += "N/A";
+          }
+          if (teamCode.length() > 0) {
+            newTeams += "\nCODE: " + teamCode;
+          }
+          newTeams += "\n\n";
+          
+          if (teamIcon.length() > 0) {
+            teamIcons.append(teamIcon);
+          }
+          
+          i += teamEnd + 1;
+        }
+        
+        teams = newTeams;
+      }
+      
+      if (stage == 5) {
         readServerLists(text);
       } 
     }
@@ -280,12 +322,12 @@ void keyReleased() {
 }
 
 void mouseWheel(MouseEvent event) {
-  if (stage == 2) {
+  if (stage == 2 || stage == 3) {
     float scroll = event.getCount();
-    scrollVelocity = scroll*-2;
+    scrollVelocity = scroll*-4;
   }
   
-  else if (stage == 4) {
+  else if (stage == 5) {
     if (myClient.cpackage.equals("spider") && myClient.score > 40) {
       float scroll = event.getCount();
       

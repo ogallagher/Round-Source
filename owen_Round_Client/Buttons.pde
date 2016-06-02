@@ -1,10 +1,8 @@
-void createButtonInfo(int locationX, int locationY) {
-  PVector mLocation = new PVector(mouseX,mouseY);
-  mLocation.x -= locationX;
-  mLocation.y -= locationY;
-  float distance = mLocation.mag();
+void createButtonInfo(int x, int y) {
+  PVector difference = new PVector(mouseX,mouseY);
+  difference.sub(x,y);
   
-  if (distance < 35) {
+  if (difference.mag() < 35) {
     if (mousePressed) {
       stage = 1;
     }
@@ -13,7 +11,7 @@ void createButtonInfo(int locationX, int locationY) {
     stroke(255);
     noFill();
     ellipseMode(CENTER);
-    ellipse(locationX,locationY,50,50);
+    ellipse(x,y,50,50);
     popMatrix();
   }
   
@@ -21,24 +19,22 @@ void createButtonInfo(int locationX, int locationY) {
   stroke(255);
   ellipseMode(CENTER);
   rectMode(CENTER);
-  if (distance < 35 || stage == 1) { 
+  if (difference.mag() < 35 || stage == 1) { 
     fill(255);
   }
   else {
     noFill();
   }
-  ellipse(locationX,locationY-9,6,6);
-  rect(locationX,locationY+6,6,15);
+  ellipse(x,y-9,6,6);
+  rect(x,y+6,6,15);
   popMatrix();
 }
 
-void createButtonHelp(int locationX, int locationY) {
-  PVector mLocation = new PVector(mouseX,mouseY);
-  mLocation.x -= locationX;
-  mLocation.y -= locationY;
-  float distance = mLocation.mag();
+void createButtonHelp(int x, int y) {
+  PVector difference = new PVector(mouseX,mouseY);
+  difference.sub(x,y);
   
-  if (distance < 35) {
+  if (difference.mag() < 35) {
     if (mousePressed) {
       stage = 2;
       helpLocation = 0;
@@ -48,35 +44,76 @@ void createButtonHelp(int locationX, int locationY) {
     stroke(255);
     noFill();
     ellipseMode(CENTER);
-    ellipse(locationX,locationY,50,50);
+    ellipse(x,y,50,50);
     popMatrix();
   }
   
   pushMatrix();
   stroke(255);
-  if (distance < 35 || stage == 2) {               
+  if (difference.mag() < 35 || stage == 2) {               
     fill(255);
   }
   else {
     noFill();
   }
   beginShape();
-    vertex(locationX-10,locationY-13);
-    vertex(locationX+10,locationY-13);
-    vertex(locationX+10,locationY+5);
-    vertex(locationX-3,locationY+5);
-    vertex(locationX-3,locationY-1);
-    vertex(locationX+4,locationY-1);
-    vertex(locationX+4,locationY-7);
-    vertex(locationX-10,locationY-7);
+    vertex(x-10,y-13);
+    vertex(x+10,y-13);
+    vertex(x+10,y+5);
+    vertex(x-3,y+5);
+    vertex(x-3,y-1);
+    vertex(x+4,y-1);
+    vertex(x+4,y-7);
+    vertex(x-10,y-7);
   endShape(CLOSE);
-  ellipse(locationX,locationY+12,6,6);
+  ellipse(x,y+12,6,6);
   popMatrix();
 }
 
-void createButtonScroll(int locationX, int locationY) {
+void createButtonIcons(int x, int y) {
+  PVector difference = new PVector(mouseX,mouseY);
+  difference.sub(x,y);
+  
+  if (difference.mag() < 35) {
+    if (mousePressed) {
+      stage = 3;
+    }
+    
+    pushMatrix();
+    stroke(255);
+    noFill();
+    ellipseMode(CENTER);
+    ellipse(x,y,50,50);
+    popMatrix();
+  }
+  
+  if (stage == 3 && teams.length() == 0) {
+    broadcast("DATA",teamHD);
+  }
+  
   pushMatrix();
-  if (mousePressed || abs(scrollVelocity) > 50) {
+  stroke(255);
+  if (difference.mag() < 35 || stage == 3) {
+    fill(255);
+  }
+  else {
+    fill(0);
+  }
+  translate(x,y-4);
+  rectMode(CENTER);
+  ellipseMode(CENTER);
+  rect(0,0,24,19);
+  ellipse(0,10,24,24);
+  if (!(difference.mag() < 35 || stage == 3)) {
+    noStroke();
+    rect(0.5,0,22.5,17);
+  }
+  popMatrix();
+}
+
+void createButtonScroll(int x, int y, float s) {
+  pushMatrix();
+  if (mousePressed) {
     fill(255,50);
   }
   else {
@@ -85,32 +122,33 @@ void createButtonScroll(int locationX, int locationY) {
   noStroke();
   strokeWeight(1.5);
   rectMode(CENTER);
-  rect(locationX,locationY,55,height);
+  if (stage == 2) {
+    rect(x,map(s,-650,0,height-200,200),55,400);
+  }
+  else if (stage == 3) {
+    rect(x,map(s,-1 * (teamIcons.size()-3) * 142,0,height-200,200),55,400);
+  }
   popMatrix();
   
-  if (mouseX > locationX-35) {
-    if (mouseY < locationY || round(scrollVelocity) > 0) {
+  if (mouseX > x-35) {
+    if (mouseY < y) {
       pushMatrix();
       noFill();
       if (mousePressed) {
         stroke(0);
         scrollVelocity = 3;
       }
-      else if (abs(scrollVelocity) > 50) {
-        stroke(0);
-      }
       else {
         stroke(255);
       }
       strokeWeight(5);
       beginShape();
-        vertex(locationX-15, locationY-80);
-        vertex(locationX   , locationY-90);
-        vertex(locationX+15, locationY-80);
+        vertex(x-15, y-80);
+        vertex(x   , y-90);
+        vertex(x+15, y-80);
       endShape();
       popMatrix();
     }
-    
     else {
       pushMatrix();
       noFill();
@@ -118,37 +156,34 @@ void createButtonScroll(int locationX, int locationY) {
         stroke(0);
         scrollVelocity = -3;
       }
-      else if (abs(scrollVelocity) > 50) {
-        stroke(0);
-      }
       else {
         stroke(255);
       }
       strokeWeight(5);
       beginShape();
-        vertex(locationX-15, locationY+80);
-        vertex(locationX   , locationY+90);
-        vertex(locationX+15, locationY+80);
+        vertex(x-15, y+80);
+        vertex(x   , y+90);
+        vertex(x+15, y+80);
       endShape();
       popMatrix();
     }
   }
 }
 
-void createButtonPlay(int locationX, int locationY) {
+void createButtonPlay(int x, int y) {
   PVector mLocation = new PVector(mouseX,mouseY);
-  mLocation.x -= locationX;
-  mLocation.y -= locationY;
+  mLocation.x -= x;
+  mLocation.y -= y;
   float distance = mLocation.mag();
   
   float iconK = 12;
   
   if (distance < 35) {
-    if (mousePressed && stage < 3) {
-      stage = 3;
+    if (mousePressed && stage < 4) {
+      stage = 4;
       titleOrigin.set(width/2,60);
     }
-    else if (mousePressed && stage == 3 && !(username.equals("TYPE USERNAME ([,],*,TAB,: are not allowed)")) && !(username.equals("Sorry, the username you gave is already taken.")) && !(username.equals("Sorry, the name you gave is already signed in for another player.")) && !(username.equals("Sorry, the username you entered was not found on file.")) && !(username.equals("Great! Now switch to LOAD FILE and sign in.")) && !(username.equals("Sorry, there are too many clients currently playing."))) {
+    else if (mousePressed && stage == 4 && !(username.equals("TYPE USERNAME ([,],*,TAB,: are not allowed)")) && !(username.equals("Sorry, the username you gave is already taken.")) && !(username.equals("Sorry, the name you gave is already signed in for another player.")) && !(username.equals("Sorry, the username you entered was not found on file.")) && !(username.equals("Great! Now switch to LOAD FILE and sign in.")) && !(username.equals("Sorry, there are too many clients currently playing."))) {
       String message = "";
       
       if (username.indexOf('_') > -1) {
@@ -197,7 +232,7 @@ void createButtonPlay(int locationX, int locationY) {
       
       mousePressed = false;
     }
-    else if (stage == 3 && mousePressed == false) {
+    else if (stage == 4 && mousePressed == false) {
       if (loadString.length() > 0) {
         broadcast(loadString,loadHD);
       }
@@ -210,16 +245,16 @@ void createButtonPlay(int locationX, int locationY) {
         popMatrix();
       }
     }
-    else if (stage == 5 && mousePressed) {
+    else if (stage == 6 && mousePressed) {
       myClient.restart();
-      stage = 3;
+      stage = 4;
     }
     
     pushMatrix();
     stroke(255);
     noFill();
     ellipseMode(CENTER);
-    ellipse(locationX,locationY,50,50);
+    ellipse(x,y,50,50);
     popMatrix();
   }
   
@@ -231,19 +266,19 @@ void createButtonPlay(int locationX, int locationY) {
   else {
     noFill();
   }
-  locationX += 4;
+  x += 4;
   triangle(
-             locationX - (.875*iconK), locationY - (iconK),
-             locationX - (.875*iconK), locationY + (iconK),
-             locationX + (.875*iconK), locationY
+             x - (.875*iconK), y - (iconK),
+             x - (.875*iconK), y + (iconK),
+             x + (.875*iconK), y
              );
   popMatrix();
 }
 
-void createButtonBack(int locationX, int locationY) {
+void createButtonBack(int x, int y) {
   PVector mLocation = new PVector(mouseX,mouseY);
-  mLocation.x -= locationX;
-  mLocation.y -= locationY;
+  mLocation.x -= x;
+  mLocation.y -= y;
   float distance = mLocation.mag();
   
   float iconK = 12;
@@ -257,7 +292,7 @@ void createButtonBack(int locationX, int locationY) {
     stroke(255);
     noFill();
     ellipseMode(CENTER);
-    ellipse(locationX,locationY,50,50);
+    ellipse(x,y,50,50);
     popMatrix();
   }
   
@@ -269,20 +304,20 @@ void createButtonBack(int locationX, int locationY) {
   else {
     noFill();
   }
-  locationX -= 2;
+  x -= 2;
   triangle(
-             locationX + (.875*iconK), locationY - (iconK),
-             locationX + (.875*iconK), locationY + (iconK),
-             locationX - (.875*iconK), locationY
+             x + (.875*iconK), y - (iconK),
+             x + (.875*iconK), y + (iconK),
+             x - (.875*iconK), y
              );
   popMatrix();
 }
 
-void createButtonEscape(int locationX,int locationY) {
+void createButtonEscape(int x,int y) {
   if (mouseX > 700 && mouseY < 100) {
     PVector mLocation = new PVector(mouseX,mouseY);
-    mLocation.x -= locationX;
-    mLocation.y -= locationY;
+    mLocation.x -= x;
+    mLocation.y -= y;
     float distance = mLocation.mag();
     
     if (distance < 30) {
@@ -296,7 +331,7 @@ void createButtonEscape(int locationX,int locationY) {
       strokeWeight(1.5);
       noFill();
       ellipseMode(CENTER);
-      ellipse(locationX,locationY,40,40);
+      ellipse(x,y,40,40);
       popMatrix();
     }
     else {
@@ -313,7 +348,7 @@ void createButtonEscape(int locationX,int locationY) {
       noFill();
     }
     rectMode(CENTER);
-    rect(locationX,locationY,12,12);
+    rect(x,y,12,12);
     popMatrix();
   }
   else {
@@ -321,10 +356,10 @@ void createButtonEscape(int locationX,int locationY) {
   }
 }
 
-void createButtonChat(int locationX, int locationY) {
+void createButtonChat(int x, int y) {
   PVector mLocation = new PVector(mouseX,mouseY);
-  mLocation.x -= locationX;
-  mLocation.y -= locationY;
+  mLocation.x -= x;
+  mLocation.y -= y;
   float distance = mLocation.mag(); 
   
   if (distance < 30) {
@@ -348,7 +383,7 @@ void createButtonChat(int locationX, int locationY) {
       strokeWeight(1.5);
       noFill();
       ellipseMode(CENTER);
-      ellipse(locationX,locationY,40,40);
+      ellipse(x,y,40,40);
       popMatrix();
     }
   }
@@ -366,7 +401,7 @@ void createButtonChat(int locationX, int locationY) {
     else {
       noFill();
     }
-    translate(locationX,locationY);
+    translate(x,y);
     beginShape();
       vertex(-9,-8);
       vertex(9,-8);
@@ -380,10 +415,10 @@ void createButtonChat(int locationX, int locationY) {
   }
 }
 
-void createButtonName(int locationX, int locationY) {
+void createButtonName(int x, int y) {
   PVector mLocation = new PVector(mouseX,mouseY);
-  mLocation.x -= locationX;
-  mLocation.y -= locationY;
+  mLocation.x -= x;
+  mLocation.y -= y;
   float distance = mLocation.mag(); 
   
   if (distance < 30) {
@@ -404,7 +439,7 @@ void createButtonName(int locationX, int locationY) {
       strokeWeight(1.5);
       noFill();
       ellipseMode(CENTER);
-      ellipse(locationX,locationY,40,40);
+      ellipse(x,y,40,40);
       popMatrix();
     }
   }
@@ -422,7 +457,7 @@ void createButtonName(int locationX, int locationY) {
     else {
       noFill();
     }
-    translate(locationX,locationY);
+    translate(x,y);
     rotate(PI * -0.25);
     rectMode(CENTER);
     rect(0,-1,9,14);
@@ -437,7 +472,7 @@ void createButtonName(int locationX, int locationY) {
     else {
       noFill();
     }
-    translate(locationX,locationY);
+    translate(x,y);
     rotate(PI * -0.25);
     beginShape();
       vertex(4,-10);
@@ -459,13 +494,13 @@ void createButtonName(int locationX, int locationY) {
   }
 }
 
-void createButtonWoodpecker(int locationX, int locationY) {
+void createButtonWoodpecker(int x, int y) {
   PVector mLocation = new PVector(mouseX,mouseY);
-  mLocation.x -= locationX;
-  mLocation.y -= locationY;
+  mLocation.x -= x;
+  mLocation.y -= y;
   float distance = mLocation.mag();
   
-  if (distance < 40 && stage < 4) {
+  if (distance < 40 && stage < 5) {
     if (mousePressed) {
       combatPackage = 1;
     }
@@ -474,44 +509,44 @@ void createButtonWoodpecker(int locationX, int locationY) {
     stroke(255);
     noFill();
     ellipseMode(CENTER);
-    ellipse(locationX,locationY,60,60);
+    ellipse(x,y,60,60);
     popMatrix();
   }
   
   pushMatrix();
   translate(2,0);
   stroke(255);
-  if (distance < 40 || combatPackage == 1 || stage == 4) {                                      // 40 is the radius of the button's activation site
+  if (distance < 40 || combatPackage == 1 || stage == 5) {                                      // 40 is the radius of the button's activation site
     fill(255);
   }
   else {
     noFill();
   }
-  ellipse(locationX-6,locationY,24,24);
-  triangle(locationX+10,locationY-4,
-           locationX+22,locationY,
-           locationX+10, locationY+4);
-  ellipse(locationX-20, locationY-10,4,4);
+  ellipse(x-6,y,24,24);
+  triangle(x+10,y-4,
+           x+22,y,
+           x+10, y+4);
+  ellipse(x-20, y-10,4,4);
            
   strokeWeight(3);
-  if (stage < 4) {
+  if (stage < 5) {
     stroke(0);
   }
   else {
     stroke(80);
   }
-  line(locationX-18,locationY,locationX-6,locationY-12);
+  line(x-18,y,x-6,y-12);
   strokeWeight(1.5);
   popMatrix();
 }
 
-void createButtonMole(int locationX, int locationY) {
+void createButtonMole(int x, int y) {
   PVector mLocation = new PVector(mouseX,mouseY);
-  mLocation.x -= locationX;
-  mLocation.y -= locationY;
+  mLocation.x -= x;
+  mLocation.y -= y;
   float distance = mLocation.mag();
   
-  if (distance < 40 && stage < 4) {
+  if (distance < 40 && stage < 5) {
     if (mousePressed) {
       combatPackage = 2;
     }
@@ -520,23 +555,23 @@ void createButtonMole(int locationX, int locationY) {
     stroke(255);
     noFill();
     ellipseMode(CENTER);
-    ellipse(locationX,locationY,60,60);
+    ellipse(x,y,60,60);
     popMatrix();
   }
   
   pushMatrix();
-  if (distance < 40 || combatPackage == 2 || stage == 4) {
+  if (distance < 40 || combatPackage == 2 || stage == 5) {
     fill(255);
   }
   else {
     noFill();
   }
   stroke(255);
-  ellipse(locationX,locationY-8,20,20);
-  if (stage < 4) {
+  ellipse(x,y-8,20,20);
+  if (stage < 5) {
     fill(0);
     noStroke();
-    rect(locationX,locationY-2,20,10);
+    rect(x,y-2,20,10);
   }
   else {
     fill(80);
@@ -545,7 +580,7 @@ void createButtonMole(int locationX, int locationY) {
   popMatrix();
   
   pushMatrix();
-  if (distance < 40 || combatPackage == 2 || stage == 4) {
+  if (distance < 40 || combatPackage == 2 || stage == 5) {
     fill(255);
   }
   else {
@@ -555,10 +590,10 @@ void createButtonMole(int locationX, int locationY) {
   
   translate(0,-4);
   beginShape();
-    vertex(locationX+10,locationY-4);
-    vertex(locationX+10,locationY+20);
-    vertex(locationX-10,locationY+20);
-    vertex(locationX-10,locationY-4);
+    vertex(x+10,y-4);
+    vertex(x+10,y+20);
+    vertex(x-10,y+20);
+    vertex(x-10,y-4);
   if (distance < 40) {
     endShape(CLOSE);
   }
@@ -568,7 +603,7 @@ void createButtonMole(int locationX, int locationY) {
   popMatrix();
   
   pushMatrix();
-  if (stage < 4) {
+  if (stage < 5) {
     fill(0);
     stroke(0);
   }
@@ -577,51 +612,51 @@ void createButtonMole(int locationX, int locationY) {
     stroke(80);
   }
   strokeWeight(3);
-  line(locationX-10,locationY-2,locationX+10,locationY-2);
+  line(x-10,y-2,x+10,y-2);
   strokeWeight(1.5);
   
-  if (distance < 40 || combatPackage == 2 || stage == 4) {
+  if (distance < 40 || combatPackage == 2 || stage == 5) {
     noStroke();
   }
   else {
     stroke(255);
   }
-  ellipse(locationX,locationY-2,10,10);
+  ellipse(x,y-2,10,10);
   popMatrix();
 }
 
-void createButtonSalamander(int locationX, int locationY) {
+void createButtonSalamander(int x, int y) {
   PVector mLocation = new PVector(mouseX,mouseY);
-  mLocation.x -= locationX;
-  mLocation.y -= locationY;
+  mLocation.x -= x;
+  mLocation.y -= y;
   float distance = mLocation.mag();
   
   pushMatrix();
   stroke(255);
   ellipseMode(CENTER);
-  if (distance < 40 || combatPackage == 3 || stage == 4) {                                      // 40 is the radius of the button's activation site
+  if (distance < 40 || combatPackage == 3 || stage == 5) {                                      // 40 is the radius of the button's activation site
     fill(255);
   }
   else {
     noFill();
   }
-  ellipse(locationX,locationY,30,30);
+  ellipse(x,y,30,30);
   popMatrix();
   
   pushMatrix();
-  if (stage < 4) {
+  if (stage < 5) {
     fill(0);
   }
   else {
     fill(80);
   }
   noStroke();
-  translate(locationX,locationY-8);
+  translate(x,y-8);
   rectMode(CENTER);
   rect(0,0,35,15); 
   popMatrix();
   
-  if (distance < 40 && stage < 4) {
+  if (distance < 40 && stage < 5) {
     if (mousePressed) {
       combatPackage = 3;
     }
@@ -630,12 +665,12 @@ void createButtonSalamander(int locationX, int locationY) {
     stroke(255);
     noFill();
     ellipseMode(CENTER);
-    ellipse(locationX,locationY,60,60);
+    ellipse(x,y,60,60);
     popMatrix();
   }
   
   pushMatrix();
-  if (distance < 40 || combatPackage == 3 || stage == 4) {
+  if (distance < 40 || combatPackage == 3 || stage == 5) {
     fill(255);
   }
   else {
@@ -643,14 +678,14 @@ void createButtonSalamander(int locationX, int locationY) {
   }
   stroke(255);
   beginShape();
-    vertex(locationX-15,locationY);
-    vertex(locationX-14,locationY-7);
-    vertex(locationX-4,locationY-2);
-    vertex(locationX+2,locationY-16);
-    vertex(locationX+10,locationY-3);
-    vertex(locationX+14,locationY-5);
-    vertex(locationX+15,locationY);
-  if (distance < 40 || combatPackage == 3 || stage == 4) {
+    vertex(x-15,y);
+    vertex(x-14,y-7);
+    vertex(x-4,y-2);
+    vertex(x+2,y-16);
+    vertex(x+10,y-3);
+    vertex(x+14,y-5);
+    vertex(x+15,y);
+  if (distance < 40 || combatPackage == 3 || stage == 5) {
     endShape(CLOSE);
   }
   else {
@@ -659,13 +694,13 @@ void createButtonSalamander(int locationX, int locationY) {
   popMatrix();
 }
 
-void createButtonSpider(int locationX, int locationY) {
+void createButtonSpider(int x, int y) {
   PVector mLocation = new PVector(mouseX,mouseY);
-  mLocation.x -= locationX;
-  mLocation.y -= locationY;
+  mLocation.x -= x;
+  mLocation.y -= y;
   float distance = mLocation.mag();
   
-  if (distance < 40 && stage < 4) {
+  if (distance < 40 && stage < 5) {
     if (mousePressed) {
       combatPackage = 4;
     }
@@ -675,11 +710,11 @@ void createButtonSpider(int locationX, int locationY) {
     strokeWeight(1.5);
     noFill();
     ellipseMode(CENTER);
-    ellipse(locationX,locationY,60,60);
+    ellipse(x,y,60,60);
     popMatrix();
   }
   pushMatrix();
-  if (distance < 40 || combatPackage == 4 || stage == 4) {
+  if (distance < 40 || combatPackage == 4 || stage == 5) {
     fill(255);
   }
   else {
@@ -688,10 +723,10 @@ void createButtonSpider(int locationX, int locationY) {
   stroke(255);
   strokeWeight(1.5);
   beginShape();
-    vertex(locationX,locationY+10);
-    vertex(locationX-10,locationY);
-    vertex(locationX+2,locationY-15);
-    vertex(locationX+11,locationY+1);
+    vertex(x,y+10);
+    vertex(x-10,y);
+    vertex(x+2,y-15);
+    vertex(x+11,y+1);
   endShape(CLOSE);
   popMatrix();
   
@@ -700,26 +735,26 @@ void createButtonSpider(int locationX, int locationY) {
   strokeWeight(1.5);
   noFill();
   beginShape();
-    vertex(locationX,locationY+10);
-    vertex(locationX+14,locationY+9);
-    vertex(locationX+18,locationY+15);
+    vertex(x,y+10);
+    vertex(x+14,y+9);
+    vertex(x+18,y+15);
   endShape();
   beginShape();
-    vertex(locationX,locationY+10);
-    vertex(locationX-14,locationY+6);
-    vertex(locationX-17,locationY+15);
+    vertex(x,y+10);
+    vertex(x-14,y+6);
+    vertex(x-17,y+15);
   endShape();
   popMatrix();
   
   pushMatrix();
   stroke(255);
-  if (distance < 40 || combatPackage == 4 || stage == 4) {
+  if (distance < 40 || combatPackage == 4 || stage == 5) {
     fill(255);
   }
   else {
     fill(0);
   }
-  ellipse(locationX,locationY+10,8,8);
+  ellipse(x,y+10,8,8);
   if (stage < 4) {
     stroke(0);
   }
@@ -728,18 +763,18 @@ void createButtonSpider(int locationX, int locationY) {
   }
   strokeWeight(2.5);
   noFill();
-  ellipse(locationX,locationY+10,12,12);
+  ellipse(x,y+10,12,12);
   strokeWeight(1.5);
   popMatrix();
 }
 
-void createButtonBeaver(int locationX, int locationY) {
+void createButtonBeaver(int x, int y) {
   PVector mLocation = new PVector(mouseX,mouseY);
-  mLocation.x -= locationX;
-  mLocation.y -= locationY;
+  mLocation.x -= x;
+  mLocation.y -= y;
   float distance = mLocation.mag();
   
-  if (distance < 40 && stage < 4) {
+  if (distance < 40 && stage < 5) {
     if (mousePressed) {
       combatPackage = 5;
     }
@@ -748,86 +783,86 @@ void createButtonBeaver(int locationX, int locationY) {
     stroke(255);
     noFill();
     ellipseMode(CENTER);
-    ellipse(locationX,locationY,60,60);
+    ellipse(x,y,60,60);
     popMatrix();
   }
   
   pushMatrix();
   stroke(255);
-  if (distance < 40 || combatPackage == 5 || stage == 4) {
+  if (distance < 40 || combatPackage == 5 || stage == 5) {
     fill(255);
   }
   else {
     noFill();
   }
   beginShape();
-    vertex(locationX-14,locationY-14);
-    vertex(locationX+14,locationY-14);
-    vertex(locationX+14,locationY-10);
-    vertex(locationX+2,locationY-7);
-    vertex(locationX+14,locationY-3);
-    vertex(locationX+14,locationY+4);
-    vertex(locationX+5,locationY+7);
-    vertex(locationX+14,locationY+10);
-    vertex(locationX+14,locationY+14);
-    vertex(locationX-14,locationY+14);
-    vertex(locationX-14,locationY+5);
-    vertex(locationX,locationY);
-    vertex(locationX-14,locationY-6);
+    vertex(x-14,y-14);
+    vertex(x+14,y-14);
+    vertex(x+14,y-10);
+    vertex(x+2,y-7);
+    vertex(x+14,y-3);
+    vertex(x+14,y+4);
+    vertex(x+5,y+7);
+    vertex(x+14,y+10);
+    vertex(x+14,y+14);
+    vertex(x-14,y+14);
+    vertex(x-14,y+5);
+    vertex(x,y);
+    vertex(x-14,y-6);
   endShape(CLOSE);
   popMatrix();
 }
 
-void createButtonTurtle(int locationX, int locationY) {
+void createButtonTurtle(int x, int y) {
   PVector mLocation = new PVector(mouseX,mouseY);
-  mLocation.x -= locationX;
-  mLocation.y -= locationY;
+  mLocation.x -= x;
+  mLocation.y -= y;
   float distance = mLocation.mag();
   
   pushMatrix();
   stroke(255);
-  if (distance < 40 || combatPackage == 6 || stage == 4) {
+  if (distance < 40 || combatPackage == 6 || stage == 5) {
     fill(255);
   }
   else {
     noFill();
   }
-  ellipse(locationX,locationY+8,34,50);
+  ellipse(x,y+8,34,50);
   noStroke();
-  if (stage < 4) {
+  if (stage < 5) {
     fill(0);
   }
   else {
     fill(80);
   }
   rectMode(CENTER);
-  rect(locationX,locationY+25,40,30);
+  rect(x,y+25,40,30);
   popMatrix();
   
   pushMatrix();
   stroke(255);
-  if (distance < 40 || combatPackage == 6 || stage == 4) {
+  if (distance < 40 || combatPackage == 6 || stage == 5) {
     fill(255);
   }
   else {
     noFill();
   }
   translate(2,2);
-  triangle(locationX-18,locationY+10,locationX-10,locationY+10,locationX-14,locationY+16);
+  triangle(x-18,y+10,x-10,y+10,x-14,y+16);
   translate(-4,0);
-  triangle(locationX+18,locationY+10,locationX+10,locationY+10,locationX+14,locationY+16);
+  triangle(x+18,y+10,x+10,y+10,x+14,y+16);
   popMatrix();
   
   pushMatrix();
   stroke(255);
-  if (distance < 40 || combatPackage == 6 || stage == 4) {
+  if (distance < 40 || combatPackage == 6 || stage == 5) {
     fill(255);
   }
   else {
     fill(0);
   }
-  ellipse(locationX,locationY+8,8,8);
-  if (stage < 4) {
+  ellipse(x,y+8,8,8);
+  if (stage < 5) {
     stroke(0);
   }
   else {
@@ -835,11 +870,11 @@ void createButtonTurtle(int locationX, int locationY) {
   }
   strokeWeight(2.5);
   noFill();
-  ellipse(locationX,locationY+8,12,12);
+  ellipse(x,y+8,12,12);
   strokeWeight(1.5);
   popMatrix();
   
-  if (distance < 40 && stage < 4) {
+  if (distance < 40 && stage < 5) {
     if (mousePressed) {
       combatPackage = 6;
     }
@@ -848,18 +883,18 @@ void createButtonTurtle(int locationX, int locationY) {
     stroke(255);
     noFill();
     ellipseMode(CENTER);
-    ellipse(locationX,locationY,60,60);
+    ellipse(x,y,60,60);
     popMatrix();
   }
 }
 
-void createButtonHedgehog(int locationX, int locationY) {
+void createButtonHedgehog(int x, int y) {
   PVector mLocation = new PVector(mouseX,mouseY);
-  mLocation.x -= locationX;
-  mLocation.y -= locationY;
+  mLocation.x -= x;
+  mLocation.y -= y;
   float distance = mLocation.mag();
   
-  if (distance < 40 && stage < 4) {
+  if (distance < 40 && stage < 5) {
     if (mousePressed) {
       combatPackage = 7;
     }
@@ -868,36 +903,36 @@ void createButtonHedgehog(int locationX, int locationY) {
     stroke(255);
     noFill();
     ellipseMode(CENTER);
-    ellipse(locationX,locationY,60,60);
+    ellipse(x,y,60,60);
     popMatrix();
   }
   
   pushMatrix();
   stroke(255);
-  if (distance < 40 || combatPackage == 7 || stage == 4) {
+  if (distance < 40 || combatPackage == 7 || stage == 5) {
     fill(255);
   }
   else {
     noFill();
   }
   translate(0,5);
-  triangle(locationX-7,locationY-(7*1.75*.5),locationX+7,locationY-(7*1.75*.5),locationX,locationY+(7*1.75*.5));
+  triangle(x-7,y-(7*1.75*.5),x+7,y-(7*1.75*.5),x,y+(7*1.75*.5));
   translate(0,-17);
-  triangle(locationX-7,locationY+(7*1.75*.5),locationX+7,locationY+(7*1.75*.5),locationX,locationY-(7*1.75*.5));
+  triangle(x-7,y+(7*1.75*.5),x+7,y+(7*1.75*.5),x,y-(7*1.75*.5));
   translate(10,20);
-  triangle(locationX-7,locationY+(7*1.75*.5),locationX+7,locationY+(7*1.75*.5),locationX,locationY-(7*1.75*.5));
+  triangle(x-7,y+(7*1.75*.5),x+7,y+(7*1.75*.5),x,y-(7*1.75*.5));
   translate(-20,0);
-  triangle(locationX-7,locationY+(7*1.75*.5),locationX+7,locationY+(7*1.75*.5),locationX,locationY-(7*1.75*.5));
+  triangle(x-7,y+(7*1.75*.5),x+7,y+(7*1.75*.5),x,y-(7*1.75*.5));
   popMatrix();
 }
 
-void createButtonTermite(int locationX, int locationY) {
+void createButtonTermite(int x, int y) {
   PVector mLocation = new PVector(mouseX,mouseY);
-  mLocation.x -= locationX;
-  mLocation.y -= locationY;
+  mLocation.x -= x;
+  mLocation.y -= y;
   float distance = mLocation.mag();
   
-  if (distance < 40 && stage < 4) {
+  if (distance < 40 && stage < 5) {
     if (mousePressed) {
       combatPackage = 8;
     }
@@ -906,19 +941,19 @@ void createButtonTermite(int locationX, int locationY) {
     stroke(255);
     noFill();
     ellipseMode(CENTER);
-    ellipse(locationX,locationY,60,60);
+    ellipse(x,y,60,60);
     popMatrix();
   }
   
   pushMatrix();
   stroke(255);
-  if (distance < 40 || combatPackage == 8 || stage == 4) {
+  if (distance < 40 || combatPackage == 8 || stage == 5) {
     fill(255);
   }
   else {
     noFill();
   }
-  translate(locationX,locationY-2);
+  translate(x,y-2);
   beginShape();
     vertex(-14,-14);
     vertex(-8,-14);
@@ -940,10 +975,10 @@ void createButtonTermite(int locationX, int locationY) {
   popMatrix();
 }
 
-void createButtonSigned(int locationX,int locationY) {
+void createButtonSigned(int x,int y) {
   PVector mLocation = new PVector(mouseX,mouseY);
-  mLocation.x -= locationX;
-  mLocation.y -= locationY;
+  mLocation.x -= x;
+  mLocation.y -= y;
   float distance = mLocation.mag();
   
   if (distance < 17) {
@@ -968,10 +1003,10 @@ void createButtonSigned(int locationX,int locationY) {
   }
   ellipseMode(CENTER);
   if (distance < 17) {
-    ellipse(locationX,locationY,14,14);
+    ellipse(x,y,14,14);
   }
   else {
-    ellipse(locationX,locationY,10,10);
+    ellipse(x,y,10,10);
   }
   popMatrix();
   
@@ -981,18 +1016,18 @@ void createButtonSigned(int locationX,int locationY) {
   textAlign(LEFT);
   fill(255);
   if (signed) {
-    text("LOAD FILE (If you already have a name saved)",locationX+20,locationY+7);
+    text("LOAD FILE (If you already have a name saved)",x+20,y+7);
   }
   else {
-    text("NEW FILE (If you have never played before)",locationX+20,locationY+7);
+    text("NEW FILE (If you have never played before)",x+20,y+7);
   }
   popMatrix();
 }
 
-void createButtonGraphics(int locationX,int locationY) {
+void createButtonGraphics(int x,int y) {
   PVector mLocation = new PVector(mouseX,mouseY);
-  mLocation.x -= locationX;
-  mLocation.y -= locationY;
+  mLocation.x -= x;
+  mLocation.y -= y;
   float distance = mLocation.mag();
   
   if (distance < 17) {
@@ -1017,10 +1052,10 @@ void createButtonGraphics(int locationX,int locationY) {
   }
   ellipseMode(CENTER);
   if (distance < 17) {
-    ellipse(locationX,locationY,14,14);
+    ellipse(x,y,14,14);
   }
   else {
-    ellipse(locationX,locationY,10,10);
+    ellipse(x,y,10,10);
   }
   popMatrix();
   
@@ -1030,10 +1065,10 @@ void createButtonGraphics(int locationX,int locationY) {
   textAlign(LEFT);
   fill(255);
   if (bestGraphics) {
-    text("HIGH QUALITY (Better graphics, but can be a bit slower)",locationX+20,locationY+7);
+    text("HIGH QUALITY (Better graphics, but can be a bit slower)",x+20,y+7);
   }
   else {
-    text("LOWER QUALITY (Worse graphics, but is faster)",locationX+20,locationY+7);
+    text("LOWER QUALITY (Worse graphics, but is faster)",x+20,y+7);
   }
   popMatrix();
 }

@@ -21,7 +21,7 @@ void drawHelp(int x, int y) {
   popMatrix();
   
   pushMatrix();
-  fill(0);
+  fill(0,90);
   noStroke();
   rectMode(CORNER);
   rect(0,0,width,160);

@@ -1,7 +1,7 @@
 //Round_Client
 
 // BEGUN:         July 18, 2015
-// LAST UPDATED:  May 30, 2016
+// LAST UPDATED:  June 1, 2016
 // VERSION:       8
 // UPDATES:
 //   v.7 =        Flexible field size [x], Drawn boundaries [x], name changing [x], AI enemies [x]
@@ -22,6 +22,7 @@ String newHD = "N:";
 String loadHD = "L:";
 String spawnHD = "S:";
 String deleteHD = "D:";
+String teamHD = "T:";
 
 String addressID = "@[";        //Shared client data tags (some used in object data)
 String nameID = "n[";              
@@ -60,12 +61,15 @@ ArrayList<Object> objects = new ArrayList<Object>();
 
 PFont titleFont;
 int titleSize;
-
 PVector titleOrigin;
 
 PFont infohelpFont;
 float scrollVelocity;
 float helpLocation = 0;
+
+float iconLocation = 0;
+String teams = "";
+StringList teamIcons;
 
 PFont chatFont;
 String chatBoxString = "[,],*,:,$,TAB = Not Permitted. Limit = 60 char.";
@@ -92,7 +96,7 @@ String code = "";
 
 Boolean[] keys = {false,false,false,false};                        //To keep track of multiple keys at once
 
-int stage = 0;
+int stage = 0;                        //Determines what functions should be executed in draw: 0=Title | 1=Info | 2=Help | 3=Icons | 4=Selection | 5=Play | 6=Killscreen
 boolean bestGraphics = true;
 boolean escapeHover = false;
 boolean fieldConfirmed = false;
@@ -103,8 +107,7 @@ void setup() {
   size(800,700);
   noCursor();
   
-  //client = new Client(this, "74.71.101.15", 44445);      //For using internet connection — the ip is that of our home router, the port is the one I chose on which to allow incoming data requests. (test w/ canyouseeme.org)
-  client = new Client(this, "localhost", 44445);
+  client = new Client(this, "74.71.101.15", 44445);      //For using internet connection — the ip is that of our home router, the port is the one I chose on which to allow incoming data requests. (test w/ canyouseeme.org)
   
   fileEntries = loadStrings("usernames.txt");
   pastUsernames = new StringList();
@@ -124,11 +127,12 @@ void setup() {
   
   titleOrigin = new PVector(width/2,60);
   
+  teamIcons = new StringList();
   chatList = new StringList();
 }
 
 void draw() {  
-  if (stage < 4) {
+  if (stage < 5) {
     background(0);
   }
   else {
@@ -141,19 +145,25 @@ void draw() {
   
   if (stage == 2) {
     drawHelp(130,200);
-    createButtonScroll(770,350);
+    createButtonScroll(770,350,helpLocation);
   }
   
-  if (stage > -1 && stage < 3) {
+  if (stage == 3) {
+    drawIcons(140,220);
+    createButtonScroll(770,350,iconLocation);
+  }
+  
+  if (stage > -1 && stage < 4) {
     moveTitle();
     drawTitle();
     
     createButtonInfo(50,200);
-    createButtonHelp(50,400);
-    createButtonPlay(50,600);
+    createButtonHelp(50,350);
+    createButtonIcons(50,500);
+    createButtonPlay(50,650);
   }
   
-  if (stage == 3) {
+  if (stage == 4) {
     createButtonPlay(750,630);    //If clicked, request to join is sent.
     createButtonBack(50,100);
     
@@ -177,7 +187,7 @@ void draw() {
   
   readServerMessage();
     
-  if (stage == 4) {
+  if (stage == 5) {
     myClient.changeObjects();
     myClient.control();
     myClient.collision();
@@ -203,11 +213,11 @@ void draw() {
     
     displayField();
     
-    chatLine();                           //for the textBox and the displays
+    chat();                               //for the textBox and the displays
     rename();                             //"   "
   }
   
-  if (stage == 5) {
+  if (stage == 6) {
     displayKillscreen();
     createButtonPlay(width/2,height/2);    //If clicked, stage returns to 0.
   }

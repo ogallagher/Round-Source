@@ -103,6 +103,19 @@ void respond() {
       }
     }
     
+    if (clientMessage.indexOf(teamHD) > -1) {                                   //*** Administrate teams
+      String message = extractString(clientMessage,teamHD,endHD);
+      String response = "";
+      
+      if (message.equals("DATA")) {
+        for (int i=0; i<icons.length; i++) {
+          response += idList.get(i) + iconID + codeList.get(i) + endID + iconList.get(i) + '\n';
+        }
+        
+        broadcast(response, teamHD, clientAddress);
+      }
+    }
+    
     if (clientMessage.indexOf(clientHD) > -1) {                                 //*** Update client's data
       String editMessage =    extractString(clientMessage,clientHD,endHD);
       

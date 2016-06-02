@@ -1,7 +1,7 @@
 //Round_Server
 
 // BEGUN:         July 18, 2015
-// LAST UPDATED:  May 30, 2016
+// LAST UPDATED:  June 1, 2016
 // VERSION:       8
 // UPDATES:       
 //    7 = Flexible field size, drawn boundaries, name changing, AI enemies
@@ -72,6 +72,7 @@ String newHD = "N:";
 String loadHD = "L:";
 String spawnHD = "S:";
 String deleteHD = "D:";
+String teamHD = "T:";
 
 String addressID = "@[";        //Shared client data tags (some used in object/enemy data)
 String nameID = "n[";              
