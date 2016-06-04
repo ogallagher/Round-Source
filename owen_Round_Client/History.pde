@@ -197,11 +197,11 @@ Icons                             √••
   bullet                          √
   crown                           √
   hammer                          √
-  fruit-slice                     √
-  info button                     √
-  help button                     √
-  stop button                     √
-  continue button                 √
+  melon                           √
+  i                               √
+  ?                               √
+  stop                            √
+  play                            √
   radioactive symbol              •
   hexagon                         •
   star                            •
@@ -216,6 +216,7 @@ Icons                             √••
   cloud                           •
   shield                          •
   ellipses                        •
+  plus                            •
 
 Create Enemies w/ A.I.            √√√
   Server-side                     √
@@ -349,7 +350,7 @@ Improve Shooting Protocols        √√√
     edit respond() to process     √
       multiple spawn() requests   √
           
-Promote teaming                   √√º
+Promote teaming                   √√√
   decrease damage from 'friendly  √
     fire' to promote teaming      √
     add icon code to info         √
@@ -378,42 +379,41 @@ Promote teaming                   √√º
         players on its team       x
       to change a fogger to your  x
         team, touch it            x
-  systems for team requests       º
+  systems for team requests       √
     page lists all taken and      √
       available team icons        √
-    client requests team code or  •
-      new team.                   •
-    client-side                   º
+    explain in help menu          √
+    client-side                   √
       new icons menu button and   √
         corresponding stage #     √
       createButtonIcons()         √
         logo is a shield          √
-      icons menu contents         º
+      icons menu contents         √
         list (scrollable)         √
-        text-box to send requests •
+        icons function as buttons √
+          edit drawing            √
+        team()                    √
+          broadcast @[#]T:NEW*    √
+          broadcast @[#]T:CODE*   √
+            with name             √
+      edit readServerMessage() to √
+        update if requestingTeam  √
       broadcast @[#]T:DATA* to    √
         get taken and available   √
         list                      √
-      createButtonCode() switch   •
-        used to request team code •
-        vs. create a new team     •
-      broadcast @[#]T:NEW*        •
-      broadcast @[#]T:CODE*       •
-      myClient.restart()          •
-        clear teams and teamIcons •
-    server-side                   º
-      respond to teamHD requests  º
+      whenever playButton pressed √
+        clear teams and teamIcons √
+    server-side                   √
+      respond to teamHD requests  √
         data                      √
-        get                       •
-        new                       •
+        code                      √
+          check that name on file √
+          check that icon on file √
+        new                       √
       create icons.txt            √
       method to read txt to       √
         codeList + iconList       √
-      updateIcons()               •
-      edit respond() for team     •
-        heading messages          •  
-        get code                  •
-        new team                  •
+      updateIcons()               √
   clients can send private        √
     messages to specific players  √
     (default receiver is the      √

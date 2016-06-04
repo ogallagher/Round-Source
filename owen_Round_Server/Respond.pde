@@ -114,6 +114,51 @@ void respond() {
         
         broadcast(response, teamHD, clientAddress);
       }
+      else if (message.indexOf("CODE") > -1) {
+        String icon = message.substring(message.indexOf(iconID)+iconID.length(),message.length()-1);
+        
+        int foundIcon = -1;
+        boolean owned = false;
+        boolean clientFound = false;
+        
+        for (int i=0; i<icons.length && foundIcon == -1; i++) {
+          if (iconList.get(i).equals(icon)) {
+            foundIcon = i;
+            
+            if (extractString(idList.get(i),ownerID,endID).length() > 0) {
+              owned = true;
+            }
+          }
+        }
+        
+        if (foundIcon > -1 && !owned) {
+          String clientName = cleanString(extractString(message,nameID,endID),"0123456789");
+          
+          for (int i=0; i<accountList.size() && !clientFound; i++) {
+            if (extractString(message,nameID,endID).equals(extractString(accountList.get(i),nameID,endID))) {
+              clientFound = true; 
+            }
+          }
+          
+          if (clientFound) {
+            idList.set(foundIcon,replaceString(idList.get(foundIcon),clientName,ownerID,endID));
+            updateIcons();
+          }
+        }
+        
+        for (int i=0; i<icons.length; i++) {
+          response += idList.get(i) + iconID + codeList.get(i) + endID + iconList.get(i) + '\n';
+        }
+        broadcast(response, teamHD, clientAddress);
+      }
+      else if (message.indexOf("NEW") > -1) {
+        chatList.append(nameID + "N/A" + endID + chatID + extractString(message,nameID,endID) + endID);
+        
+        for (int i=0; i<icons.length; i++) {
+          response += idList.get(i) + iconID + codeList.get(i) + endID + iconList.get(i) + '\n';
+        }
+        broadcast(response, teamHD, clientAddress);
+      }
     }
     
     if (clientMessage.indexOf(clientHD) > -1) {                                 //*** Update client's data

@@ -1,16 +1,16 @@
 //Round_Server
 
 // BEGUN:         July 18, 2015
-// LAST UPDATED:  June 1, 2016
+// LAST UPDATED:  June 3, 2016
 // VERSION:       8
 // UPDATES:       
 //    7 = Flexible field size, drawn boundaries, name changing, AI enemies
 //    8 = Tags shortened to reduce lag [x], Round locations and velocities [x], Improve shooting protocols [x], Promote teaming [...], Improve enemies [x], Change scoring dynamics and upgrades [ ], Worsen spider package (dagger,speed) [ ], Termite combat package [...], Autocomplete username [x], Allow complex movement [x], Various bug fixes [...]
 
 /*  
-    File Format Example
-      name[player0]score[0]
-      name[player1]score[1]
+    Accounts Format Example
+      name[player0]score[0]address[#]
+      name[player1]score[1]address[#]
       
     Message Format Example
       name[player0]receiver[player1]chat[M] —— from client

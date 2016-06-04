@@ -1,12 +1,27 @@
 //Round_Client
 
 // BEGUN:         July 18, 2015
-// LAST UPDATED:  June 1, 2016
+// LAST UPDATED:  June 3, 2016
 // VERSION:       8
-// UPDATES:
-//   v.7 =        Flexible field size [x], Drawn boundaries [x], name changing [x], AI enemies [x]
-//   v.8 =        Tags shortened to reduce lag [x], Round locations and velocities [x], Improve shooting protocols [x], Promote teaming [...], Improve enemies [x], Change scoring dynamics and upgrades [ ], Worsen spider package (dagger,speed) [ ], Termite combat package [...], Autocomplete username [x], Allow complex movement [x], Various bug fixes [...]
 
+/* UPDATES:
+     v.7        
+        Flexible field size [x] 
+        Drawn boundaries [x]
+        Name changing [x]
+        AI enemies [x]
+     v.8        
+        Lag reduction (tags shortened, rounded data) [x]
+        Improve shooting protocols [x]
+        Promote teaming [x]
+        Improve enemies [x]
+        Change scoring dynamics and upgrades [ ]
+        Worsen spider package (dagger,speed) [ ]
+        Termite combat package [...]
+        Autocomplete username [x]
+        Allow complex movement [x]
+        Various bug fixes [...]
+*/
 
 import processing.net.*;
 
@@ -67,9 +82,12 @@ PFont infohelpFont;
 float scrollVelocity;
 float helpLocation = 0;
 
-float iconLocation = 0;
+float iconLocation = 0;              //For scrolling
 String teams = "";
 StringList teamIcons;
+int requestingTeam = -1;             // -3: Request new team | -2: Type new team name | -1: Nothing | >0: Request team code
+String newTeam = "Type team name, then press ENTER";
+boolean ownTeam = false;
 
 PFont chatFont;
 String chatBoxString = "[,],*,:,$,TAB = Not Permitted. Limit = 60 char.";
@@ -151,6 +169,11 @@ void draw() {
   if (stage == 3) {
     drawIcons(140,220);
     createButtonScroll(770,350,iconLocation);
+    
+    createButtonNew(140,int(142*teamIcons.size() - 120 + height/2 + iconLocation));
+    newTeam();
+    
+    teamRequests();
   }
   
   if (stage > -1 && stage < 4) {

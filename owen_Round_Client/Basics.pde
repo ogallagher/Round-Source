@@ -139,7 +139,6 @@ void drawIcon(String icon, PVector location) {
         }
       endShape(CLOSE);
     }
-    
     else if (shapes[i].indexOf(ellipseID) > -1) {
       float[] dimensions = float(split(extractString(shapes[i],ellipseID,endID),','));
       ellipseMode(CENTER);
@@ -234,8 +233,11 @@ void readServerMessage() {
         }
       }
       
-      if (teams.length() == 0 && text.indexOf(teamHD) > -1 && text.indexOf(endID,text.indexOf(teamHD)) > -1 && text.indexOf(endHD,text.indexOf(endID,text.indexOf(teamHD))) > -1) {
+      if ((teams.length() == 0 || requestingTeam > -1 || requestingTeam == -3) && text.indexOf(teamHD) > -1 && text.indexOf(endID,text.indexOf(teamHD)) > -1 && text.indexOf(endHD,text.indexOf(endID,text.indexOf(teamHD))) > -1) {
         teams = text.substring(text.indexOf(endID,text.indexOf(teamHD))+1,text.indexOf(endHD,text.indexOf(endID,text.indexOf(teamHD))));
+        teamIcons.clear();
+        newTeam = "Type team name, then press ENTER";
+        requestingTeam = -1;
         
         String newTeams = "";
         int i=0;
@@ -257,7 +259,21 @@ void readServerMessage() {
             newTeams += "N/A";
           }
           if (teamCode.length() > 0) {
-            newTeams += "\nCODE: " + teamCode;
+            String myName = "";
+            if (username.indexOf('_') > -1) {
+               myName = username.substring(0,username.indexOf('_'));
+             }
+             else {
+               myName = username;
+             }
+             
+            if (teamOwner.equals(cleanString(myName,"0123456789"))) {
+              ownTeam = true;
+              newTeams += "\nCode: " + teamCode;
+            }
+            else {
+              newTeams += "\nCode: " + "•••••";
+            }
           }
           newTeams += "\n\n";
           

@@ -111,6 +111,52 @@ void createButtonIcons(int x, int y) {
   popMatrix();
 }
 
+void createButtonNew(int x, int y) {
+  PVector difference = new PVector(mouseX,mouseY);
+  difference.sub(width/2 + x,y-10);
+  
+  if (difference.mag() < 35) {
+    pushMatrix();
+    stroke(255);
+    noFill();
+    ellipseMode(CENTER);
+    ellipse(width/2 + x,y-10,60,60);
+    popMatrix();
+    
+    if (mousePressed) {
+      requestingTeam = -2;
+    }
+  }
+  
+  pushMatrix();
+  noStroke();
+  fill(255);
+  textAlign(LEFT);
+  textFont(infohelpFont,20);
+  if (requestingTeam == -2) {
+    text(newTeam,x,y);
+  }
+  else if (requestingTeam == -3) {
+    text("Sending request...",x,y);
+  }
+  else {
+    text("Request new team",x,y);
+  }
+  
+  stroke(255);
+  strokeWeight(3);
+  translate(width/2 + x, y-10);
+  if (difference.mag() < 35) {
+    line(-18,0,18,0);
+    line(0,-18,0,18);
+  }
+  else {
+    line(-12,0,12,0);
+    line(0,-12,0,12);
+  }
+  popMatrix();
+}
+
 void createButtonScroll(int x, int y, float s) {
   pushMatrix();
   if (mousePressed) {
@@ -123,7 +169,7 @@ void createButtonScroll(int x, int y, float s) {
   strokeWeight(1.5);
   rectMode(CENTER);
   if (stage == 2) {
-    rect(x,map(s,-650,0,height-200,200),55,400);
+    rect(x,map(s,-1280,0,height-200,200),55,400);
   }
   else if (stage == 3) {
     rect(x,map(s,-1 * (teamIcons.size()-3) * 142,0,height-200,200),55,400);
@@ -182,6 +228,11 @@ void createButtonPlay(int x, int y) {
     if (mousePressed && stage < 4) {
       stage = 4;
       titleOrigin.set(width/2,60);
+      
+      teams = "";
+      teamIcons.clear();
+      requestingTeam = -1;
+      newTeam = "Type team name, then press ENTER";
     }
     else if (mousePressed && stage == 4 && !(username.equals("TYPE USERNAME ([,],*,TAB,: are not allowed)")) && !(username.equals("Sorry, the username you gave is already taken.")) && !(username.equals("Sorry, the name you gave is already signed in for another player.")) && !(username.equals("Sorry, the username you entered was not found on file.")) && !(username.equals("Great! Now switch to LOAD FILE and sign in.")) && !(username.equals("Sorry, there are too many clients currently playing."))) {
       String message = "";
@@ -755,7 +806,7 @@ void createButtonSpider(int x, int y) {
     fill(0);
   }
   ellipse(x,y+10,8,8);
-  if (stage < 4) {
+  if (stage < 5) {
     stroke(0);
   }
   else {

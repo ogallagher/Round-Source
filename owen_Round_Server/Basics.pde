@@ -65,4 +65,4 @@ void broadcast(String text, String heading, String destination) {       // (HEAD
 
 void updateAccounts() {
   saveStrings("accounts.txt", accountList.array());    // Writes the strings to a file, each on a separate line
-}  
+}
