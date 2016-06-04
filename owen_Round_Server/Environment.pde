@@ -60,7 +60,12 @@ void spawn(String objectData) {
       }
       
       if (!processed) {
-        turretList.add(new Turret(location,int(split(extractString(objectData,targetID,endID),',')),int(extractString(objectData,damageID,endID)),int(extractString(objectData,healthID,endID)),objectData.substring(objectData.indexOf(iconID)+iconID.length(),objectData.indexOf(endID+ownerID)),extractString(objectData,ownerID,endID)));
+        if (objectData.indexOf(radiusID) == -1) {
+          turretList.add(new Turret(location,int(split(extractString(objectData,targetID,endID),',')),int(extractString(objectData,damageID,endID)),-1,int(extractString(objectData,healthID,endID)),objectData.substring(objectData.indexOf(iconID)+iconID.length(),objectData.indexOf(endID+ownerID)),extractString(objectData,ownerID,endID)));
+        }
+        else {
+          turretList.add(new Turret(location,int(split(extractString(objectData,targetID,endID),',')),int(extractString(objectData,damageID,endID)),int(extractString(objectData,radiusID,endID)),int(extractString(objectData,healthID,endID)),objectData.substring(objectData.indexOf(iconID)+iconID.length(),objectData.indexOf(endID+ownerID)),extractString(objectData,ownerID,endID)));
+        }
       }
     }
     else {

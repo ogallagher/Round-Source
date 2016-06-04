@@ -132,10 +132,10 @@ void respond() {
         }
         
         if (foundIcon > -1 && !owned) {
-          String clientName = cleanString(extractString(message,nameID,endID),"0123456789");
+          String clientName = extractString(message,nameID,endID);
           
           for (int i=0; i<accountList.size() && !clientFound; i++) {
-            if (extractString(message,nameID,endID).equals(extractString(accountList.get(i),nameID,endID))) {
+            if (clientName.equals(extractString(accountList.get(i),nameID,endID))) {
               clientFound = true; 
             }
           }

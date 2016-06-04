@@ -419,6 +419,10 @@ Promote teaming                   √√√
     (default receiver is the      √
     team)                         √
     explain in HELP menu          √
+    
+Weaken spider package             √√√
+  make slower                     √
+  worsen dagger                   √
       
 Improve Enemies                   √√√
   make aim less perfect           √
@@ -447,17 +451,17 @@ Scoring and Upgrades              •••
   make score loss a proportion    •
   upgrades more frequent          •
   
-New termite combat package        √√º
-  stats                           º
+New termite combat package        √√√
+  stats                           √
     attack: creates turret        √
     special: creates base         √
     speed: fast                   √
     coolTime: very long           √
-    upgrade: turrets shoot        •
-      grenades                    •
-      turrets not affected by     •
-        their own grenades        •
-  selection description           •
+    upgrade: turrets shoot        √
+      grenades                    √
+      turrets not affected by     √
+        their own grenades        √
+  selection description           √
   createButtonTermite()           √
   create icon                     √
     castle front with jagged top  √
@@ -578,16 +582,16 @@ Highlight buttons                 √√√
   help, info                      √
   combat packages                 √
   
-Give object information on hover? •••
-  create hoverDialogue() function •
-    when mouse is over an object  •
-      (check every X ms) display  •
-      explanation of that object  •
-   ammo: "RELOAD SITE"            •
-   health: "HEALTH BOX"           •
-   coin: "COIN"                   •
-   turret: "TURRET"               •
-   base: "BASE"                   •
+Give object information on hover? xxx
+  create hoverDialogue() function x
+    when mouse is over an object  x
+      (check every X ms) display  x
+      explanation of that object  x
+   ammo: "RELOAD SITE"            x
+   health: "HEALTH BOX"           x
+   coin: "COIN"                   x
+   turret: "TURRET"               x
+   base: "BASE"                   x
     
 Move teaming explanation to help  √√√
   TEAMS: following the username   √
@@ -673,5 +677,6 @@ DEBUGGING:
   Other termites don't show up    √    (solution: clients used to only draw others if (other.alpha > 0), so I made an exception if (other.cpackage.equals("termite"))
   Bases aren't affected by rings  √    (solution: simple typo meant radius of hazardRing was nil)
   Chat messages are often lost    •    (clients don't always receive messages sent by the server. solution: change server.chatList to store receivers, and send chatList on every X ms?)
+  Clients can others' codes       √    (a client can just type another's name without numbers and see their code. solution: server sends full name as owner, client displays cleaned name but checks with full)
   
 \*****************************************************/

@@ -253,7 +253,7 @@ void readServerMessage() {
           
           newTeams += "Name: " + teamName + "\nOwner: ";
           if (teamOwner.length() > 0) {
-            newTeams += teamOwner;
+            newTeams += cleanString(teamOwner,"0123456789");
           }
           else {
             newTeams += "N/A";
@@ -267,7 +267,7 @@ void readServerMessage() {
                myName = username;
              }
              
-            if (teamOwner.equals(cleanString(myName,"0123456789"))) {
+            if (teamOwner.equals(myName)) {
               ownTeam = true;
               newTeams += "\nCode: " + teamCode;
             }

@@ -1,7 +1,7 @@
 class Tower {        //Turrets and ¿Foggers?
   PVector location;
   PVector target;
-  int radius;
+  int range;
   int health;
   String icon;
   
@@ -10,23 +10,25 @@ class Tower {        //Turrets and ¿Foggers?
     target = new PVector();
     icon = icn;
     health = hth;
-    radius = 0;
+    range = 0;
   }
 }
 
 class Turret extends Tower {
   int damage;
+  int radius;
   int timer;
   String owner;
   String trueTarget;
   String code;
   boolean targetFound;
   
-  Turret(int[] loc, int[] tar, int dam, int hth, String icn, String own) {
+  Turret(int[] loc, int[] tar, int dam, int rad, int hth, String icn, String own) {
     super(loc,hth,icn);
     
     target.set(tar[0],tar[1]);
     damage = dam;
+    radius = rad;
     timer = 0;
     owner = own;
     trueTarget = "";
@@ -34,7 +36,7 @@ class Turret extends Tower {
     
     PVector magnitude = new PVector(tar[0],tar[1]);
     magnitude.sub(location);
-    radius = round(magnitude.mag());
+    range = round(magnitude.mag());
     
     if (icon.length() > 0) {
       int i = 0;
@@ -52,7 +54,7 @@ class Turret extends Tower {
     if (!targetFound) {
       target.sub(location);
       target.normalize();
-      target.mult(radius);
+      target.mult(range);
       
       for (int i=0; i<clientList.size(); i++) {
         String client = clientList.get(i);
@@ -119,7 +121,7 @@ class Turret extends Tower {
       
       if (targetFound) {
         target.normalize();
-        target.mult(radius);
+        target.mult(range);
       }
       target.add(location);
     }
@@ -133,7 +135,7 @@ class Turret extends Tower {
           
           difference.set(clientL[0],clientL[1]);
           difference.sub(location);
-          if (difference.mag() < radius) {
+          if (difference.mag() < range) {
             target.set(clientL[0],clientL[1]);
           }
           else {
@@ -150,7 +152,7 @@ class Turret extends Tower {
           
           difference.set(enemy.location);
           difference.sub(location);
-          if (difference.mag() < radius) {
+          if (difference.mag() < range) {
             target.set(enemy.location);
           }
           else {
@@ -167,7 +169,7 @@ class Turret extends Tower {
           
           difference.set(turret.location);
           difference.sub(location);
-          if (difference.mag() < radius) {
+          if (difference.mag() < range) {
             target.set(turret.location);
           }
           else {
@@ -185,7 +187,7 @@ class Turret extends Tower {
           
           difference.set(objectL[0],objectL[1]);
           difference.sub(location);
-          if (difference.mag() < radius) {
+          if (difference.mag() < range) {
             target.set(objectL[0],objectL[1]);
           }
           else {
@@ -211,9 +213,16 @@ class Turret extends Tower {
     
     bLocation.mult(55);
     bLocation.add(location);
-
-    String bullet = nameID + "bullet" + endID + locationID + str(round(bLocation.x)) + ',' + str(round(bLocation.y)) + endID + velocityID + str(round(velocity.x)) + ',' + str(round(velocity.y)) + endID + targetID + str(round(target.x)) + ',' + str(round(target.y)) + endID + damageID + str(damage) + endID + iconID + code + endID + ownerID + owner + endID;
-    objectList.append(bullet); //<>//
+    
+    String projectile = "";
+    
+    if (radius == -1) {
+      projectile = nameID + "bullet" + endID + locationID + str(round(bLocation.x)) + ',' + str(round(bLocation.y)) + endID + velocityID + str(round(velocity.x)) + ',' + str(round(velocity.y)) + endID + targetID + str(round(target.x)) + ',' + str(round(target.y)) + endID + damageID + str(damage) + endID + iconID + code + endID + ownerID + owner + endID;
+    }
+    else {
+      projectile = nameID + "grenade" + endID + locationID + str(round(bLocation.x)) + ',' + str(round(bLocation.y)) + endID + velocityID + str(round(velocity.x)) + ',' + str(round(velocity.y)) + endID + targetID + str(round(target.x)) + ',' + str(round(target.y)) + endID + radiusID + str(radius) + endID + damageID + str(damage) + endID + iconID + code + endID + ownerID + owner + endID;
+    }
+    objectList.append(projectile); //<>//
   }
   
   void time() {
@@ -226,7 +235,7 @@ class Turret extends Tower {
   }
   
   void collide() {
-    for (int i=0; i<objectList.size(); i++) {                                           // react with and delete coins/ammoBoxes/healthBoxes/bullets/hazardRings
+    for (int i=0; i<objectList.size(); i++) {                                           // react with and delete coins/ammoBoxes/healthBoxes/bullets/grenades/hazardRings
       String object = objectList.get(i);
       int[] objectLocation = int(split(extractString(object,locationID,endID),','));
       
@@ -247,7 +256,7 @@ class Turret extends Tower {
         difference.sub(location);
         
         if (difference.mag() < minDistance) {
-          if (extractString(object,nameID,endID).equals("bullet") || extractString(object,nameID,endID).equals("hazardRing")) {
+          if (extractString(object,nameID,endID).equals("bullet") || extractString(object,nameID,endID).equals("grenade") || extractString(object,nameID,endID).equals("hazardRing")) {
             if (!extractString(object,ownerID,endID).equals(owner)) {
               float damage = int(extractString(object,damageID,endID));
               if (object.substring(object.indexOf(iconID)+iconID.length(),object.indexOf(endID+ownerID)).equals(code)) {

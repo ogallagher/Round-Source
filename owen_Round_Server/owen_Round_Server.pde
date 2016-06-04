@@ -1,7 +1,7 @@
 //Round_Server
 
 // BEGUN:         July 18, 2015
-// LAST UPDATED:  June 3, 2016
+// LAST UPDATED:  June 4, 2016
 // VERSION:       8
 // UPDATES:       
 //    7 = Flexible field size, drawn boundaries, name changing, AI enemies
@@ -37,7 +37,7 @@
         owner[player5]  
       name[fanshot]location[X,Y]velocity[Xv,Yv]radius[R]alpha[A]damage[D]icon[C]owner[player6]   alpha corresponds to additional bullets to the original deviation angle of 0 ON EACH SIDE (decided not to use it...)
       name[laserPoint]location[X,Y]alpha[A]                                                      alpha corresponds to whether the sight should be deleted
-      name[turret]location[X,Y]target[Xt,Yt]damage[D]health[H]icon[C]owner[player7]              target used both to tell range and angle
+      name[turret]location[X,Y]target[Xt,Yt]radius[R]damage[D]health[H]icon[C]owner[player7]     target used both to tell range and angle
       name[base]location[X,Y]radius[R]icon[C]owner[player8]                                      radius corresponds to how far health is distributed and how much health the base still has
     
     enemyList Format Example

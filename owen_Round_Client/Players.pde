@@ -50,8 +50,6 @@ class Player {
     otherClients.clear();
     objects.clear();
     z = 1;
-    bestGraphics = true;
-    signed = true;
     
     name = "";
     score = -1;
@@ -123,7 +121,7 @@ class Player {
         ammo2 = 2;
       }
       else if (cpackage.equals("spider")) {
-        speed = int(upgrade("speed1",8));
+        speed = int(upgrade("speed1",3));
         ammo1 = 5;
       }
       else if (cpackage.equals("beaver")) {
@@ -148,43 +146,50 @@ class Player {
       health = int(upgrade("health",100));
       healthEstablished = true;
     }
-    
-    speedConstant = 0.8;   //... probably should put this in initialization later
   }
   
   void control() {
     if (!chatting && !renaming) {
       if (mousePressed && mouseButton == LEFT) {
         if (cpackage.equals("woodpecker")) {
-          speedConstant *= 0.5;
+          speedConstant = 0.4;
+        }
+        else {
+          speedConstant = 1;
         }
       }
-      if (mousePressed && mouseButton == RIGHT) {
+      else if (mousePressed && mouseButton == RIGHT) {
         if (cpackage.equals("hedgehog")) {
-          if (score > 230) {
+          if (score >= 230) {
             speedConstant = 0.2; 
           }
           else {
             speedConstant = 0;
           }
         }
+        else {
+          speedConstant = 1;
+        }
       }
-      if (cpackage.equals("termite") && (coolTime1 > 0 || coolTime2 > 0)) {
+      else if (cpackage.equals("termite") && (coolTime1 > 0 || coolTime2 > 0)) {
         speedConstant = 0;
+      }
+      else {
+        speedConstant = 1;
       }
       
       updateKeys();
       if (keys[0] && location.y > 30) {
-        location.y -= speed * speedConstant;
+        location.y -= speed * 0.8 * speedConstant;
       }
       if (keys[2] && location.y < fieldWidth - 30) {
-        location.y += speed * speedConstant;
+        location.y += speed * 0.8 * speedConstant;
       }
       if (keys[1] && location.x > 30) {
-        location.x -= speed * speedConstant;
+        location.x -= speed * 0.8 * speedConstant;
       }
       if (keys[3] && location.x < fieldWidth - 30) {
-        location.x += speed * speedConstant;
+        location.x += speed * 0.8 * speedConstant;
       }
     }
     
@@ -260,7 +265,7 @@ class Player {
         coolTime2 -= upgrade("time",0.5);
       }
       if (cpackage.equals("spider")) {
-        coolTime2 -= upgrade("time",6);
+        coolTime2 -= 1;
       }
       if (cpackage.equals("termite")){
         coolTime2 -= 0.8;
@@ -279,16 +284,16 @@ class Player {
   
   void collision() {
     if (location.x < 30) {
-      location.x += speed * speedConstant;
+      location.x = 30;
     }
     if (location.x > fieldWidth - 30) {
-      location.x -= speed * speedConstant;
+      location.x = fieldWidth - 30;
     }
     if (location.y < 30) {
-      location.y += speed * speedConstant;
+      location.y = 30;
     }
     if (location.y > fieldWidth - 30) {
-      location.y -= speed * speedConstant;
+      location.y = fieldWidth - 30;
     }
     
     for (int i=0; i<otherClients.size(); i++) {            // repel with other clients
@@ -372,7 +377,7 @@ class Player {
       broadcast += alphaID + "0" + endID;
     }
     else if (cpackage.equals("turtle") && mousePressed && mouseButton == RIGHT) {
-      if (score > 200) {
+      if (score >= 200) {
         broadcast += alphaID + str(round(upgrade("shield",-80))) + endID;
       }
       else {
@@ -422,7 +427,7 @@ class Player {
           
           int damage = round(upgrade("damage",10));
           
-          if (score > 150) {      
+          if (score >= 150) {      
             PVector translation;
             translation = PVector.fromAngle(angle);
             if (switch1) {
@@ -578,7 +583,7 @@ class Player {
           
           int damage = round(upgrade("damage",15));
           
-          if (score > 150) {
+          if (score >= 150) {
             addition = nameID + "grenade" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + velocityID + str(round(velocity.x)) + ',' + str(round(velocity.y)) + endID + targetID + str(round(targetL.x)) + ',' + str(round(targetL.y)) + endID + radiusID + str(150) + endID + damageID + damage + endID + iconID + code + endID + ownerID + name + endID;
           }
           else {
@@ -636,7 +641,7 @@ class Player {
           PVector shieldPoint;
           
           int shieldLength = round(upgrade("shield",10));
-          if (score > 200) {
+          if (score >= 200) {
             shieldLength = round(upgrade("shield",-80));
           }
           
@@ -684,7 +689,7 @@ class Player {
                 if (v.mag() < 15) {
                   subtractions += nameID + object.name + endID + locationID + str(object.location.x) + ',' + str(object.location.y) + endID + object.specifics + splitID;
                   
-                  if (score > 200) {                               //bullet and grenade deflection
+                  if (score >= 200) {                               //bullet and grenade deflection
                     v.set(onePoint);
                     v.sub(twoPoint);
                     
@@ -765,10 +770,19 @@ class Player {
           targetL.mult(upgrade("range",300));
           targetL.add(objectL);
           
-          int damage = round(upgrade("damage",10));
+          int damage = 0;
+          String objectR = "";
+          
+          if (score >= 250) {
+            damage = round(upgrade("damage",3));
+            objectR = radiusID + str(150) + endID;
+          }
+          else {
+            damage = round(upgrade("damage",10));
+          }
           int objectH = round(upgrade("health",100));
           
-          addition = nameID + "turret" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + targetID + str(round(targetL.x)) + ',' + str(round(targetL.y)) + endID + damageID + str(damage) + endID + healthID + objectH + endID + iconID + icon + endID + ownerID + name + endID;
+          addition = nameID + "turret" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + targetID + str(round(targetL.x)) + ',' + str(round(targetL.y)) + endID + objectR + damageID + str(damage) + endID + healthID + objectH + endID + iconID + icon + endID + ownerID + name + endID;
         }
         else if (mouseButton == RIGHT && coolTime2 < 0.1 && ammo2 > 0) {
           PVector objectL = PVector.fromAngle(angle);
@@ -893,7 +907,7 @@ class Player {
       rotate(angle + PI/2);
       
       rectMode(CENTER);
-      if (score > 150) {
+      if (score >= 150) {
         translate(-20,0);
         if (ammo1 > 0 && switch1) {
             translate(0,5*coolTime1/100);
@@ -994,7 +1008,7 @@ class Player {
       fill(255);
       stroke(255);
       translate((z*location.x)-camera.x+width/2,(z*location.y)-camera.y+height/2);
-      if (mousePressed && mouseButton == RIGHT) {
+      if ((mousePressed && mouseButton == RIGHT) || ammo1 == 0) {
         rotate(angle + PI/3);
       }
       else {
@@ -1019,7 +1033,7 @@ class Player {
       stroke(255);
       strokeWeight(1.5);
       translate((z*location.x)-camera.x+width/2,(z*location.y)-camera.y+height/2);
-      if (mousePressed && mouseButton == RIGHT) {
+      if ((mousePressed && mouseButton == RIGHT) || ammo1 == 0) {
         rotate(angle);
       }
       else {
@@ -1079,7 +1093,7 @@ class Player {
       if (mousePressed && mouseButton == RIGHT) {
         rotate(angle);
         strokeWeight(3);
-        if (score > 200) {
+        if (score >= 200) {
           line(55,-0.5*round(upgrade("shield",-80)),55,0.5*round(upgrade("shield",-80)));
         }
         else {
@@ -1373,7 +1387,7 @@ class OtherPlayer {
         rotate(angle + PI/2);
         
         rectMode(CENTER);
-        if (score > 150) {
+        if (score >= 150) {
           translate(-20,0);
           rect(0,z*-40,z*4,z*20);
           strokeWeight(2);

@@ -19,7 +19,7 @@ void drawPackageSelection(int selection) {
     text("SALAMANDER\n  SPEED: 10\n  ATTACK: remote detonators (activate if touched, otherwise within a time limit.)\n  SPECIAL: long-range grenades\n  INFO: unlock demolition grenades after 200",0,0); //Shrink walls
   }
   if (selection == 4) {
-    text("SPIDER\n  SPEED: 8\n  ATTACK: long-range sniper\n  SPECIAL: short-range dagger\n  INFO: unlock zoom after 40 (scroll up and down)",0,0);
+    text("SPIDER\n  SPEED: 3\n  ATTACK: long-range sniper\n  SPECIAL: short-range dagger\n  INFO: unlock zoom after 40 (scroll up and down)",0,0);
   }
   if (selection == 5) {
     text("BEAVER\n  SPEED: 7\n  ATTACK: mid-range pistol\n  SPECIAL: move walls (# of walls you can hold at once depends on your score)\n  INFO: unlock grenades after 150",0,0);

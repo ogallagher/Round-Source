@@ -1,7 +1,7 @@
 //Round_Client
 
 // BEGUN:         July 18, 2015
-// LAST UPDATED:  June 3, 2016
+// LAST UPDATED:  June 4, 2016
 // VERSION:       8
 
 /* UPDATES:
@@ -16,8 +16,8 @@
         Promote teaming [x]
         Improve enemies [x]
         Change scoring dynamics and upgrades [ ]
-        Worsen spider package (dagger,speed) [ ]
-        Termite combat package [...]
+        Worsen spider package (dagger,speed) [x]
+        Termite combat package [x]
         Autocomplete username [x]
         Allow complex movement [x]
         Various bug fixes [...]
@@ -131,6 +131,9 @@ void setup() {
   pastUsernames = new StringList();
   for (int i=0; i<fileEntries.length; i++) {
     pastUsernames.append(fileEntries[i]);
+  }
+  if (fileEntries.length > 0) {
+    signed = true;
   }
   
   for (int i=0; i<6; i++) {
