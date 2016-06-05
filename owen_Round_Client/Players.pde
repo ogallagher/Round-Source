@@ -160,7 +160,7 @@ class Player {
       }
       else if (mousePressed && mouseButton == RIGHT) {
         if (cpackage.equals("hedgehog")) {
-          if (score >= 230) {
+          if (score >= 10) {
             speedConstant = 0.2; 
           }
           else {
@@ -377,7 +377,7 @@ class Player {
       broadcast += alphaID + "0" + endID;
     }
     else if (cpackage.equals("turtle") && mousePressed && mouseButton == RIGHT) {
-      if (score >= 200) {
+      if (score >= 30) {
         broadcast += alphaID + str(round(upgrade("shield",-80))) + endID;
       }
       else {
@@ -427,7 +427,7 @@ class Player {
           
           int damage = round(upgrade("damage",10));
           
-          if (score >= 150) {      
+          if (score >= 25) {      
             PVector translation;
             translation = PVector.fromAngle(angle);
             if (switch1) {
@@ -583,7 +583,7 @@ class Player {
           
           int damage = round(upgrade("damage",15));
           
-          if (score >= 150) {
+          if (score >= 20) {
             addition = nameID + "grenade" + endID + locationID + str(round(objectL.x)) + ',' + str(round(objectL.y)) + endID + velocityID + str(round(velocity.x)) + ',' + str(round(velocity.y)) + endID + targetID + str(round(targetL.x)) + ',' + str(round(targetL.y)) + endID + radiusID + str(150) + endID + damageID + damage + endID + iconID + code + endID + ownerID + name + endID;
           }
           else {
@@ -641,8 +641,8 @@ class Player {
           PVector shieldPoint;
           
           int shieldLength = round(upgrade("shield",10));
-          if (score >= 200) {
-            shieldLength = round(upgrade("shield",-80));
+          if (score >= 30) {
+            shieldLength = round(upgrade("shield",-30));
           }
           
           for (int i=0; i<objects.size(); i++) {
@@ -689,7 +689,7 @@ class Player {
                 if (v.mag() < 15) {
                   subtractions += nameID + object.name + endID + locationID + str(object.location.x) + ',' + str(object.location.y) + endID + object.specifics + splitID;
                   
-                  if (score >= 200) {                               //bullet and grenade deflection
+                  if (score >= 30) {                               //bullet and grenade deflection
                     v.set(onePoint);
                     v.sub(twoPoint);
                     
@@ -773,7 +773,7 @@ class Player {
           int damage = 0;
           String objectR = "";
           
-          if (score >= 250) {
+          if (score >= 40) {
             damage = round(upgrade("damage",3));
             objectR = radiusID + str(150) + endID;
           }
@@ -907,7 +907,7 @@ class Player {
       rotate(angle + PI/2);
       
       rectMode(CENTER);
-      if (score >= 150) {
+      if (score >= 25) {
         translate(-20,0);
         if (ammo1 > 0 && switch1) {
             translate(0,5*coolTime1/100);
@@ -1093,7 +1093,7 @@ class Player {
       if (mousePressed && mouseButton == RIGHT) {
         rotate(angle);
         strokeWeight(3);
-        if (score >= 200) {
+        if (score >= 30) {
           line(55,-0.5*round(upgrade("shield",-80)),55,0.5*round(upgrade("shield",-80)));
         }
         else {
@@ -1387,7 +1387,7 @@ class OtherPlayer {
         rotate(angle + PI/2);
         
         rectMode(CENTER);
-        if (score >= 150) {
+        if (score >= 25) {
           translate(-20,0);
           rect(0,z*-40,z*4,z*20);
           strokeWeight(2);

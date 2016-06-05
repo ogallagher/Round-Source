@@ -34,7 +34,10 @@ void updateClient(String name, String score, String location, String angle, Stri
       if (int(health) == 0) {
         int newScore = int(score);
         if (newScore > 0) {
-          newScore -= 1;
+          newScore -= round(newScore*0.0667);
+          if (newScore == int(score)) {
+            newScore--;
+          }
           clientList.set(i, replaceString(clientList.get(i),str(newScore),scoreID,endID));
           
           int[] locationInt = int(split(location,','));

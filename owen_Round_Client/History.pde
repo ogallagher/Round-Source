@@ -447,9 +447,27 @@ Improve Enemies                   √√√
     random amount of repulsion    √
       (agility)                   √
     
-Scoring and Upgrades              •••
-  make score loss a proportion    •
-  upgrades more frequent          •
+Scoring and Upgrades              √√•
+  make score loss score/15        √
+  more coins                      √
+  upgrades more attainable        √
+  change stat upgrades            √
+    health                        √
+    time                          √
+    damage                        √
+    range                         √
+    speed1                        √
+    speed2                        √
+    zoom                          √
+    shield                        √
+  highscores()                    •
+    loop through all clients      •
+    two variables:                •
+      topPlayer                   •
+      topTeam                     •
+    display topPlayer             •
+    display topTeam icon          •
+    
   
 New termite combat package        √√√
   stats                           √
@@ -492,13 +510,13 @@ Smokescreens lowers enemy agility √√√
 
 Spawn new enemies faster          √√√
 
-Improve server reading?           •••
-  in respond()                    •
-    compile multiple HD requests  •
-    of each type before analyzing •
-    them?                         •
+Improve server reading?           xxx
+  in respond()                    x
+    compile multiple HD requests  x
+    of each type before analyzing x
+    them?                         x
     
-Increase boxes' spawn quantity    •••
+Increase boxes' spawn quantity    √√√
 
 Autocomplete username             √√√
   create usernames.txt            √

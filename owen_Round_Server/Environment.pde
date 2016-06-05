@@ -598,7 +598,7 @@ void spawnItems() {
     spawn(nameID + "healthBox" + endID + locationID + location + endID);
   }
   
-  if (a < ceil(clientList.size()/2) + 1) {
+  if (a < ceil(clientList.size()/2) + 2) {
     int x = 0;
     int y = 0;
     boolean inWall = true;
@@ -629,19 +629,44 @@ void spawnItems() {
     spawn(nameID + "ammoBox" + endID + locationID + location + endID);
   }
   
-  if (coinTimer > 3000) {          //Waits approximately 30 seconds
+  if (coinTimer > 500) {
     coinTimer = 0;
     
-    if (c < 2 && clientList.size() > 0) {
+    if (c < 5 && clientList.size() > 0) {
       int averageScore = 0;
-      
       for (int i=0; i<clientList.size(); i++) {
         averageScore += int(extractString(clientList.get(i),scoreID,endID));
       }
       averageScore = round(averageScore / clientList.size());
       
       if (averageScore < 50) {
-        location = str(int(random(50,fieldWidth-50))) + ',' + str(int(random(50,fieldWidth-50)));
+        int x = 0;
+        int y = 0;
+        boolean inWall = true;
+        
+        while (inWall) {
+          boolean currentInWall = false;
+          x = int(random(50,fieldWidth-50));
+          y = int(random(50,fieldWidth-50));
+          
+          for (int i=0; i<objectList.size() && !currentInWall; i++) {
+            if (extractString(objectList.get(i),nameID,endID).equals("wall")) {
+              int[] difference = int(split(extractString(objectList.get(i),locationID,endID),','));
+              difference[0] -= x;
+              difference[1] -= y;
+              
+              if (sqrt(pow(difference[0],2) + pow(difference[1],2)) < int(extractString(objectList.get(i),radiusID,endID)) + 20) {
+                currentInWall = true; 
+              }
+            }
+          }
+          
+          if (!currentInWall) {
+            inWall = false;
+          }
+        }
+        
+        location = str(x) + ',' + str(y);
         spawn(nameID + "coin" + endID + locationID + location + endID);
       }
     }
@@ -697,7 +722,7 @@ void adjustLimits() {
   viewLimits[3] = 0 - clientScope;                 //Ymax
    
   for (int i=0; i<clientList.size(); i++) {
-    float[] location = float(split(extractString(clientList.get(i),locationID,endID),','));
+    int[] location = int(split(extractString(clientList.get(i),locationID,endID),','));
     if (location[0] - clientScope < viewLimits[0]) {
       viewLimits[0] = location[0] - clientScope;
     }

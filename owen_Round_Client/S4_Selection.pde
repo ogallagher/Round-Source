@@ -10,28 +10,28 @@ void drawPackageSelection(int selection) {
   translate(50,300);
   
   if (selection == 1) {
-    text("WOODPECKER\n  SPEED: 5\n  ATTACK: mid-range machine gun (low cool-down time)\n  SPECIAL: temporary smokescreen\n  INFO: unlock dual machine guns after 150",0,0);
+    text("WOODPECKER\n  SPEED: 5\n  ATTACK: mid-range machine gun (low cool-down time)\n  SPECIAL: temporary smokescreen\n  INFO: unlock dual machine guns at 25",0,0);
   }
   if (selection == 2) {
-    text("MOLE\n  SPEED: 1\n  ATTACK: short-range rotating blades\n  SPECIAL: mid-range teleportation\n  INFO: unlock limited zoom after 170 (scroll up and down)",0,0);
+    text("MOLE\n  SPEED: 1\n  ATTACK: short-range rotating blades\n  SPECIAL: mid-range teleportation\n  INFO: unlock limited zoom at 30 (scroll up and down)",0,0);
   }
   if (selection == 3) {
-    text("SALAMANDER\n  SPEED: 10\n  ATTACK: remote detonators (activate if touched, otherwise within a time limit.)\n  SPECIAL: long-range grenades\n  INFO: unlock demolition grenades after 200",0,0); //Shrink walls
+    text("SALAMANDER\n  SPEED: 10\n  ATTACK: remote detonators (activate if touched, otherwise within a time limit.)\n  SPECIAL: long-range grenades\n  INFO: unlock demolition grenades at 35",0,0); //Shrink walls
   }
   if (selection == 4) {
-    text("SPIDER\n  SPEED: 3\n  ATTACK: long-range sniper\n  SPECIAL: short-range dagger\n  INFO: unlock zoom after 40 (scroll up and down)",0,0);
+    text("SPIDER\n  SPEED: 3\n  ATTACK: long-range sniper\n  SPECIAL: short-range dagger\n  INFO: unlock zoom at 15 (scroll up and down)",0,0);
   }
   if (selection == 5) {
-    text("BEAVER\n  SPEED: 7\n  ATTACK: mid-range pistol\n  SPECIAL: move walls (# of walls you can hold at once depends on your score)\n  INFO: unlock grenades after 150",0,0);
+    text("BEAVER\n  SPEED: 7\n  ATTACK: mid-range pistol\n  SPECIAL: move walls (# of walls you can hold at once depends on your score)\n  INFO: unlock grenades at 20",0,0);
   }
   if (selection == 6) {
-    text("TURTLE\n  SPEED: 2\n  ATTACK: mid-range 360˚ shockwave \n  SPECIAL: shield (blocks slower, non-sniper bullets)\n  INFO: unlock shield bullet deflection after 200",0,0); 
+    text("TURTLE\n  SPEED: 2\n  ATTACK: mid-range 360˚ shockwave \n  SPECIAL: shield (blocks slower, non-sniper bullets)\n  INFO: unlock shield bullet deflection at 30",0,0); 
   }
   if (selection == 7) {
-    text("HEDGEHOG\n  SPEED: 4\n  ATTACK: mid-range fan shotgun\n  SPECIAL: static invisibility\n  INFO: unlock slow invisibility after 230",0,0);
+    text("HEDGEHOG\n  SPEED: 4\n  ATTACK: mid-range fan shotgun\n  SPECIAL: static invisibility\n  INFO: unlock slow invisibility at 10",0,0);
   }
   if (selection == 8) {
-    text("TERMITE\n  SPEED: 8\n  ATTACK: create mid-range turret\n SPECIAL: create short-range base\n INFO: turrets shoot bullets (grenades after 250), bases shoot health.",0,0);
+    text("TERMITE\n  SPEED: 8\n  ATTACK: create mid-range turret\n SPECIAL: create short-range base\n INFO: turrets shoot bullets (grenades at 40), bases shoot health.",0,0);
   }
   
   popMatrix();

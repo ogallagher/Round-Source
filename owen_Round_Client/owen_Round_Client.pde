@@ -15,7 +15,7 @@
         Improve shooting protocols [x]
         Promote teaming [x]
         Improve enemies [x]
-        Change scoring dynamics and upgrades [ ]
+        Change scoring dynamics and upgrades [...]
         Worsen spider package (dagger,speed) [x]
         Termite combat package [x]
         Autocomplete username [x]

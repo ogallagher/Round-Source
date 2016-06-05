@@ -5,37 +5,37 @@ float upgrade(String type, float initial) {
   float newStat = -1;
   
   if (type.equals("health")) {
-    constant = 20;
+    constant = 40;
     root = 2.5;
   }
   else if (type.equals("time")) {
-    constant = 0.03;
-    root = 1.08;
+    constant = 0.1;
+    root = 1.1;
     ceiling = round(initial + 5);
   }
   else if (type.equals("damage")) {
-    constant = 5;
-    root = 2.8;
+    constant = 1.3;
+    root = 2.5;
   }
   else if (type.equals("range")) {
     if (myClient.cpackage.equals("spider")) {
-      constant = 8;
+      constant = 15;
       root = 3.4;
-      ceiling = 300;
+      ceiling = 100;
     }
     else {
-      constant = 22;
-      root = 2.7;
+      constant = 30;
+      root = 2.3;
       ceiling = 750;
     }
   }
   else if (type.equals("speed1")) {
-    constant = .45;
-    root = 2;
+    constant = .6;
+    root = 1.8;
     ceiling = int(1.6*initial);
   }
   else if (type.equals("speed2")) {
-    constant = 0.020;
+    constant = 0.1;
     root = 1.1;
     ceiling = round(2*initial);
   }
@@ -43,17 +43,17 @@ float upgrade(String type, float initial) {
     root = 1.7;
     
     if (myClient.cpackage.equals("spider")) {
-      constant = -1.4;
+      constant = -3;
       ceiling = 40;
     }
-    else if (myClient.cpackage.equals("mole")) {        //Check this balance
-      constant = -1;
+    else if (myClient.cpackage.equals("mole")) {
+      constant = -2.5;
       ceiling = 60;
     }
   }
   else if (type.equals("shield")) {
-     constant = 1;
-     root = 1;
+     constant = 3;
+     root = 1.1;
      ceiling = 250;
   }
   else {

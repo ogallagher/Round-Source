@@ -344,7 +344,7 @@ void mouseWheel(MouseEvent event) {
   }
   
   else if (stage == 5) {
-    if (myClient.cpackage.equals("spider") && myClient.score > 40) {
+    if (myClient.cpackage.equals("spider") && myClient.score >= 15) {
       float scroll = event.getCount();
       
       z -= scroll/500;
@@ -357,7 +357,7 @@ void mouseWheel(MouseEvent event) {
       }
     }
     
-    else if (myClient.cpackage.equals("mole") && myClient.score > 170) {
+    else if (myClient.cpackage.equals("mole") && myClient.score >= 30) {
       float scroll = event.getCount();
       
       z -= scroll/500;
