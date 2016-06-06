@@ -21,7 +21,7 @@
         Autocomplete username [x]
         Allow complex movement [x]
         Various bug fixes [x]
-        Testing [...]    —————> Font across systems, otherClients (especially termites), chat with specified receivers, teams
+        Testing [...]
 */
 
 import processing.net.*;

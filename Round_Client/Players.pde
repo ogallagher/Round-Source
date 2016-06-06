@@ -1209,7 +1209,7 @@ class Player {
     ellipse(0,0,z*60,z*60);
     
     int textSize = int(z*15);
-    textFont(chatFont,textSize);
+    textFont(titleFont,textSize);
     textAlign(CENTER);
     if (mousePressed && mouseButton == RIGHT && cpackage.equals("hedgehog")) {
       fill(255,50);
@@ -1598,7 +1598,7 @@ class OtherPlayer {
       ellipse(0,0,z*60,z*60);
       
       int textSize = int(z*15);
-      textFont(chatFont,textSize);
+      textFont(titleFont,textSize);
       textAlign(CENTER);
       fill(255);
       translate(0,z*50);

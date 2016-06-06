@@ -631,6 +631,25 @@ Allow complex movement            √√√
   get the function from           √
     owen_Complex_Client           √
     
+Version 8 testing                 √ºº
+  font across systems             º
+    check titleFont               º
+    check infohelpFont            º
+    check chatFont                º
+  otherClients (termites)         √
+    change otherClients' name     √
+      displays to titleFont       √
+  chatting with receivers         º
+  teams                           º
+  java application                √
+    the client java application   √
+      doesn't support external    √
+      data files as-is.           √
+    test-solution:                √
+      move usernames.txt to /data √
+      write to Round_Client.app/  √
+        Contents/Java/data        √
+    
   
 DEBUGGING:                        
   Show turtle's shield            √    (draw shield, expand alpha interpretation to include shieldLength)
