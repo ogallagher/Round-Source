@@ -300,6 +300,7 @@ void highscores() {
           currentTeams.set(j,currentTeams.get(j).substring(0,currentTeams.get(j).indexOf(":")) + ":" + str(teamScore));
         }
         else {
+          teamKnown = true;
           teamScore = otherClients.get(i).score;
           currentTeams.append(otherClients.get(i).otherIcon + ":" + str(teamScore));
         }
@@ -307,9 +308,19 @@ void highscores() {
         j++;
       }
       
-      if (teamScore > topTeam[0]) {
-        topTeam[0] = teamScore;
-        topTeam[1] = j;
+      if (teamKnown) {
+        if (teamScore > topTeam[0]) {
+          topTeam[0] = teamScore;
+          topTeam[1] = j;
+        }
+      }
+      else {
+        teamScore = otherClients.get(i).score;
+        currentTeams.append(otherClients.get(i).otherIcon + ":" + str(teamScore));
+        if (teamScore > topTeam[0]) {
+          topTeam[0] = teamScore;
+          topTeam[1] = j;
+        }
       }
     }
   }
