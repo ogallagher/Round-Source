@@ -639,9 +639,9 @@ Version 8 testing                 √ºº
   otherClients (termites)         √
     change otherClients' name     √
       displays to titleFont       √
-  chatting with receivers         º
+  chatting with receivers         √
   teams                           º
-  java application                √
+  java application                º
     the client java application   √
       doesn't support external    √
       data files as-is.           √
@@ -649,6 +649,10 @@ Version 8 testing                 √ºº
       move usernames.txt to /data √
       write to Round_Client.app/  √
         Contents/Java/data        √
+    app freezes when another      •
+      client tries to sign in...  •
+  enemies drop coins too scarcely √
+    make probability 60%          √
     
   
 DEBUGGING:                        

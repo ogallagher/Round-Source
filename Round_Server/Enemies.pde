@@ -597,7 +597,7 @@ class Enemy {
     if (health < 1) {
       float randomDrop = random(1);
       
-      if (randomDrop < 0.33) {
+      if (randomDrop < 0.66) {
         PVector objectL;
         objectL = PVector.fromAngle(angle);
         objectL.mult(55);

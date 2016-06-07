@@ -302,7 +302,7 @@ void updateFile() {
   }
 
   // Writes the strings to a file, each on a separate line
-  saveStrings("Round_Client.app/Contents/Java/data/usernames.txt", newFile);
+  saveStrings("data/usernames.txt", newFile);
 }
 
 void updateKeys() {
