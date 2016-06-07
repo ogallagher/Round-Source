@@ -21,7 +21,7 @@
         Autocomplete username [x]
         Allow complex movement [x]
         Various bug fixes [x]
-        Testing [...]
+        Testing and more debugging [...]
 */
 
 import processing.net.*;

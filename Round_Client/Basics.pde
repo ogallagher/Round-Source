@@ -176,7 +176,7 @@ void readServerMessage() {
           if (message.indexOf(iconID) > -1 && message.indexOf(radiusID) > -1 && message.indexOf(nameID) > -1) {
             boolean myRegistration = false;
             if (username.indexOf('_') > -1) {
-              if (extractString(message,nameID,endID).equals(cleanString(username.substring(username.indexOf('_')),"0123456789"))) {
+              if (extractString(message,nameID,endID).equals(cleanString(username.substring(0,username.indexOf('_')),"0123456789"))) {
                 myRegistration = true;
               }
             }

@@ -722,7 +722,7 @@ DEBUGGING:
   Bases aren't affected by rings  √    (solution: simple typo meant radius of hazardRing was nil)
   Chat messages are often lost    •    (clients don't always receive messages sent by the server. solution: change server.chatList to store receivers, and send chatList on every X ms?)
   Clients can others' codes       √    (a client can just type another's name without numbers and see their code. solution: server sends full name as owner, client displays cleaned name but checks with full)
-  Glitch with highscores          ?    (the logic in highescores() was off for calculatin topTeam score)
+  Glitch with highscores          ?    (the logic in highscores() was off for calculation of topTeam score)
   REGISTERED received wrong       √    (other clients registered when they should not have)
   
 \*****************************************************/

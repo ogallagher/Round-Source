@@ -296,8 +296,8 @@ void highscores() {
         if (currentTeams.get(j).substring(0,currentTeams.get(j).indexOf(":")).equals(otherClients.get(i).otherIcon)) {
           teamKnown = true;
           
-          teamScore = int(currentTeams.get(j).substring(currentTeams.get(j).indexOf(":")+1));
-          currentTeams.set(j,currentTeams.get(j).substring(0,currentTeams.get(j).indexOf(":")) + ":" + str(teamScore + otherClients.get(i).score));
+          teamScore = int(currentTeams.get(j).substring(currentTeams.get(j).indexOf(":")+1)) + otherClients.get(i).score;
+          currentTeams.set(j,currentTeams.get(j).substring(0,currentTeams.get(j).indexOf(":")) + ":" + str(teamScore));
         }
         else {
           teamScore = otherClients.get(i).score;
