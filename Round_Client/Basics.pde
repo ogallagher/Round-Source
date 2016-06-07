@@ -172,11 +172,25 @@ void readServerMessage() {
           username = "Sorry, that name is already signed in for another player.";
           loadString = "";
         } 
-        else if (message.indexOf("REGISTERED") > -1 && stage == 4) {                    // Name given is acceptable and is now playing.
-          if (message.indexOf(iconID) > -1 && message.indexOf(radiusID) > -1) {
-            icon = message.substring(message.indexOf(iconID) + iconID.length(), message.indexOf(endID + radiusID));
-            fieldWidth = (floor((int(extractString(message,radiusID,endID)) * 2) * 0.1)) * 10;
-            fieldConfirmed = true;
+        else if (message.indexOf("REGISTERED") > -1 && stage == 4 && loadString.length() > 0) {                    // Name given is acceptable and is now playing.
+          if (message.indexOf(iconID) > -1 && message.indexOf(radiusID) > -1 && message.indexOf(nameID) > -1) {
+            boolean myRegistration = false;
+            if (username.indexOf('_') > -1) {
+              if (extractString(message,nameID,endID).equals(cleanString(username.substring(username.indexOf('_')),"0123456789"))) {
+                myRegistration = true;
+              }
+            }
+            else {
+              if (extractString(message,nameID,endID).equals(cleanString(username,"0123456789"))) {
+                myRegistration = true;
+              }
+            }
+            
+            if (myRegistration) {
+              icon = message.substring(message.indexOf(iconID) + iconID.length(), message.indexOf(endID + radiusID));
+              fieldWidth = (floor((int(extractString(message,radiusID,endID)) * 2) * 0.1)) * 10;
+              fieldConfirmed = true;
+            }
           }
           
           if (fieldConfirmed) {

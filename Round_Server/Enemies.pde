@@ -59,6 +59,8 @@ class Enemy {
     }
     inSmokeScreen = false;
     
+    PVector totalRepulsion = new PVector(0,0);
+    
     for (int i=0; i<objectList.size(); i++) {
       String name = extractString(objectList.get(i),nameID,endID);
       if (name.equals("bullet") || name.equals("grenade") || name.equals("demolition") || name.equals("hazardRing")) {
@@ -82,7 +84,7 @@ class Enemy {
           distance = constrain(repulsion.mag(),0,speed);
           repulsion.normalize();
           repulsion.mult(distance);
-          location.add(repulsion);
+          totalRepulsion.add(repulsion);
         }
       }
       else if (!inSmokeScreen && name.equals("smokescreen")) {
@@ -95,6 +97,13 @@ class Enemy {
         }
       }
     }
+    
+    if (totalRepulsion.mag() > speed) {
+      totalRepulsion.normalize();
+      totalRepulsion.mult(speed);
+    }
+    
+    location.add(totalRepulsion);
   }
   
   void setTargetShoot() {

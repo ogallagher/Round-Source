@@ -640,8 +640,8 @@ Version 8 testing                 √ºº
     change otherClients' name     √
       displays to titleFont       √
   chatting with receivers         √
-  teams                           º
-  java application                º
+  teams                           √
+  java application                √
     the client java application   √
       doesn't support external    √
       data files as-is.           √
@@ -649,10 +649,13 @@ Version 8 testing                 √ºº
       move usernames.txt to /data √
       write to Round_Client.app/  √
         Contents/Java/data        √
-    app freezes when another      •
-      client tries to sign in...  •
   enemies drop coins too scarcely √
     make probability 60%          √
+  glitch with highscores()        ?
+  glitch with REGISTERED message: √
+    send name[player0] at end of  √
+    message                       √
+  enemies dodge fanshots too well √
     
   
 DEBUGGING:                        
@@ -719,5 +722,7 @@ DEBUGGING:
   Bases aren't affected by rings  √    (solution: simple typo meant radius of hazardRing was nil)
   Chat messages are often lost    •    (clients don't always receive messages sent by the server. solution: change server.chatList to store receivers, and send chatList on every X ms?)
   Clients can others' codes       √    (a client can just type another's name without numbers and see their code. solution: server sends full name as owner, client displays cleaned name but checks with full)
+  Glitch with highscores          ?    (the logic in highescores() was off for calculatin topTeam score)
+  REGISTERED received wrong       √    (other clients registered when they should not have)
   
 \*****************************************************/

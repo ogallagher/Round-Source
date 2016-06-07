@@ -271,9 +271,15 @@ void textBoxName(int locationX, int locationY) {
 }
 
 void highscores() {
-  int[] topPlayer = {-1,-1};  //{score,index}
+  int[] topPlayer = {myClient.score,-1};  //{score,index}
   int[] topTeam = {-1,-1};
+  
   StringList currentTeams = new StringList();
+  if (icon.length() > 0) {
+    currentTeams.append(icon + ":" + str(myClient.score));
+    topTeam[0] = myClient.score;
+    topTeam[1] = 0;
+  }
   
   for (int i=0; i<otherClients.size(); i++) {
     if (otherClients.get(i).score > topPlayer[0]) {
@@ -284,11 +290,9 @@ void highscores() {
     if (otherClients.get(i).otherIcon.length() > 0) {
       boolean teamKnown = false;
       int teamScore = -1;
-      int j = -1;
+      int j = 0;
       
       while (j<currentTeams.size() && !teamKnown) {
-        j++;
-        
         if (currentTeams.get(j).substring(0,currentTeams.get(j).indexOf(":")).equals(otherClients.get(i).otherIcon)) {
           teamKnown = true;
           
@@ -299,6 +303,8 @@ void highscores() {
           teamScore = otherClients.get(i).score;
           currentTeams.append(otherClients.get(i).otherIcon + ":" + str(teamScore));
         }
+        
+        j++;
       }
       
       if (teamScore > topTeam[0]) {
@@ -312,10 +318,10 @@ void highscores() {
   textFont(infohelpFont,20*z);
   textAlign(CENTER);
   fill(255);
-  if (topTeam[0] > -1 || icon.length() > 0) {
+  if (topTeam[0] > -1) {
     text("TOP TEAM:",width/3,20);
   }
-  if (topPlayer[0] > -1) {
+  if (topPlayer[1] > -1) {
     text("TOP PLAYER:\n" + otherClients.get(topPlayer[1]).name + " (" + str(topPlayer[0]) + ")",2*width/3,20);
   }
   else {
@@ -323,11 +329,14 @@ void highscores() {
   }
   popMatrix();
   
-  PVector l = new PVector(((width/3)-width/2+myClient.camera.x)/z,((30*z)+20+myClient.camera.y-height/2)/z);
   if (topTeam[0] > -1) {
-    drawIcon(currentTeams.get(topTeam[1]), l);
-  }
-  else if (icon.length() > 0) {
-    drawIcon(icon, l);
+    PVector l = new PVector(((width/3)-width/2+myClient.camera.x)/z,((30*z)+20+myClient.camera.y-height/2)/z);
+    
+    if (topTeam[1] > -1) {
+      drawIcon(currentTeams.get(topTeam[1]), l);
+    }
+    else {
+      drawIcon(icon,l);
+    }
   }
 }

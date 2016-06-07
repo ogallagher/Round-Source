@@ -60,7 +60,7 @@ void respond() {
             if (testAddress.equals(clientAddress)) {
               registered = true;
               
-              broadcast("REGISTERED" + icon + radiusID + str(round(fieldWidth/2)) + endID, messageHD, clientAddress);   // Name given is acceptable; the client just didn't receive the message the first time and is still in the menu screen.
+              broadcast("REGISTERED" + icon + radiusID + str(round(fieldWidth/2)) + endID + nameID + cleanString(clientName,"0123456789") + endID, messageHD, clientAddress);   // Name given is acceptable; the client just didn't receive the message the first time and is still in the menu screen.
             }
             else {
               duplicated = true;
@@ -90,7 +90,7 @@ void respond() {
             accountList.set(i,replaceString(accountList.get(i),clientAddress,addressID,endID));
             updateAccounts();
             
-            broadcast("REGISTERED" + icon + radiusID + str(round(fieldWidth/2)) + endID, messageHD, clientAddress);            // Name given is acceptable and is now playing.
+            broadcast("REGISTERED" + icon + radiusID + str(round(fieldWidth/2)) + endID + nameID + cleanString(clientName, "0123456789") + endID, messageHD, clientAddress);            // Name given is acceptable and is now playing.
           }
         }
         
