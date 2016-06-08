@@ -295,7 +295,6 @@ void highscores() {
       while (j<currentTeams.size() && !teamKnown) {
         if (currentTeams.get(j).substring(0,currentTeams.get(j).indexOf(":")).equals(otherClients.get(i).otherIcon)) {
           teamKnown = true;
-          
           teamScore = int(currentTeams.get(j).substring(currentTeams.get(j).indexOf(":")+1)) + otherClients.get(i).score;
           currentTeams.set(j,currentTeams.get(j).substring(0,currentTeams.get(j).indexOf(":")) + ":" + str(teamScore));
         }
@@ -309,6 +308,8 @@ void highscores() {
       }
       
       if (teamKnown) {
+        j--;
+        
         if (teamScore > topTeam[0]) {
           topTeam[0] = teamScore;
           topTeam[1] = j;
