@@ -41,7 +41,7 @@ void drawTitle() {
   popMatrix();
   
   pushMatrix();
-  titleSize = 25;
+  titleSize = 22;
   textFont(titleFont,titleSize);
   textAlign(CENTER);
   fill(0);

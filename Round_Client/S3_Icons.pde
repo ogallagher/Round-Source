@@ -1,7 +1,7 @@
 // ICONS
 
-void drawIcons(int x, int y) {    //Height of 1 icon description: ~145
-  int minimum = -1 * (teamIcons.size()-3) * 142;
+void drawIcons(int x, int y) {    //Height of 1 icon description: ~122
+  int minimum = -1 * (teamIcons.size()-3) * 122;
 
   iconLocation += scrollVelocity;
   
@@ -23,10 +23,10 @@ void drawIcons(int x, int y) {    //Height of 1 icon description: ~145
     popMatrix();
     
     for (int i=0; i<teamIcons.size(); i++) {
-      drawIcon(teamIcons.get(i),new PVector(x,y + (142*i) - 320));
+      drawIcon(teamIcons.get(i),new PVector(x,y + (122*i) - 320));
       
       if (!ownTeam) {
-        PVector origin = new PVector(x,y+(142*i)-320);
+        PVector origin = new PVector(x,y+(122*i)-320);
         PVector difference = new PVector(mouseX,mouseY);
         difference.sub((z*origin.x)-myClient.camera.x+width/2,(z*origin.y)-myClient.camera.y+height/2);
         
@@ -58,7 +58,7 @@ void drawIcons(int x, int y) {    //Height of 1 icon description: ~145
     textFont(infohelpFont,20);
     textAlign(LEFT);
     fill(255);
-    text("Waiting for team data...",x,y);
+    text("Waiting for team data...",width/3,height/2);
     popMatrix();
   }
   

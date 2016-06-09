@@ -315,8 +315,10 @@ void updateFile() {
     newFile[i] = pastUsernames.get(i);
   }
 
-  // Writes the strings to a file, each on a separate line
-  saveStrings("Round_Client.app/Contents/Java/data/usernames.txt", newFile);
+  // Since the different versions of the game move the data directory around, below are various options for each project version
+  
+  saveStrings("data/usernames.txt", newFile);                                   //Write to usernames.txt in Round-Source and Round-WIN32 and Round-WIN64
+  //saveStrings("Round_Client.app/Contents/Java/data/usernames.txt", newFile);  //Write to usernames.txt in Round-MACOSX
 }
 
 void updateKeys() {

@@ -631,11 +631,11 @@ Allow complex movement            √√√
   get the function from           √
     owen_Complex_Client           √
     
-Version 8 testing                 √√º
-  font across systems             º
-    check titleFont               º
-    check infohelpFont            º
-    check chatFont                º
+Version 8 testing                 √√?
+  font across systems             ?
+    check titleFont               ?
+    check infohelpFont            ?
+    check chatFont                ?
   otherClients (termites)         √
     change otherClients' name     √
       displays to titleFont       √
@@ -724,5 +724,6 @@ DEBUGGING:
   Clients can others' codes       √    (a client can just type another's name without numbers and see their code. solution: server sends full name as owner, client displays cleaned name but checks with full)
   Glitch with highscores          √    (the logic in highscores() was off for calculation of topTeam score)
   REGISTERED received wrong       √    (other clients registered when they should not have)
+  WIN## doesn't get fonts         ?    (the windows versions of the java application don't read font files from data directory)
   
 \*****************************************************/

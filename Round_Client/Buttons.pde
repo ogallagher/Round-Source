@@ -234,7 +234,7 @@ void createButtonPlay(int x, int y) {
       requestingTeam = -1;
       newTeam = "Type team name, then press ENTER";
     }
-    else if (mousePressed && stage == 4 && !(username.equals("TYPE USERNAME ([,],*,TAB,: are not allowed)")) && !(username.equals("Sorry, the username you gave is already taken.")) && !(username.equals("Sorry, the name you gave is already signed in for another player.")) && !(username.equals("Sorry, the username you entered was not found on file.")) && !(username.equals("Great! Now switch to LOAD FILE and sign in.")) && !(username.equals("Sorry, there are too many clients currently playing."))) {
+    else if (mousePressed && stage == 4 && username.length() > 0 && !(username.equals("TYPE USERNAME ([,],*,TAB,: are not allowed)")) && !(username.equals("Sorry, the username you gave is already taken.")) && !(username.equals("Sorry, the name you gave is already signed in for another player.")) && !(username.equals("Sorry, the username you entered was not found on file.")) && !(username.equals("Great! Now switch to LOAD FILE and sign in.")) && !(username.equals("Sorry, there are too many clients currently playing."))) {
       String message = "";
       
       if (username.indexOf('_') > -1) {

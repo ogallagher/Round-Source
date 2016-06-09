@@ -1,28 +1,8 @@
 //Round_Client
 
 // BEGUN:         July 18, 2015
-// LAST UPDATED:  June 7, 2016
+// LAST UPDATED:  June 9, 2016
 // VERSION:       8
-
-/* UPDATES:
-     v.7        
-        Flexible field size [x] 
-        Drawn boundaries [x]
-        Name changing [x]
-        AI enemies [x]
-     v.8        
-        Lag reduction (tags shortened, rounded data) [x]
-        Improve shooting protocols [x]
-        Promote teaming [x]
-        Improve enemies [x]
-        Change scoring dynamics and upgrades [x]
-        Worsen spider package (dagger,speed) [x]
-        Termite combat package [x]
-        Autocomplete username [x]
-        Allow complex movement [x]
-        Various bug fixes [x]
-        Testing and more debugging [...]
-*/
 
 import processing.net.*;
 
@@ -143,9 +123,9 @@ void setup() {
   println("ID Number: " + myAddress);
   myClient = new Player();
   
-  titleFont = createFont("HanzipenSC-W3",50,true);
-  infohelpFont = createFont("Avenir-Book",50,true);
-  chatFont = createFont("PTMono-Regular", 10, true);
+  titleFont = createFont("ComicSansMS",50,true);      //Fonts compatible with both OS (OSX and WINDOWS)
+  infohelpFont = createFont("ArialMT",50,true);
+  chatFont = createFont("LucidaConsole", 10, true);
   
   titleOrigin = new PVector(width/2,60);
   
@@ -174,7 +154,7 @@ void draw() {
     drawIcons(140,220);
     createButtonScroll(770,350,iconLocation);
     
-    createButtonNew(140,int(142*teamIcons.size() - 120 + height/2 + iconLocation));
+    createButtonNew(140,int(122*teamIcons.size() - 120 + height/2 + iconLocation));
     newTeam();
     
     teamRequests();
