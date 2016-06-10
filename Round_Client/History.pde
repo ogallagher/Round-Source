@@ -631,7 +631,7 @@ Allow complex movement            √√√
   get the function from           √
     owen_Complex_Client           √
     
-Version 8 testing                 √√?
+Version 8 testing                 √√º
   font across systems             ?
     check titleFont               ?
     check infohelpFont            ?
@@ -656,6 +656,20 @@ Version 8 testing                 √√?
     send name[player0] at end of  √
     message                       √
   enemies dodge fanshots too well √
+  server freezes sometimes        ?
+    edit server.respond()         √
+      make sure endHD is present  √
+       after first header         √
+    edit server.spawn()           √
+  client spawns in upper-left     ?
+    corner too often              √
+    I think the solution was to   √
+      have myClient accept the    √
+      incoming location info if   √
+      near the corner, accounting √
+      for possible collision with √
+      the edge                    √
+  
     
   
 DEBUGGING:                        
@@ -724,6 +738,7 @@ DEBUGGING:
   Clients can others' codes       √    (a client can just type another's name without numbers and see their code. solution: server sends full name as owner, client displays cleaned name but checks with full)
   Glitch with highscores          √    (the logic in highscores() was off for calculation of topTeam score)
   REGISTERED received wrong       √    (other clients registered when they should not have)
-  WIN## doesn't get fonts         ?    (the windows versions of the java application don't read font files from data directory)
+  WIN## doesn't get fonts         ?    (the windows versions of the java application don't read font files from data directory. solution: use fonts common to both OS's?)
+  Server glitch with empty data   ?    (the server freezes every now and then when data is not formatted as expected. solution: server accounts for data that could return null, incomplete, or blank)
   
 \*****************************************************/

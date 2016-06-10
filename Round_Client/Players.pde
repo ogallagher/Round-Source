@@ -100,7 +100,7 @@ class Player {
       score = int(extractString(data,scoreID,endID));
     }
     
-    if (location.x == -1 && location.y == -1) {
+    if (location.x < 35 && location.y < 35) {
       int[] locationInt = int(split(extractString(data,locationID,endID),','));
       location.set(locationInt[0],locationInt[1]);
     }
