@@ -631,10 +631,10 @@ Allow complex movement            √√√
   get the function from           √
     owen_Complex_Client           √
     
-Version 8 testing                 √√º
+Version 8 testing                 √√?
   font across systems             √
     check titleFont               √
-    check infohelpFont            -  it might be OK, but the size is a bit different (in the icons list)
+    check infohelpFont            √  it's OK, but the size is a bit different (in the icons list)
     check chatFont                √
   otherClients (termites)         √
     change otherClients' name     √
@@ -661,6 +661,7 @@ Version 8 testing                 √√º
       make sure endHD is present  √
        after first header         √
     edit server.spawn()           √
+    more small edits...           ?
   client spawns in upper-left     √
     corner too often              √
     I think the solution was to   √
@@ -677,11 +678,15 @@ Version 8 testing                 √√º
   mistake where icon codes are    √
     shown when username.length()  √
     is zero                       √
-  differences between MAC and WIN º
+  differences between MAC and WIN √
     font names                    √
     username.txt writing          √
-    icons list button spacing     •
-      WIN is less by -1?          •
+    icons list button spacing     √
+      WIN is less by -2 approx.   √
+    change scrollbar to match     √
+      icons list in WIN           √
+    change NEW button to match    √
+      icons list in WIN           √
   
     
   
@@ -756,5 +761,6 @@ DEBUGGING:
   Shield = invisibility           √    (solution: shieldLength was negative)
   Shield shrinks                  √    (solution: shieldLength was negative, so though the shield was actually growing, abs(shieldLength) was shrinking)
   Codes are shown                 √    (if there was no teamOwner and username was blank, then "" == "". solution: check that teamOwner.length() > 0)
+  Scrollbar too short for icons   √    (solution: it was still set for the old font set, so I just updated it)
   
 \*****************************************************/

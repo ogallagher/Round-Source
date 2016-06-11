@@ -1,6 +1,6 @@
 // ICONS
 
-void drawIcons(int x, int y) {    //Height of 1 icon description: ~122
+void drawIcons(int x, int y) {    //Height of 1 icon description: ~122 (-2 for WIN)
   int minimum = -1 * (teamIcons.size()-3) * 122;
 
   iconLocation += scrollVelocity;

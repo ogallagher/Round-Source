@@ -172,7 +172,7 @@ void createButtonScroll(int x, int y, float s) {
     rect(x,map(s,-1280,0,height-200,200),55,400);
   }
   else if (stage == 3) {
-    rect(x,map(s,-1 * (teamIcons.size()-3) * 142,0,height-200,200),55,400);
+    rect(x,map(s,-1 * (teamIcons.size()-3) * 122,0,height-200,200),55,400);
   }
   popMatrix();
   
