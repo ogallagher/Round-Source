@@ -191,7 +191,7 @@ Make fieldWidth expandable        √√√
     
 Draw field boundaries             √√√
 
-Icons                             √••
+Icons                             √xx
   skull                           √
   present                         √
   bullet                          √
@@ -202,21 +202,21 @@ Icons                             √••
   ?                               √
   stop                            √
   play                            √
-  radioactive symbol              •
-  hexagon                         •
-  star                            •
-  leaf                            •
-  feather                         •
-  key                             •
-  diamond                         •
-  mountain                        •
-  simple fish                     •
-  dollar sign                     •
-  bowling ball                    •
-  cloud                           •
-  shield                          •
-  ellipses                        •
-  plus                            •
+  radioactive                     x      Though I plan on adding these team options, I won't do
+  hexagon                         x    so now, and when I do, I won't update their status
+  star                            x    in the client code. 
+  leaf                            x      This note applies to all icons from "radioactive" 
+  feather                         x    downward.
+  key                             x
+  diamond                         x
+  mountain                        x
+  fish                            x
+  $                               x
+  bowling ball                    x
+  cloud                           x
+  shield                          x
+  ellipses                        x
+  plus                            x
 
 Create Enemies w/ A.I.            √√√
   Server-side                     √
@@ -632,10 +632,10 @@ Allow complex movement            √√√
     owen_Complex_Client           √
     
 Version 8 testing                 √√º
-  font across systems             ?
-    check titleFont               ?
-    check infohelpFont            ?
-    check chatFont                ?
+  font across systems             √
+    check titleFont               √
+    check infohelpFont            -  it might be OK, but the size is a bit different (in the icons list)
+    check chatFont                √
   otherClients (termites)         √
     change otherClients' name     √
       displays to titleFont       √
@@ -661,7 +661,7 @@ Version 8 testing                 √√º
       make sure endHD is present  √
        after first header         √
     edit server.spawn()           √
-  client spawns in upper-left     ?
+  client spawns in upper-left     √
     corner too often              √
     I think the solution was to   √
       have myClient accept the    √
@@ -669,6 +669,19 @@ Version 8 testing                 √√º
       near the corner, accounting √
       for possible collision with √
       the edge                    √
+  mistakes involving shields      √
+    enemies don't see turtles     √
+      holding them                √
+    shield gets shorter with more √
+      score                       √
+  mistake where icon codes are    √
+    shown when username.length()  √
+    is zero                       √
+  differences between MAC and WIN º
+    font names                    √
+    username.txt writing          √
+    icons list button spacing     •
+      WIN is less by -1?          •
   
     
   
@@ -738,7 +751,10 @@ DEBUGGING:
   Clients can others' codes       √    (a client can just type another's name without numbers and see their code. solution: server sends full name as owner, client displays cleaned name but checks with full)
   Glitch with highscores          √    (the logic in highscores() was off for calculation of topTeam score)
   REGISTERED received wrong       √    (other clients registered when they should not have)
-  WIN## doesn't get fonts         ?    (the windows versions of the java application don't read font files from data directory. solution: use fonts common to both OS's?)
+  WIN## doesn't get fonts         √    (the windows versions of the java application don't read font files from data directory. solution: use fonts common to both OS's?)
   Server glitch with empty data   ?    (the server freezes every now and then when data is not formatted as expected. solution: server accounts for data that could return null, incomplete, or blank)
+  Shield = invisibility           √    (solution: shieldLength was negative)
+  Shield shrinks                  √    (solution: shieldLength was negative, so though the shield was actually growing, abs(shieldLength) was shrinking)
+  Codes are shown                 √    (if there was no teamOwner and username was blank, then "" == "". solution: check that teamOwner.length() > 0)
   
 \*****************************************************/

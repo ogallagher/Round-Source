@@ -15,7 +15,7 @@ If you want to download the actual game later:
 - Visit [ogallagher/Round-WIN32](https://github.com/ogallagher/Round-WIN32) for the version compatible with a computer running the windows-32 operating system
 - Visit [ogallagher/Round-WIN64](https://github.com/ogallagher/Round-WIN64) for the version compatible with a computer running the windows-64 operating system
 - Further instructions can be found in the above repositories
-- The game doesn't work yet, as the server is not running.
+- The game doesn't work yet, as the server is not running
 
 # History
 This section describes the change-history of the game, including edits to files not contained in this repository.

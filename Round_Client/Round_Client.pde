@@ -1,7 +1,7 @@
 //Round_Client
 
 // BEGUN:         July 18, 2015
-// LAST UPDATED:  June 9, 2016
+// LAST UPDATED:  June 10, 2016
 // VERSION:       8
 
 import processing.net.*;
@@ -126,6 +126,17 @@ void setup() {
   titleFont = createFont("ComicSansMS",50,true);      //Fonts compatible with both OS (OSX and WINDOWS)
   infohelpFont = createFont("ArialMT",50,true);
   chatFont = createFont("LucidaConsole", 10, true);
+  
+  /* 
+    Font names on windows OS
+      titleFont = "Comic Sans MS"
+      infohelpFont = "Arial" 
+      chatFont = "Lucida Console"
+    Font names on mac OS
+      titleFont = "ComicSansMS"
+      infohelpFont = "ArialMT" 
+      chatFont = "LucidaConsole"
+  */
   
   titleOrigin = new PVector(width/2,60);
   

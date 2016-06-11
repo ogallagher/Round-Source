@@ -281,7 +281,7 @@ void readServerMessage() {
                myName = username;
              }
              
-            if (teamOwner.equals(myName)) {
+            if (teamOwner.length() > 0 && teamOwner.equals(myName)) {
               ownTeam = true;
               newTeams += "\nCode: " + teamCode;
             }

@@ -378,7 +378,7 @@ class Player {
     }
     else if (cpackage.equals("turtle") && mousePressed && mouseButton == RIGHT) {
       if (score >= 30) {
-        broadcast += alphaID + str(round(upgrade("shield",-80))) + endID;
+        broadcast += alphaID + str(round(upgrade("shield",-30))) + endID;
       }
       else {
         broadcast += alphaID + str(round(upgrade("shield",10))) + endID;
@@ -1094,7 +1094,7 @@ class Player {
         rotate(angle);
         strokeWeight(3);
         if (score >= 30) {
-          line(55,-0.5*round(upgrade("shield",-80)),55,0.5*round(upgrade("shield",-80)));
+          line(55,-0.5*round(upgrade("shield",-30)),55,0.5*round(upgrade("shield",-30)));
         }
         else {
           line(55,-0.5*round(upgrade("shield",10)),55,0.5*round(upgrade("shield",10)));
