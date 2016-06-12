@@ -1,4 +1,5 @@
-# Round-Source 
+<img src="/Round_Icon/icon.png" align="bottom" width="128">
+# Round-Source
 - Multiplayer
 - Top-down
 - Competitive
@@ -46,7 +47,7 @@ The game is in its 8th version. Some of the major updates to the game introduced
 ## Development and Debugging
 The game was first begun on 18 July 2015. 
 
-It was updated last on 7 June 2016. 
+It was updated last on 10 June 2016. 
 
 To see a more detailed list of changes to the project over time, see Round-Source/Round_Client/History.pde.
 
