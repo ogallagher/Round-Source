@@ -682,11 +682,12 @@ Version 8 testing                 √√?
     font names                    √
     username.txt writing          √
     icons list button spacing     √
-      WIN is less by -2 approx.   √
+      WIN is less by -3           √
     change scrollbar to match     √
       icons list in WIN           √
     change NEW button to match    √
       icons list in WIN           √
+  disable _ for NEW FILE          ?
   
     
   

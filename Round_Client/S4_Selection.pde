@@ -102,10 +102,14 @@ void textBoxUsername(int x,int y) {
       
       else if (key != CODED && key != BACKSPACE && key != ENTER && key != RETURN && key != '*' && key != '[' && key != ']' && key != ':' && key != '\t') {
         if (username.equals("TYPE USERNAME ([,],*,TAB,: are not allowed)") || username.equals("Sorry, the username you gave is already taken.") || username.equals("Sorry, that name is already signed in for another player.") || username.equals("Sorry, the username you entered was not found on file.") || username.equals("Great! Now switch to LOAD FILE and sign in.") || username.equals("Sorry, there are too many clients currently playing.")) {
-          username = str(key);
+          if (!(!signed && key == '_')) {
+            username = str(key);
+          }
         }
         else {
-          username = username + key;
+          if (!(!signed && key == '_')) {
+            username = username + key;
+          }
         }
       }
       
