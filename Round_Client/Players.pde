@@ -357,6 +357,7 @@ class Player {
                       + locationID + str(round(location.x)) + ',' + str(round(location.y)) + endID 
                       + packageID  + cpackage                                + endID
                       + healthID   + str(health)                             + endID;
+                      
     if (score > -1) {
       broadcast += scoreID + str(score) + endID;
     }
@@ -854,14 +855,8 @@ class Player {
             score += 1;
           }
           else if ((object.name.equals("bullet")|| object.name.equals("hazardRing")) && !lastTaken.equals(nameID + object.name + endID + locationID + str(object.location.x) + ',' + str(object.location.y) + endID + object.specifics)) {
-            if (!extractString(object.specifics,ownerID,endID).equals(name)) {
-              float damage = int(extractString(object.specifics,damageID,endID));
-              
-              if (object.specifics.substring(object.specifics.indexOf(iconID)+iconID.length(),object.specifics.indexOf(endID+ownerID)).equals(code)) {
-                damage *= 0.5;
-              }
-              
-              health -= damage;
+            if (!extractString(object.specifics,ownerID,endID).equals(name) && !object.specifics.substring(object.specifics.indexOf(iconID)+iconID.length(),object.specifics.indexOf(endID+ownerID)).equals(code)) {
+              health -= int(extractString(object.specifics,damageID,endID));
             }
             
             if (health < 0) {

@@ -656,12 +656,15 @@ Version 8 testing                 √√?
     send name[player0] at end of  √
     message                       √
   enemies dodge fanshots too well √
-  server freezes sometimes        ?
+  server freezes sometimes        √
     edit server.respond()         √
       make sure endHD is present  √
        after first header         √
     edit server.spawn()           √
-    more small edits...           ?
+    made server.respond() a step  √
+      in draw() (rather than a    √
+      new thread)                 √
+    more small edits...           √
   client spawns in upper-left     √
     corner too often              √
     I think the solution was to   √
@@ -687,11 +690,21 @@ Version 8 testing                 √√?
       icons list in WIN           √
     change NEW button to match    √
       icons list in WIN           √
-  disable _ for NEW FILE          ?
+  disable _ for NEW FILE          √
   name changes (server-side)      √
     fix accounts.txt update       √
     replace owner in icons.txt    √
-  
+  eliminate friendly fire         ?
+    edit myClient.changeObjects() √
+    edit turret.collide()         √
+    edit drawHelp                 √
+    edit README mention of f.f.   √
+  turrets damage friendly bases   ?
+    edit updateEnvironment()      √
+      (server-side)               √
+  edit server.spawn() to move     ?
+    towers out of walls           √
+  center enemy coin drops         √
     
   
 DEBUGGING:                        
@@ -761,7 +774,7 @@ DEBUGGING:
   Glitch with highscores          √    (the logic in highscores() was off for calculation of topTeam score)
   REGISTERED received wrong       √    (other clients registered when they should not have)
   WIN## doesn't get fonts         √    (the windows versions of the java application don't read font files from data directory. solution: use fonts common to both OS's?)
-  Server glitch with empty data   ?    (the server freezes every now and then when data is not formatted as expected. solution: server accounts for data that could return null, incomplete, or blank)
+  Server glitch with empty data   √    (the server freezes every now and then when data is not formatted as expected. solution: server accounts for data that could return null, incomplete, or blank)
   Shield = invisibility           √    (solution: shieldLength was negative)
   Shield shrinks                  √    (solution: shieldLength was negative, so though the shield was actually growing, abs(shieldLength) was shrinking)
   Codes are shown                 √    (if there was no teamOwner and username was blank, then "" == "". solution: check that teamOwner.length() > 0)
