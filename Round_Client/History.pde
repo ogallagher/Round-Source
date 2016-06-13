@@ -688,6 +688,9 @@ Version 8 testing                 √√?
     change NEW button to match    √
       icons list in WIN           √
   disable _ for NEW FILE          ?
+  name changes (server-side)      √
+    fix accounts.txt update       √
+    replace owner in icons.txt    √
   
     
   
@@ -763,5 +766,6 @@ DEBUGGING:
   Shield shrinks                  √    (solution: shieldLength was negative, so though the shield was actually growing, abs(shieldLength) was shrinking)
   Codes are shown                 √    (if there was no teamOwner and username was blank, then "" == "". solution: check that teamOwner.length() > 0)
   Scrollbar too short for icons   √    (solution: it was still set for the old font set, so I just updated it)
+  Name changes don't take effect  √    (solution: server was not updating accounts.txt correctly, server should update icons.txt immediately)
   
 \*****************************************************/
