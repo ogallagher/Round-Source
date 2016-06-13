@@ -631,7 +631,7 @@ Allow complex movement            √√√
   get the function from           √
     owen_Complex_Client           √
     
-Version 8 testing                 √√?
+Version 8 testing                 √√√º
   font across systems             √
     check titleFont               √
     check infohelpFont            √  it's OK, but the size is a bit different (in the icons list)
@@ -694,17 +694,19 @@ Version 8 testing                 √√?
   name changes (server-side)      √
     fix accounts.txt update       √
     replace owner in icons.txt    √
-  eliminate friendly fire         ?
+  eliminate friendly fire         √
     edit myClient.changeObjects() √
     edit turret.collide()         √
     edit drawHelp                 √
     edit README mention of f.f.   √
-  turrets damage friendly bases   ?
+  turrets damage friendly bases   √
     edit updateEnvironment()      √
       (server-side)               √
-  edit server.spawn() to move     ?
+  edit server.spawn() to move     √
     towers out of walls           √
   center enemy coin drops         √
+  fix collision with rings        √
+  checking for further issues...  º
     
   
 DEBUGGING:                        
@@ -780,5 +782,6 @@ DEBUGGING:
   Codes are shown                 √    (if there was no teamOwner and username was blank, then "" == "". solution: check that teamOwner.length() > 0)
   Scrollbar too short for icons   √    (solution: it was still set for the old font set, so I just updated it)
   Name changes don't take effect  √    (solution: server was not updating accounts.txt correctly, server should update icons.txt immediately)
+  HazardRings don't hurt client   √    (solution: hurt client if client is not owner AND (code length = 0 OR not same code))
   
 \*****************************************************/

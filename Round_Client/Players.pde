@@ -855,7 +855,7 @@ class Player {
             score += 1;
           }
           else if ((object.name.equals("bullet")|| object.name.equals("hazardRing")) && !lastTaken.equals(nameID + object.name + endID + locationID + str(object.location.x) + ',' + str(object.location.y) + endID + object.specifics)) {
-            if (!extractString(object.specifics,ownerID,endID).equals(name) && !object.specifics.substring(object.specifics.indexOf(iconID)+iconID.length(),object.specifics.indexOf(endID+ownerID)).equals(code)) {
+            if (!extractString(object.specifics,ownerID,endID).equals(name) && (code.length() == 0 || !object.specifics.substring(object.specifics.indexOf(iconID)+iconID.length(),object.specifics.indexOf(endID+ownerID)).equals(code))) {
               health -= int(extractString(object.specifics,damageID,endID));
             }
             
