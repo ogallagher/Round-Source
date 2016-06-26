@@ -106,7 +106,7 @@ void setup() {
   size(800,700);
   noCursor();
   
-  client = new Client(this, "74.71.101.15", 44445);      //For using internet connection — the ip is that of my home router, the port is the one on which I chose to allow incoming data requests. (test connectivity w/ canyouseeme.org)
+  client = new Client(this, "74.71.101.15", 8080);  //Gallagher modem ip, port-forwarded 8080
   
   fileEntries = loadStrings("usernames.txt");
   pastUsernames = new StringList();
